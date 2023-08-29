@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="MyTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <!-- Customize hint text color -->
+        <item name="android:textColorHint">@color/white</item>
+
+        <!-- Customize box stroke color -->
+        <item name="boxStrokeColor">@color/white</item>
+
+
+        <!-- Customize box background color -->
+        <item name="boxBackgroundColor">@color/white</item>
+    </style>
+</resources>
