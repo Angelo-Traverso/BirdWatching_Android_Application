@@ -17,7 +17,7 @@
         app:startIconTint="@color/white"
         style="@style/MyTextInputLayoutStyle"
         app:startIconDrawable="@drawable/baseline_mail_outline_24"
-        android:hint="Email">
+        android:hint="@string/name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -37,10 +37,10 @@
         android:layout_below="@+id/userEmail"
         app:startIconTint="@color/white"
         app:endIconTint="@color/white"
-        app:startIconDrawable="@drawable/baseline_lock_24"
+        app:startIconDrawable="@drawable/lock"
         app:endIconMode="password_toggle"
         style="@style/MyTextInputLayoutStyle"
-        android:hint="Password">
+        android:hint="@string/passwordHint">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/btnSignIn"
         android:src="@drawable/logo"
-        android:contentDescription="d"
+        android:contentDescription="@string/Logo"
         android:layout_marginBottom="40dp"
         />
 

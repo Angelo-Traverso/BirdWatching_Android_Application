@@ -6,4 +6,20 @@
     <string name="signUp">Sign Up</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Sign in-->
+    <string name="emailHint">Email</string>
+    <string name="passwordHint">Password</string>
+
+    <!--Sign up-->
+    <string name="name">Name</string>
+    <string name="repeatPassword">Repeat Password</string>
+
+
+    <!--Sign up-->
+    <string name="hotspots">Hotspots</string>
+
+
+    <!--Content Descriptions-->
+    <string name="Logo">Logo</string>
 </resources>
