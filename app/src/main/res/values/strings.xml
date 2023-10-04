@@ -1,3 +1,36 @@
 <resources>
-    <string name="app_name">OPSC7312_POE_BirdWatching</string>
+    <string name="app_name">Feather-Find</string>
+
+    <string name="signIn">Sign In</string>
+
+    <string name="signUp">Sign Up</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Sign in-->
+    <string name="emailHint">Email</string>
+    <string name="passwordHint">Password</string>
+
+    <!--Sign up-->
+    <string name="name">Name</string>
+    <string name="repeatPassword">Repeat Password</string>
+
+
+    <!--Sign up-->
+    <string name="hotspots">Hotspots</string>
+
+
+    <!--Content Descriptions-->
+    <string name="Logo">Logo</string>
+
+
+    <!--Challenges-->
+    <string name="Challenges">CHALLENGES</string>
+    <string name="Back">Back</string>
+    <string name="PointEarnedHeading">My points earned</string>
+    <string name="WeeklyChallenges">Weekly Challenges</string>
+
+
+
+
 </resources>

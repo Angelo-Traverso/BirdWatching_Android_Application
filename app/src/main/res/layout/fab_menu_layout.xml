@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/menu_item_1"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/controller"
+        android:background="@drawable/round_button"
+        android:contentDescription="Menu Item 1"/>
+
+    <ImageButton
+        android:id="@+id/menu_item_2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/settings"
+        android:background="@drawable/round_button"
+        android:contentDescription="Menu Item 2"/>
+    <ImageButton
+        android:id="@+id/menu_item_3"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/edit_square"
+        android:background="@drawable/round_button"
+        android:contentDescription="Menu Item 2"/>
+    <ImageButton
+        android:id="@+id/menu_item_4"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/visibility"
+        android:background="@drawable/round_button"
+        android:contentDescription="Menu Item 2"/>
+    <ImageButton
+        android:id="@+id/menu_item_5"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/trophy"
+        android:background="@drawable/round_button"
+        android:contentDescription="Menu Item 2"/>
+
+    <!-- Add more menu items as needed -->
+
+</LinearLayout>

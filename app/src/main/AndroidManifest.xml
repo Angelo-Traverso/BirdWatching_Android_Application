@@ -12,6 +12,9 @@
         android:theme="@style/Theme.OPSC7312_POE_BirdWatching"
         tools:targetApi="31">
         <activity
+            android:name=".Hotpots"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
