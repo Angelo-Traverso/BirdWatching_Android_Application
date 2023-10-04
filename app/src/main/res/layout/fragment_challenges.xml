@@ -24,7 +24,7 @@
         android:fontFamily="@font/sedansc_regular"
         android:layout_below="@+id/lblBack"
         android:gravity="center"
-        android:textSize="26sp"
+        android:textSize="35sp"
         android:textColor="@color/white"
         android:text="@string/Challenges"/>
 
@@ -61,5 +61,24 @@
         android:textSize="22sp"
         android:textColor="@color/white"
         android:text="@string/WeeklyChallenges"/>
+
+    <View
+        android:id="@+id/lineWeeklyChallenges"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:alpha="0.2"
+        android:layout_below="@+id/tvWeeklyChallengesHeading"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"/>
+
+    <!--Replace with custom progress-->
+    <LinearLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lineWeeklyChallenges"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        />
 
 </RelativeLayout>
