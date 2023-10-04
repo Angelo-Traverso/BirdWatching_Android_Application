@@ -1,1 +1,6 @@
-# OPSC7312_POE_BirdWatching
+# OPSC7312_POE_BirdWatching![Screenshot_20230811-144556](https://github.com/Angelo-Traverso/OPSC7312_POE_BirdWatching/assets/90568303/8a809446-5cf9-46d4-b921-873cf75f4d4a)
+![Screenshot_20230822-174009](https://github.com/Angelo-Traverso/OPSC7312_POE_BirdWatching/assets/90568303/be37fb3f-7bd9-4b07-ac08-b012e9998343)
+![Screenshot_20230811-144631](https://github.com/Angelo-Traverso/OPSC7312_POE_BirdWatching/assets/90568303/dbae674a-b484-4334-b13d-0958c9701466)
+![Screenshot_20230811-144608](https://github.com/Angelo-Traverso/OPSC7312_POE_BirdWatching/assets/90568303/baea7967-fcc6-4cee-bcb3-558acb1d76cd)
+![Screenshot_20230811-144603](https://github.com/Angelo-Traverso/OPSC7312_POE_BirdWatching/assets/90568303/11bb8ddb-e534-4085-9f6d-de5e8eb4d901)
+![Screenshot_20230811-144601](https://github.com/Angelo-Traverso/OPSC7312_POE_BirdWatching/assets/90568303/05194e93-8f2c-4eb5-920d-8562648d38f3)
