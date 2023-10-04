@@ -22,4 +22,15 @@
 
     <!--Content Descriptions-->
     <string name="Logo">Logo</string>
+
+
+    <!--Challenges-->
+    <string name="Challenges">CHALLENGES</string>
+    <string name="Back">Back</string>
+    <string name="PointEarnedHeading">My points earned</string>
+    <string name="WeeklyChallenges">Weekly Challenges</string>
+
+
+
+
 </resources>

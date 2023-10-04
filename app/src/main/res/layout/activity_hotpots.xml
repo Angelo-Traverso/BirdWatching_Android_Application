@@ -25,14 +25,15 @@
             android:textColor="@color/white"
             android:textSize="22sp" />
 
-        <!--Vertical line-->
+        <!-- Vertical line -->
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="0.02"
-            android:alpha="0.5"
+            android:layout_marginStart="16dp"
+            android:layout_weight="0.01"
+            android:alpha="0.1"
             android:foreground="@color/white" />
 
         <ImageView
@@ -148,7 +149,6 @@
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/trophy"
         app:tint="@color/white">
-
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
