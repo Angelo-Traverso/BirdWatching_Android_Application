@@ -69,6 +69,10 @@ class Hotpots : AppCompatActivity() {
                 isOpen = true
             }
 
+            fab5.setOnClickListener{
+                loadChallengesFragment()
+            }
+
             //showFabMenu(it)
 
           /*  if (!isFABOpen) {
@@ -80,6 +84,13 @@ class Hotpots : AppCompatActivity() {
         }
     }
 
+    private fun loadChallengesFragment() {
+        val challengesFragment = Challenges()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainContainer, challengesFragment)
+            .addToBackStack(null) // If you want to allow back navigation
+            .commit()
+    }
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(this, view)
         popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
@@ -103,7 +114,7 @@ class Hotpots : AppCompatActivity() {
                     true
                 }
                 R.id.menuRewards -> {
-                    // Handle menu item 2 click
+                    loadChallengesFragment()
                     true
                 }
                 else -> false

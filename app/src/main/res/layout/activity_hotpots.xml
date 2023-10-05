@@ -4,7 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/relMain"
     tools:context=".Hotpots">
+
+    <FrameLayout
+        android:id="@+id/mainContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
     <LinearLayout
         android:id="@+id/linearAppBar"
@@ -55,6 +61,8 @@
             android:textColor="@color/white" />
 
     </LinearLayout>
+
+    </FrameLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

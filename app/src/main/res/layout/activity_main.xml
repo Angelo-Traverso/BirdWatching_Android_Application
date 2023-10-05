@@ -7,8 +7,6 @@
     android:background="@color/app_background"
     tools:context=".MainActivity">
 
-
-
     <TextView
         android:id="@+id/appName"
         android:layout_width="match_parent"
@@ -18,8 +16,7 @@
         android:textSize="48sp"
         android:fontFamily="@font/sedansc_regular"
         android:textColor="@color/white"
-        android:gravity="center"
-        />
+        android:gravity="center"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
@@ -34,9 +31,6 @@
         app:tabIndicatorFullWidth="false"
         app:tabMode="fixed"
         app:tabTextColor="@color/white">
-
-
-
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
