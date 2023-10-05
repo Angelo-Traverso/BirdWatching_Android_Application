@@ -10,7 +10,15 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.Style
+
+
+
 
 class Hotpots : AppCompatActivity() {
 
@@ -35,7 +43,21 @@ class Hotpots : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_hotpots)
+
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+
+        val fragment = map()
+        transaction.replace(R.id.mainContainer, fragment)
+
+        transaction.addToBackStack(null)
+
+        transaction.commit()
+
+
+
         ///
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
@@ -124,33 +146,6 @@ class Hotpots : AppCompatActivity() {
     }
 
     private fun showFabMenu() {
-        /*val popupView = LayoutInflater.from(this).inflate(R.layout.fab_menu_layout, null)
-        val popupWindow = PopupWindow(
-            popupView,
-            300,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        // Calculate the y-offset to position the popup above the FAB
-        val yOffset = -(popupWindow.height + anchor.height)
-
-        // Example: Set actions for menu items
-        val menuItem1 = popupView.findViewById<ImageButton>(R.id.menu_item_1)
-        menuItem1.setOnClickListener {
-            // Handle menu item 1 click
-            // Add your logic here
-            popupWindow.dismiss()
-        }
-
-        val menuItem2 = popupView.findViewById<ImageButton>(R.id.menu_item_2)
-        menuItem2.setOnClickListener {
-            // Handle menu item 2 click
-            // Add your logic here
-            popupWindow.dismiss()
-        }
-
-        // Show the popup menu above the FAB
-        popupWindow.showAsDropDown(anchor, 0, yOffset)*/
 
         isFABOpen = true
 
@@ -175,5 +170,6 @@ class Hotpots : AppCompatActivity() {
         fab5.animate().translationY(fabMenuTranslationY)
 
     }
+
 
 }

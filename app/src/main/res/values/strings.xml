@@ -30,7 +30,7 @@
     <string name="PointEarnedHeading">My points earned</string>
     <string name="WeeklyChallenges">Weekly Challenges</string>
 
-
+    <string name="mapbox_access_token">sk.eyJ1IjoiYW5nZWxvLXQiLCJhIjoiY2xuY3hyaWtpMGt5ZTJqcXNoNzh4cjkxdiJ9.VasjYafU8FXBUIgJMxyG-Q</string>
 
 
 </resources>
