@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    tools:context=".AddObservation">
+
+    <TextView
+        android:id="@+id/tvAddObservation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/AddObservation"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:fontFamily="@font/sedansc_regular"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        />
+
+    <EditText
+        android:id="@+id/etSelectSpecies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAddObservation"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColorHint="@color/white"
+        android:hint="@string/SelectSpecies"
+        android:drawableStart="@drawable/bird"
+        android:drawableTint="@color/white"
+        android:drawableEnd="@drawable/arrow_rightpx"
+        />
+
+    <EditText
+        android:id="@+id/etHowMany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etSelectSpecies"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColorHint="@color/white"
+        android:hint="@string/SelectSpecies"
+        android:drawableStart="@drawable/hash"
+        android:drawableTint="@color/white"
+        android:drawableEnd="@drawable/arrow_rightpx"
+        />
+
+    <EditText
+        android:id="@+id/etWhen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etHowMany"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColorHint="@color/white"
+        android:hint="@string/SelectSpecies"
+        android:drawableStart="@drawable/calendar"
+        android:drawableTint="@color/white"
+        android:drawableEnd="@drawable/arrow_rightpx"
+        />
+
+    <EditText
+        android:id="@+id/etWhere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etWhen"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColorHint="@color/white"
+        android:hint="@string/SelectSpecies"
+        android:drawableStart="@drawable/location"
+        android:drawableTint="@color/white"
+        android:drawableEnd="@drawable/arrow_rightpx"
+        />
+
+    <EditText
+        android:id="@+id/etNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etWhere"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColorHint="@color/white"
+        android:hint="Add a note"
+        />
+
+    <Button
+        android:id="@+id/btnSaveObservation"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/etNote"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:elevation="40dp"
+
+        android:backgroundTint="@color/tab_indicator"
+        android:layout_centerHorizontal="true"
+        android:text="@string/SaveObservation"
+        />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/btnSaveObservation"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+
+        android:backgroundTint="@android:color/transparent"
+        android:layout_centerHorizontal="true"
+        android:text="@string/SaveObservation"
+        />
+
+</RelativeLayout>

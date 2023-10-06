@@ -42,13 +42,13 @@ Quisque nec ex in lectus tincidunt pretium. Quisque dapibus mattis elit, non ull
 
     <string name="Metric">Metric</string>
     <string name="Imperial">Imperial</string>
-
-
-
+    <string name="AddObservation">Add Observation</string>
 
 
 
     <string name="mapbox_access_token">sk.eyJ1IjoiYW5nZWxvLXQiLCJhIjoiY2xuY3hyaWtpMGt5ZTJqcXNoNzh4cjkxdiJ9.VasjYafU8FXBUIgJMxyG-Q</string>
 
+    <string name="SelectSpecies">Select a species</string>
+    <string name="SaveObservation">Save Observation</string>
 
 </resources>

@@ -28,7 +28,7 @@ class Hotpots : AppCompatActivity() {
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var fab1: FloatingActionButton
     private lateinit var settings: FloatingActionButton
-    private lateinit var fab3: FloatingActionButton
+    private lateinit var addObservation: FloatingActionButton
     private lateinit var fab4: FloatingActionButton
     private lateinit var fab5: FloatingActionButton
     private var isFABOpen = false
@@ -69,10 +69,19 @@ class Hotpots : AppCompatActivity() {
         fabMenu = findViewById(R.id.fabMenu)
         fab1 = findViewById(R.id.menu_item_1)
         settings = findViewById(R.id.menu_item_2)
-        fab3 = findViewById(R.id.menu_item_3)
+        addObservation = findViewById(R.id.menu_item_3)
         fab4 = findViewById(R.id.menu_item_4)
         fab5 = findViewById(R.id.menu_item_5)
         val linearLayout = findViewById<LinearLayout>(R.id.linearAppBar)
+
+        addObservation.setOnClickListener{
+            val intent = Intent(this, AddObservation::class.java )
+            startActivity(intent)
+
+            // Close the menu when item clicked
+            close()
+
+        }
 
         settings.setOnClickListener{
             val intent = Intent(this, Settings::class.java)
@@ -105,7 +114,7 @@ class Hotpots : AppCompatActivity() {
         fabMenu.startAnimation(fabClock)
         fab1.startAnimation(fabOpen)
         settings.startAnimation(fabOpen)
-        fab3.startAnimation(fabOpen)
+        addObservation.startAnimation(fabOpen)
         fab4.startAnimation(fabOpen)
         fab5.startAnimation(fabOpen)
         isOpen = true
@@ -117,7 +126,7 @@ class Hotpots : AppCompatActivity() {
         if (isOpen) {
             fab1.startAnimation(fabClose)
             settings.startAnimation(fabClose)
-            fab3.startAnimation(fabClose)
+            addObservation.startAnimation(fabClose)
             fab4.startAnimation(fabClose)
             fab5.startAnimation(fabClose)
             fabMenu.startAnimation(fabAnticlock)
@@ -127,7 +136,7 @@ class Hotpots : AppCompatActivity() {
             fabMenu.startAnimation(fabClock)
             fab1.startAnimation(fabOpen)
             settings.startAnimation(fabOpen)
-            fab3.startAnimation(fabOpen)
+            addObservation.startAnimation(fabOpen)
             fab4.startAnimation(fabOpen)
             fab5.startAnimation(fabOpen)
             return false
@@ -139,7 +148,7 @@ class Hotpots : AppCompatActivity() {
     {
         fab1.startAnimation(fabClose)
         settings.startAnimation(fabClose)
-        fab3.startAnimation(fabClose)
+        addObservation.startAnimation(fabClose)
         fab4.startAnimation(fabClose)
         fab5.startAnimation(fabClose)
         fabMenu.startAnimation(fabAnticlock)
@@ -154,63 +163,4 @@ class Hotpots : AppCompatActivity() {
             .addToBackStack(null) // If you want to allow back navigation
             .commit()
     }
-    private fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(this, view)
-        popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
-            // Handle menu item click here
-            when (menuItem.itemId) {
-                R.id.menuGame -> {
-                    // Handle menu item 1 click
-                    true
-                }
-                R.id.menuSettings -> {
-
-                    true
-                }
-                R.id.menuAddSighting -> {
-                    // Handle menu item 2 click
-                    true
-                }
-                R.id.menuViewSighting -> {
-                    // Handle menu item 2 click
-                    true
-                }
-                R.id.menuRewards -> {
-                    loadChallengesFragment()
-                    true
-                }
-                else -> false
-            }
-        }
-        popupMenu.show()
-    }
-
-    private fun showFabMenu() {
-
-        isFABOpen = true
-
-        fabMenu.animate().translationY(-resources.getDimension(R.dimen.standard_55))
-        fab1.animate().translationY(-resources.getDimension(R.dimen.standard_105))
-        settings.animate().translationY(-resources.getDimension(R.dimen.standard_155))
-        fab3.animate().translationY(-resources.getDimension(R.dimen.standard_205))
-        fab4.animate().translationY(-resources.getDimension(R.dimen.standard_255))
-        fab5.animate().translationY(-resources.getDimension(R.dimen.standard_305))
-
-
-    }
-
-    private fun closeFABMenu() {
-        isFABOpen=false
-        val fabMenuTranslationY = fabMenu.translationY
-
-        fab1.animate().translationY(fabMenuTranslationY)
-        settings.animate().translationY(fabMenuTranslationY)
-        fab3.animate().translationY(fabMenuTranslationY)
-        fab4.animate().translationY(fabMenuTranslationY)
-        fab5.animate().translationY(fabMenuTranslationY)
-
-    }
-
-
 }
