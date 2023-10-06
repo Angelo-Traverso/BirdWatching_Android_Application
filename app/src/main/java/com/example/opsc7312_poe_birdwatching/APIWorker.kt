@@ -1,20 +1,7 @@
 package com.example.opsc7312_poe_birdwatching
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.util.Log
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
