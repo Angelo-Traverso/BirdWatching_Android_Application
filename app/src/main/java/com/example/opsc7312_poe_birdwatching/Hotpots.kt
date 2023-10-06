@@ -78,40 +78,73 @@ class Hotpots : AppCompatActivity() {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
 
-        }
+            // Close the menu when item clicked
+            close()
 
+        }
+        fab5.setOnClickListener{
+            loadChallengesFragment()
+
+            // Close the menu when item clicked
+            close()
+        }
         fabMenu.setOnClickListener {
-            if (isOpen) {
-                fab1.startAnimation(fabClose)
-                settings.startAnimation(fabClose)
-                fab3.startAnimation(fabClose)
-                fab4.startAnimation(fabClose)
-                fab5.startAnimation(fabClose)
-                fabMenu.startAnimation(fabAnticlock)
-                isOpen = false
-            } else {
-                fabMenu.startAnimation(fabClock)
-                fab1.startAnimation(fabOpen)
-                settings.startAnimation(fabOpen)
-                fab3.startAnimation(fabOpen)
-                fab4.startAnimation(fabOpen)
-                fab5.startAnimation(fabOpen)
-                isOpen = true
+            if(isOpen())
+            {
+                close()
+            }else
+            {
+
+                open()
             }
-
-            fab5.setOnClickListener{
-                loadChallengesFragment()
-            }
-
-            //showFabMenu(it)
-
-          /*  if (!isFABOpen) {
-
-                showFabMenu();
-            } else {
-                closeFABMenu();
-            }*/
         }
+    }
+
+    private fun open()
+    {
+        fabMenu.startAnimation(fabClock)
+        fab1.startAnimation(fabOpen)
+        settings.startAnimation(fabOpen)
+        fab3.startAnimation(fabOpen)
+        fab4.startAnimation(fabOpen)
+        fab5.startAnimation(fabOpen)
+        isOpen = true
+
+    }
+
+    private fun isOpen() : Boolean
+    {
+        if (isOpen) {
+            fab1.startAnimation(fabClose)
+            settings.startAnimation(fabClose)
+            fab3.startAnimation(fabClose)
+            fab4.startAnimation(fabClose)
+            fab5.startAnimation(fabClose)
+            fabMenu.startAnimation(fabAnticlock)
+            return true
+
+        } else {
+            fabMenu.startAnimation(fabClock)
+            fab1.startAnimation(fabOpen)
+            settings.startAnimation(fabOpen)
+            fab3.startAnimation(fabOpen)
+            fab4.startAnimation(fabOpen)
+            fab5.startAnimation(fabOpen)
+            return false
+        }
+
+    }
+
+    private fun close()
+    {
+        fab1.startAnimation(fabClose)
+        settings.startAnimation(fabClose)
+        fab3.startAnimation(fabClose)
+        fab4.startAnimation(fabClose)
+        fab5.startAnimation(fabClose)
+        fabMenu.startAnimation(fabAnticlock)
+        isOpen = false
+
     }
 
     private fun loadChallengesFragment() {
