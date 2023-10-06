@@ -64,7 +64,6 @@ class Challenges : Fragment() {
 
             linearLayout.addView(challengeItemView) // Add the challenge item to the container
         }
-
         return view
     }
 

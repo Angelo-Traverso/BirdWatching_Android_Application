@@ -1,5 +1,6 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.content.Intent
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,7 +27,7 @@ class Hotpots : AppCompatActivity() {
     private var isMenuVisible = false;
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var fab1: FloatingActionButton
-    private lateinit var fab2: FloatingActionButton
+    private lateinit var settings: FloatingActionButton
     private lateinit var fab3: FloatingActionButton
     private lateinit var fab4: FloatingActionButton
     private lateinit var fab5: FloatingActionButton
@@ -49,6 +50,7 @@ class Hotpots : AppCompatActivity() {
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
 
+
         val fragment = map()
         transaction.replace(R.id.mainContainer, fragment)
 
@@ -66,16 +68,22 @@ class Hotpots : AppCompatActivity() {
 
         fabMenu = findViewById(R.id.fabMenu)
         fab1 = findViewById(R.id.menu_item_1)
-        fab2 = findViewById(R.id.menu_item_2)
+        settings = findViewById(R.id.menu_item_2)
         fab3 = findViewById(R.id.menu_item_3)
         fab4 = findViewById(R.id.menu_item_4)
         fab5 = findViewById(R.id.menu_item_5)
         val linearLayout = findViewById<LinearLayout>(R.id.linearAppBar)
 
+        settings.setOnClickListener{
+            val intent = Intent(this, Settings::class.java)
+            startActivity(intent)
+
+        }
+
         fabMenu.setOnClickListener {
             if (isOpen) {
                 fab1.startAnimation(fabClose)
-                fab2.startAnimation(fabClose)
+                settings.startAnimation(fabClose)
                 fab3.startAnimation(fabClose)
                 fab4.startAnimation(fabClose)
                 fab5.startAnimation(fabClose)
@@ -84,7 +92,7 @@ class Hotpots : AppCompatActivity() {
             } else {
                 fabMenu.startAnimation(fabClock)
                 fab1.startAnimation(fabOpen)
-                fab2.startAnimation(fabOpen)
+                settings.startAnimation(fabOpen)
                 fab3.startAnimation(fabOpen)
                 fab4.startAnimation(fabOpen)
                 fab5.startAnimation(fabOpen)
@@ -124,7 +132,7 @@ class Hotpots : AppCompatActivity() {
                     true
                 }
                 R.id.menuSettings -> {
-                    // Handle menu item 2 click
+
                     true
                 }
                 R.id.menuAddSighting -> {
@@ -151,7 +159,7 @@ class Hotpots : AppCompatActivity() {
 
         fabMenu.animate().translationY(-resources.getDimension(R.dimen.standard_55))
         fab1.animate().translationY(-resources.getDimension(R.dimen.standard_105))
-        fab2.animate().translationY(-resources.getDimension(R.dimen.standard_155))
+        settings.animate().translationY(-resources.getDimension(R.dimen.standard_155))
         fab3.animate().translationY(-resources.getDimension(R.dimen.standard_205))
         fab4.animate().translationY(-resources.getDimension(R.dimen.standard_255))
         fab5.animate().translationY(-resources.getDimension(R.dimen.standard_305))
@@ -164,7 +172,7 @@ class Hotpots : AppCompatActivity() {
         val fabMenuTranslationY = fabMenu.translationY
 
         fab1.animate().translationY(fabMenuTranslationY)
-        fab2.animate().translationY(fabMenuTranslationY)
+        settings.animate().translationY(fabMenuTranslationY)
         fab3.animate().translationY(fabMenuTranslationY)
         fab4.animate().translationY(fabMenuTranslationY)
         fab5.animate().translationY(fabMenuTranslationY)
