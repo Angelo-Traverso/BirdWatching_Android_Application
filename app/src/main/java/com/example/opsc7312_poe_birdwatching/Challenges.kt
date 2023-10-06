@@ -54,17 +54,14 @@ class Challenges : Fragment() {
             tvProgress.text = "${challenge.progress}/100" // Adjust as per your progress representation
             tvPoints.text = "+${challenge.pointsToGet} points"
 
-            if(i > 0) {
-                // Set top margin
-                val params = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                params.topMargin = 64
-                challengeItemView.layoutParams = params
+            // Set top margin
+            val params = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            params.topMargin = 64
+            challengeItemView.layoutParams = params
 
-
-            }
             linearLayout.addView(challengeItemView) // Add the challenge item to the container
         }
 
