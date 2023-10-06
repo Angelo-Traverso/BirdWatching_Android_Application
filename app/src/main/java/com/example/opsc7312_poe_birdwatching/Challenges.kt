@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.view.marginTop
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +40,7 @@ class Challenges : Fragment() {
 
         // Loop through the challenges and dynamically add them to the container
         for ((i, challenge) in challengeList.withIndex()) {
-            val challengeItemView = LayoutInflater.from(requireContext()).inflate(R.layout.challenege_item_layout, null) // Change to the correct layout
+            val challengeItemView = LayoutInflater.from(requireContext()).inflate(R.layout.challenge_item_layout, null) // Change to the correct layout
 
             val tvChallengeDescription = challengeItemView.findViewById<TextView>(R.id.tvChallengeDescription)
             val progressBar = challengeItemView.findViewById<ProgressBar>(R.id.progressBar)

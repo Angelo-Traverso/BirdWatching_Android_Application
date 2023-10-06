@@ -30,32 +30,50 @@
 
     <TextView
         android:id="@+id/tvPointsEarned"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvChallenges"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:textSize="18sp"
         android:textColor="@color/white"
         android:text="@string/PointEarnedHeading"/>
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/pointsEarnedIndicator"
+    <FrameLayout
+        android:id="@+id/framePoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvChallenges"
-        android:layout_alignParentEnd="true"
-        android:background="#FF0000"
-        android:layout_marginEnd="16dp"
+        android:layout_toEndOf="@+id/tvPointsEarned"
         android:layout_marginTop="32dp"
-        android:max="100"
-        />
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end">
+
+        <!-- Rounded frame for points -->
+        <ImageView
+            android:id="@+id/ivPointsFrame"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/rounded_frame"
+            android:layout_gravity="center"
+            android:contentDescription="pointsFrame" />
+
+        <!-- TextView to display the points -->
+        <TextView
+            android:id="@+id/tvPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="108"
+            android:layout_gravity="center"
+            android:textColor="@color/white" />
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/tvWeeklyChallengesHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pointsEarnedIndicator"
+        android:layout_below="@+id/framePoints"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:textSize="22sp"

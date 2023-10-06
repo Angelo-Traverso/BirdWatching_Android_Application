@@ -13,11 +13,7 @@ import com.mapbox.mapboxsdk.maps.Style
 
 var mapView: MapView? = null
 
-/**
- * A simple [Fragment] subclass.
- * Use the [map.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class map : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -26,7 +22,6 @@ class map : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
         }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,7 +37,7 @@ class map : Fragment() {
                 // Map is set up and the style has loaded. Now you can add data or make other map adjustment
             }
             val cameraPosition = CameraPosition.Builder()
-                .target(LatLng(51.5074, -0.1278))  // Change the latitude and longitude to the desired location
+                .target(LatLng(-33.9149, 18.4241))
                 .zoom(12.0) // Zoom level
                 .tilt(20.0) // Tilt angle
                 .build()
