@@ -1,14 +1,16 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
+import com.example.opsc7312_poe_birdwatching.Models.LocationDataClass
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mapbox.mapboxsdk.Mapbox
@@ -16,29 +18,21 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.Style
-import android.Manifest
+import kotlin.concurrent.thread
 
-var mapView: MapView? = null
-
-/**
- * A simple [Fragment] subclass.
- * Use the [map.newInstance] factory method to
- * create an instance of this fragment.
- */
 class map : Fragment() {
-//    // TODO: Rename and change types of parameters
-//    private var param1: String? = null
-//    private var param2: String? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
+    var mapView: MapView? = null
+    var HotspotList = mutableListOf<HotspotModel>()
+    var apiWorker = APIWorker()
+    var lat = -33.9249
+    var lon = 18.4241
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-//        arguments?.let {
-//
-//        }
     }
 
     override fun onCreateView(
@@ -55,42 +49,121 @@ class map : Fragment() {
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync { mapboxMap ->
             mapboxMap.setStyle(Style.MAPBOX_STREETS) {
-                // Map is set up and the style has loaded. Now you can add data or make other map adjustment
-            }
 
-            //Check for location permission
-            if (ContextCompat.checkSelfPermission(
-                    requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
+                //Check for location permission
+                if (ContextCompat.checkSelfPermission(
+                        requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
 
-                // get users lcoation
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    location?.let {
+//                //get users location
+//                fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity())
+//                { location: Location? ->
+//                    location?.let {
+//
+//                        lat = location.latitude
+//                        lon = location.longitude
+//
+//                    }
+//
+//                    //if no location found set it to the castle of good hope
+//                    if (location == null) {
+//
+//                        lat = -33.9249
+//                        lon = 18.4241
+//
+//                    }
+//                }
 
-                        val cameraPosition = CameraPosition.Builder().target(
-                            LatLng(
-                                it.latitude, it.longitude
-                            )
-                        )  // Change the latitude and longitude to the desired location
-                            .zoom(12.0) // Zoom level
-                            .tilt(20.0) // Tilt angle
-                            .build()
+                    //move camera
+                    val cameraPosition = CameraPosition.Builder().target(
+                        LatLng(
+                            lat, lon
+                        )
+                    ).zoom(12.0).tilt(20.0).build()
 
-                        mapboxMap.cameraPosition = cameraPosition
+                    mapboxMap.cameraPosition = cameraPosition
 
-                    }
-
+                } else {
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        LOCATION_PERMISSION_REQUEST_CODE
+                    )
                 }
-            } else {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE
-                )
             }
+
+            //create a new thread and query the api
+            thread {
+                val bird = try {
+                    apiWorker.QueryeBird(lon, lat, 500.0)?.readText()
+                } catch (e: Exception) {
+                    return@thread
+                }
+
+                ExtractFromJSON(bird)
+            }
+
         }
+
         return view
+    }
+
+    //extrract the data from the json resonse
+    private fun ExtractFromJSON(birdJSON: String?) {
+        if (!birdJSON.isNullOrEmpty()) {
+            try {
+
+                birdJSON.trimIndent()
+
+                val locations = birdJSON.lines().map { line ->
+                    val parts = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
+                    if (parts.size >= 9) {
+                        LocationDataClass(
+                            parts[0],
+                            parts[1],
+                            parts[2],
+                            parts[3],
+                            parts[4].toDouble(),
+                            parts[5].toDouble(),
+                            parts[6],
+                            parts[7],
+                            parts[8].toInt()
+                        )
+                    } else {
+                        null
+                    }
+                }.filterNotNull()
+
+                // Add hotspots to the list
+                for (location in locations) {
+                    var newHotspot =
+                        HotspotModel(location.name, location.latitude, location.longitude)
+                    HotspotList.add(newHotspot)
+                    println(newHotspot)
+                }
+
+                // Add markers on the UI thread
+                activity?.runOnUiThread {
+                    mapView?.getMapAsync { mapboxMap ->
+                        mapboxMap.setStyle(Style.MAPBOX_STREETS) {
+                            for (location in locations) {
+                                mapboxMap.addMarker(
+                                    com.mapbox.mapboxsdk.annotations.MarkerOptions()
+                                        .position(LatLng(location.latitude, location.longitude))
+                                        .title(location.name)
+                                )
+                            }
+                        }
+                    }
+                }
+
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        } else {
+            var b = 0
+        }
     }
 
     override fun onStart() {
@@ -127,25 +200,6 @@ class map : Fragment() {
         super.onDestroy()
         mapView?.onDestroy()
     }
-//    companion object {
-//        /**
-//         * Use this factory method to create a new instance of
-//         * this fragment using the provided parameters.
-//         *
-//         * @param param1 Parameter 1.
-//         * @param param2 Parameter 2.
-//         * @return A new instance of fragment map.
-//         */
-//        // TODO: Rename and change types and number of parameters
-//        @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            map().apply {
-//                arguments = Bundle().apply {
-//
-//                }
-//            }
-//
-//    }
 }
 
 
