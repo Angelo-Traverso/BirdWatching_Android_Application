@@ -1,9 +1,14 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.location.Location
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -11,8 +16,12 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.maps.MapView
@@ -23,6 +32,7 @@ import com.mapbox.mapboxsdk.maps.Style
 
 class Hotpots : AppCompatActivity() {
 
+    private val REQUEST_LOCATION_PERMISSION = 1001
 
     private var isMenuVisible = false;
     private lateinit var fabMenu: FloatingActionButton
@@ -31,10 +41,7 @@ class Hotpots : AppCompatActivity() {
     private lateinit var addObservation: FloatingActionButton
     private lateinit var fab4: FloatingActionButton
     private lateinit var fab5: FloatingActionButton
-    private var isFABOpen = false
-
-
-    ///
+    private lateinit var tvCurrentLocation: TextView
 
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
@@ -51,12 +58,28 @@ class Hotpots : AppCompatActivity() {
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
 
 
+        tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
+
         val fragment = map()
         transaction.replace(R.id.mainContainer, fragment)
 
         transaction.addToBackStack(null)
 
         transaction.commit()
+
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+        }else{requestLocation()}
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                // Got last known location. Use it if available.
+                if (location != null) {
+                    // Use the location (location.latitude and location.longitude)
+                }
+            }
 
 
 
@@ -72,7 +95,6 @@ class Hotpots : AppCompatActivity() {
         addObservation = findViewById(R.id.menu_item_3)
         fab4 = findViewById(R.id.menu_item_4)
         fab5 = findViewById(R.id.menu_item_5)
-        val linearLayout = findViewById<LinearLayout>(R.id.linearAppBar)
 
         addObservation.setOnClickListener{
             val intent = Intent(this, AddObservation::class.java )
@@ -103,12 +125,53 @@ class Hotpots : AppCompatActivity() {
                 close()
             }else
             {
-
                 open()
             }
         }
     }
 
+    private fun requestLocation() {
+
+        Log.d("Location", "requestLocation called")
+        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                // Got last known location. Use it if available.
+                if (location != null) {
+                    // Use the location (location.latitude and location.longitude)
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    tvCurrentLocation.text = "Latitude: $latitude, Longitude: $longitude"
+                } else {
+                    tvCurrentLocation.text = "Location not available"
+                }
+            }
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_LOCATION_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted, you can now access the user's location
+                    // Call a function to start receiving location updates
+                } else {
+                    // Permission denied
+                    // Handle accordingly (e.g., display a message or disable location features)
+                }
+            }
+        }
+    }
     private fun open()
     {
         fabMenu.startAnimation(fabClock)
