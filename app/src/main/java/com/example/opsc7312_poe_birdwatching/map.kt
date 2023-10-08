@@ -27,7 +27,6 @@ class map : Fragment() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     var mapView: MapView? = null
     var HotspotList = mutableListOf<HotspotModel>()
-    var apiWorker = APIWorker()
     var lat = 0.0
     var lon = 0.0
 
@@ -87,18 +86,21 @@ class map : Fragment() {
                         LOCATION_PERMISSION_REQUEST_CODE
                     )
                 }
-            }
 
-            //create a new thread and query the api
-            thread {
-                val bird = try {
-                    apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
-                } catch (e: Exception) {
-                    return@thread
+                //create a new thread and query the api
+                thread {
+                    val bird = try {
+                        var apiWorker = APIWorker()
+                        apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
+                    } catch (e: Exception) {
+                        return@thread
+                    }
+
+                    ExtractFromJSON(bird)
                 }
-
-                ExtractFromJSON(bird)
             }
+
+
 
         }
 
