@@ -2,6 +2,7 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,8 +28,8 @@ class map : Fragment() {
     var mapView: MapView? = null
     var HotspotList = mutableListOf<HotspotModel>()
     var apiWorker = APIWorker()
-    var lat = -33.9249
-    var lon = 18.4241
+    var lat = 0.0
+    var lon = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,24 +57,20 @@ class map : Fragment() {
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
 
-//                //get users location
-//                fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity())
-//                { location: Location? ->
-//                    location?.let {
-//
-//                        lat = location.latitude
-//                        lon = location.longitude
-//
-//                    }
-//
-//                    //if no location found set it to the castle of good hope
-//                    if (location == null) {
-//
-//                        lat = -33.9249
-//                        lon = 18.4241
-//
-//                    }
-//                }
+                    //get users location
+                    fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity())
+                    { location: Location? ->
+                        location?.let {
+                            lat = location.latitude
+                            lon = location.longitude
+                        }
+                    }
+
+                    //if no location found set it to the castle of good hope
+                    if (lat == 0.0 && lon == 0.0) {
+                        lat = -33.9249
+                        lon = 18.4241
+                    }
 
                     //move camera
                     val cameraPosition = CameraPosition.Builder().target(
