@@ -8,8 +8,6 @@
     android:id="@+id/relMain"
     tools:context=".Hotpots">
 
-
-
     <RelativeLayout
         android:id="@+id/linearAppBar"
         android:layout_width="match_parent"
@@ -29,7 +27,6 @@
             android:textColor="@color/white"
             android:textSize="22sp" />
 
-        <!-- Vertical line -->
         <View
             android:id="@+id/lineAppBar"
             android:layout_width="2dp"
@@ -48,12 +45,13 @@
             android:layout_gravity="center"
             android:layout_toEndOf="@+id/lineAppBar"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:text="Location"
             android:textColor="@color/white"
             android:gravity="center"
             android:drawablePadding="6dp"
-            android:drawableTint="@color/white"
-            app:drawableStartCompat="@drawable/location_small" />
+            app:drawableStartCompat="@drawable/location_small"
+            app:drawableTint="@color/white" />
 
     </RelativeLayout>
 

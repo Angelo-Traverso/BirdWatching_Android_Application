@@ -27,10 +27,15 @@ class UserSettings : Fragment() {
         // Set the track color
         sliderDistance.trackActiveTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
+        // Set the track color
+        sliderDistance.trackActiveTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
+
 
         // Set the thumb color
         sliderDistance.thumbTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
+        // Set the thumb color
+        sliderDistance.thumbTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
 
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
             val displayValue = "$value Km"
