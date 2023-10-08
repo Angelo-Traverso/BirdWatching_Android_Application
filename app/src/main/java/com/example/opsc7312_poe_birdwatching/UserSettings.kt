@@ -40,11 +40,11 @@ class UserSettings : Fragment() {
         val sliderDistance = view.findViewById<RangeSlider>(R.id.sliderDistance)
         val tvSliderText = view.findViewById<TextView>(R.id.tvMaxRadius)
 
-// Set the track color
+        // Set the track color
         sliderDistance.trackActiveTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
 
 
-// Set the thumb color
+        // Set the thumb color
         sliderDistance.thumbTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
 
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
