@@ -78,7 +78,6 @@ class map : Fragment() {
                             lat, lon
                         )
                     ).zoom(12.0).tilt(20.0).build()
-
                     mapboxMap.cameraPosition = cameraPosition
 
                 } else {
@@ -93,7 +92,7 @@ class map : Fragment() {
             //create a new thread and query the api
             thread {
                 val bird = try {
-                    apiWorker.QueryeBird(lon, lat, 500.0)?.readText()
+                    apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
                 } catch (e: Exception) {
                     return@thread
                 }
@@ -198,5 +197,3 @@ class map : Fragment() {
         mapView?.onDestroy()
     }
 }
-
-

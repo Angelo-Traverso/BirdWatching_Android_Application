@@ -1,3 +1,3 @@
 package com.example.opsc7312_poe_birdwatching.Models
 
-data class UsersModel(val UserID: String, val Fname: String, val Sname: String, val Email: String, val Hash: String, val Salt: String, val MeasurementUnits: Int, val MaxDistance: Int, val ChallengePoints: Int)
+data class UsersModel(var UserID: String = "", var Fname: String = "", var Sname: String = "", var Email: String = "", var Hash: String = "", var Salt: String = "", var MeasurementUnitsIsKM: Boolean = true, var MaxDistance: Double = 5.0, var ChallengePoints: Int = 0)
