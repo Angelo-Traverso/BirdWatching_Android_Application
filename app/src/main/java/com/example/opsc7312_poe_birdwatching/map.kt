@@ -104,7 +104,6 @@ class map : Fragment() {
                 }
             }
         }
-
         return view
     }
 

@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/app_background"
     tools:context=".SignIn">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/userEmail"
+        android:id="@+id/userSignInEmail"
+        style="@style/MyTextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        app:startIconTint="@color/white"
-        style="@style/MyTextInputLayoutStyle"
+        android:hint="@string/name"
         app:startIconDrawable="@drawable/baseline_mail_outline_24"
-        android:hint="@string/name">
+        app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtUserSignInEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            />
+            android:background="@android:color/transparent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/userPassword"
+        android:id="@+id/userSignInPassword"
+        style="@style/MyTextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_below="@+id/userSignInEmail"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:layout_below="@+id/userEmail"
-        app:startIconTint="@color/white"
+        android:hint="@string/passwordHint"
+        app:endIconMode="password_toggle"
         app:endIconTint="@color/white"
         app:startIconDrawable="@drawable/lock"
-        app:endIconMode="password_toggle"
-        style="@style/MyTextInputLayoutStyle"
-        android:hint="@string/passwordHint">
+        app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtUserSignInPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:background="@android:color/transparent"
-            />
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,29 +55,33 @@
         android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/userPassword"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-      android:elevation="40dp"
-
-        android:backgroundTint="@color/tab_indicator"
+        android:layout_below="@+id/userSignInPassword"
         android:layout_centerHorizontal="true"
-        android:text="@string/signIn"
-        />
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:backgroundTint="@color/tab_indicator"
+        android:elevation="40dp"
+        android:text="@string/signIn" />
+
+    <ProgressBar
+        android:id="@+id/pbWaitToSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSignIn"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/ivBottomLogo"
-        android:layout_marginTop="200dp"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/btnSignIn"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/btnSignIn"
-        android:src="@drawable/logo"
-        android:contentDescription="@string/Logo"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="200dp"
         android:layout_marginBottom="40dp"
-        />
+        android:contentDescription="@string/Logo"
+        android:src="@drawable/logo" />
 
 </RelativeLayout>
