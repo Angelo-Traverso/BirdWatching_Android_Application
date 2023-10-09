@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
@@ -26,8 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.Style
-
-
+import java.util.*
 
 
 class Hotpots : AppCompatActivity() {
@@ -43,6 +44,8 @@ class Hotpots : AppCompatActivity() {
     private lateinit var fab5: FloatingActionButton
     private lateinit var tvCurrentLocation: TextView
 
+
+
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
     private lateinit var fabClock: Animation
@@ -56,6 +59,7 @@ class Hotpots : AppCompatActivity() {
 
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+
 
 
         tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
@@ -131,7 +135,6 @@ class Hotpots : AppCompatActivity() {
     }
 
     private fun requestLocation() {
-
         Log.d("Location", "requestLocation called")
         val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -147,17 +150,20 @@ class Hotpots : AppCompatActivity() {
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                // Got last known location. Use it if available.
                 if (location != null) {
-                    // Use the location (location.latitude and location.longitude)
                     val latitude = location.latitude
                     val longitude = location.longitude
                     tvCurrentLocation.text = "Latitude: $latitude, Longitude: $longitude"
+
+                    // Perform reverse geocoding to get country/region code
+                  //  getCountryCodeFromLocation(location)
                 } else {
                     tvCurrentLocation.text = "Location not available"
                 }
             }
     }
+
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {

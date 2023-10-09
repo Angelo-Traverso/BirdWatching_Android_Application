@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -42,6 +43,7 @@ class map : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         Mapbox.getInstance(requireContext(), getString(R.string.mapbox_access_token))
+        val tvCurrentLocation = view?.findViewById<TextView>(R.id.tvCurrentLocation)
 
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
@@ -50,28 +52,30 @@ class map : Fragment() {
         mapView?.getMapAsync { mapboxMap ->
             mapboxMap.setStyle(Style.MAPBOX_STREETS) {
 
-                //Check for location permission
+                //  Check for location permission
                 if (ContextCompat.checkSelfPermission(
                         requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
 
-                    //get users location
+                    //  Get users location
                     fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity())
                     { location: Location? ->
                         location?.let {
                             lat = location.latitude
                             lon = location.longitude
+
+
                         }
                     }
 
-                    //if no location found set it to the castle of good hope
+                    // If no location found set it to the castle of good hope
                     if (lat == 0.0 && lon == 0.0) {
                         lat = -33.9249
                         lon = 18.4241
                     }
 
-                    //move camera
+                    // Move camera
                     val cameraPosition = CameraPosition.Builder().target(
                         LatLng(
                             lat, lon
@@ -87,7 +91,7 @@ class map : Fragment() {
                     )
                 }
 
-                //create a new thread and query the api
+                // Create a new thread and query the api
                 thread {
                     val bird = try {
                         var apiWorker = APIWorker()
@@ -96,19 +100,16 @@ class map : Fragment() {
                         return@thread
                     }
 
-                    ExtractFromJSON(bird)
+                    extractFromJSON(bird)
                 }
             }
-
-
-
         }
 
         return view
     }
 
-    //extrract the data from the json resonse
-    private fun ExtractFromJSON(birdJSON: String?) {
+    // Extract the data from the json response
+    private fun extractFromJSON(birdJSON: String?) {
         if (!birdJSON.isNullOrEmpty()) {
             try {
 

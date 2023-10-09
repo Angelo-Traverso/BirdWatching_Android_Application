@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.slider.RangeSlider
 
 class UserSettings : Fragment() {
@@ -31,7 +32,7 @@ class UserSettings : Fragment() {
         sliderDistance.trackActiveTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
 
 
-        // Set the thumb color
+         // Set the thumb color
         sliderDistance.thumbTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
         // Set the thumb color
