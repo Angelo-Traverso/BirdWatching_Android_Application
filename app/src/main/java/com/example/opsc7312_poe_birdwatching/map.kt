@@ -30,6 +30,7 @@ import com.mapbox.mapboxsdk.maps.Style
 import kotlin.concurrent.thread
 
 class map : Fragment() {
+
     private val REQUEST_LOCATION_PERMISSION = 1001
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -61,17 +62,6 @@ class map : Fragment() {
                 REQUEST_LOCATION_PERMISSION
             )
         }
-
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. Use it if available.
-                if (location != null) {
-                    // Use the location (location.latitude and location.longitude)
-                }
-            }
-
-       //fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         Mapbox.getInstance(requireContext(), getString(R.string.mapbox_access_token))
 
@@ -114,51 +104,51 @@ class map : Fragment() {
                         location?.let {
                             lat = location.latitude
                             lon = location.longitude
-
-                            val cameraPosition = CameraPosition.Builder().target(LatLng(lat, lon))
-                                .zoom(12.0)
-                                .tilt(20.0)
-                                .build()
-                            mapboxMap.cameraPosition = cameraPosition
                         }
                     }
 
+                    //if no location found set it to the castle of good hope
+                    if (lat == 0.0 && lon == 0.0) {
+                        lat = -33.9249
+                        lon = 18.4241
+                    }
 
-                    // If no location found set it to the castle of good hope
-                   /* if (lat == 0.0 && lon == 0.0) {
-                        lat =
-                        lon =
-                    }*/
-                    // Move camera
-
-
+                    //move camera
+                    val cameraPosition = CameraPosition.Builder().target(
+                        LatLng(
+                            lat, lon
+                        )
+                    ).zoom(12.0).tilt(20.0).build()
+                    mapboxMap.cameraPosition = cameraPosition
 
                 } else {
                     ActivityCompat.requestPermissions(
                         requireActivity(),
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                         LOCATION_PERMISSION_REQUEST_CODE
-
-
                     )
                 }
 
-                // Create a new thread and query the api
+                //create a new thread and query the api
                 thread {
-                    try {
-                        val apiWorker = APIWorker()
-                        val birdJSON = apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
-                        extractFromJSON(birdJSON)
+                    val bird = try {
+                        var apiWorker = APIWorker()
+                        apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        return@thread
                     }
+
+                    if (!bird.isNullOrEmpty())
+                        extractFromJSON(bird)
                 }
             }
         }
         return view
     }
+
     private fun requestLocation() {
-        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        val fusedLocationClient: FusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -182,10 +172,11 @@ class map : Fragment() {
                     val latitude = location.latitude
                     val longitude = location.longitude
                     // Move camera to the user's current location
-                    val cameraPosition = CameraPosition.Builder().target(LatLng(latitude, longitude))
-                        .zoom(12.0)
-                        .tilt(20.0)
-                        .build()
+                    val cameraPosition =
+                        CameraPosition.Builder().target(LatLng(latitude, longitude))
+                            .zoom(12.0)
+                            .tilt(20.0)
+                            .build()
                     mapView?.getMapAsync { mapboxMap ->
                         mapboxMap.cameraPosition = cameraPosition
                     }
@@ -193,8 +184,11 @@ class map : Fragment() {
             }
     }
 
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -206,26 +200,37 @@ class map : Fragment() {
             }
         }
     }
-    // Extract the data from the json response
+
+    //extrract the data from the json resonse
     private fun extractFromJSON(birdJSON: String?) {
         if (!birdJSON.isNullOrEmpty()) {
             try {
+
                 birdJSON.trimIndent()
-                val locations = birdJSON.lines().mapNotNull { line ->
+
+                val locations = birdJSON.lines().map { line ->
                     val parts = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
                     if (parts.size >= 9) {
                         LocationDataClass(
-                            parts[0], parts[1], parts[2], parts[3], parts[4].toDouble(),
-                            parts[5].toDouble(), parts[6], parts[7], parts[8].toInt()
+                            parts[0],
+                            parts[1],
+                            parts[2],
+                            parts[3],
+                            parts[4].toDouble(),
+                            parts[5].toDouble(),
+                            parts[6],
+                            parts[7],
+                            parts[8].toInt()
                         )
                     } else {
                         null
                     }
-                }
+                }.filterNotNull()
 
                 // Add hotspots to the list
                 for (location in locations) {
-                    val newHotspot = HotspotModel(location.name, location.latitude, location.longitude)
+                    var newHotspot =
+                        HotspotModel(location.name, location.latitude, location.longitude)
                     HotspotList.add(newHotspot)
                     println(newHotspot)
                 }
@@ -244,7 +249,8 @@ class map : Fragment() {
                         }
                     }
                 }
-            } catch (e: Exception) {
+
+            } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
         } else {
