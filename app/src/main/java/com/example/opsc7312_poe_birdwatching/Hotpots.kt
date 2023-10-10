@@ -216,7 +216,7 @@ class Hotpots : AppCompatActivity() {
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.mainContainer, challengesFragment)
+            .replace(R.id.relMain, challengesFragment)
             .addToBackStack(null) // If you want to allow back navigation
             .commit()
     }
