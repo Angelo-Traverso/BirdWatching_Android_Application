@@ -129,22 +129,16 @@ class map : Fragment() {
                     )
                 }
 
-                //create a new thread and query the api
-                thread {
-                    val bird = try {
-                        var apiWorker = APIWorker()
-                        apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
-                    } catch (e: Exception) {
-                        return@thread
-                    }
+                GetBirdData()
 
-                    if (!bird.isNullOrEmpty())
-                        extractFromJSON(bird)
-                }
             }
         }
         return view
     }
+
+    //location methods
+    //region
+
 
     private fun requestLocation() {
         val fusedLocationClient: FusedLocationProviderClient =
@@ -201,6 +195,26 @@ class map : Fragment() {
         }
     }
 
+
+    //endregion
+
+    //hotspot method
+    //region
+    private fun GetBirdData(){
+        //create a new thread and query the api
+        thread {
+            val bird = try {
+                var apiWorker = APIWorker()
+                apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
+            } catch (e: Exception) {
+                return@thread
+            }
+
+            if (!bird.isNullOrEmpty())
+                extractFromJSON(bird)
+        }
+    }
+
     //extrract the data from the json resonse
     private fun extractFromJSON(birdJSON: String?) {
         if (!birdJSON.isNullOrEmpty()) {
@@ -235,20 +249,7 @@ class map : Fragment() {
                     println(newHotspot)
                 }
 
-                // Add markers on the UI thread
-                activity?.runOnUiThread {
-                    mapView?.getMapAsync { mapboxMap ->
-                        mapboxMap.setStyle(Style.MAPBOX_STREETS) {
-                            for (location in locations) {
-                                mapboxMap.addMarker(
-                                    com.mapbox.mapboxsdk.annotations.MarkerOptions()
-                                        .position(LatLng(location.latitude, location.longitude))
-                                        .title(location.name)
-                                )
-                            }
-                        }
-                    }
-                }
+                UpdateMarkers(locations);
 
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -258,6 +259,29 @@ class map : Fragment() {
         }
     }
 
+    private fun UpdateMarkers(locations: List<LocationDataClass>) {
+        // Add markers on the UI thread
+        activity?.runOnUiThread {
+            mapView?.getMapAsync { mapboxMap ->
+                mapboxMap.setStyle(Style.MAPBOX_STREETS) {
+
+                    mapboxMap.clear()
+
+                    for (location in locations) {
+                        mapboxMap.addMarker(
+                            com.mapbox.mapboxsdk.annotations.MarkerOptions()
+                                .position(LatLng(location.latitude, location.longitude))
+                                .title(location.name)
+                        )
+                    }
+                }
+            }
+        }
+    }
+    //endregion
+
+    //on methods
+    //region
     override fun onStart() {
         super.onStart()
         mapView?.onStart()
@@ -266,6 +290,7 @@ class map : Fragment() {
     override fun onResume() {
         super.onResume()
         mapView?.onResume()
+        GetBirdData()
     }
 
     override fun onPause() {
@@ -292,4 +317,5 @@ class map : Fragment() {
         super.onDestroy()
         mapView?.onDestroy()
     }
+    //endregion
 }
