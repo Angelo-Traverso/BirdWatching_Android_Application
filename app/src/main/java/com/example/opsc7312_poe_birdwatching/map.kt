@@ -2,11 +2,14 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,18 +21,22 @@ import com.google.android.gms.location.LocationServices
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
+import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.mapbox.mapboxsdk.location.modes.CameraMode
+import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.Style
 import kotlin.concurrent.thread
 
 class map : Fragment() {
-
+    private val REQUEST_LOCATION_PERMISSION = 1001
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
-    var mapView: MapView? = null
-    var HotspotList = mutableListOf<HotspotModel>()
-    var lat = 0.0
-    var lon = 0.0
+    private var mapView: MapView? = null
+    private var HotspotList = mutableListOf<HotspotModel>()
+    private var lat = 0.0
+    private var lon = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,103 +47,185 @@ class map : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if (ContextCompat.checkSelfPermission(
+                requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Get user's location
+            requestLocation()
+        } else {
+            // Request location permission
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                // Got last known location. Use it if available.
+                if (location != null) {
+                    // Use the location (location.latitude and location.longitude)
+                }
+            }
+
+       //fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         Mapbox.getInstance(requireContext(), getString(R.string.mapbox_access_token))
-        val tvCurrentLocation = view?.findViewById<TextView>(R.id.tvCurrentLocation)
 
         val view = inflater.inflate(R.layout.fragment_map, container, false)
-
         mapView = view.findViewById(R.id.mapView)
+
         mapView?.onCreate(savedInstanceState)
         mapView?.getMapAsync { mapboxMap ->
             mapboxMap.setStyle(Style.MAPBOX_STREETS) {
 
-                //  Check for location permission
+                val locationComponentOptions = LocationComponentOptions.builder(requireContext())
+                    .pulseEnabled(true)
+                    .pulseColor(Color.BLUE)
+                    .pulseAlpha(.4f)
+                    .elevation(5f)
+                    .accuracyColor(Color.RED)
+                    .pulseInterpolator(BounceInterpolator())
+                    .build()
+
+                val locationComponentActivationOptions = LocationComponentActivationOptions
+                    .builder(requireContext(), it)
+                    .locationComponentOptions(locationComponentOptions)
+                    .build()
+
+                mapboxMap.locationComponent.apply {
+                    activateLocationComponent(locationComponentActivationOptions)
+                    isLocationComponentEnabled = true
+                    cameraMode = CameraMode.TRACKING_GPS
+                    renderMode = RenderMode.COMPASS
+                }
+
+                // Check for location permission
                 if (ContextCompat.checkSelfPermission(
                         requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
 
-                    //  Get users location
-                    fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity())
-                    { location: Location? ->
+                    // Get user's location
+                    fusedLocationClient.lastLocation.addOnSuccessListener(requireActivity()) { location: Location? ->
                         location?.let {
                             lat = location.latitude
                             lon = location.longitude
 
-
+                            val cameraPosition = CameraPosition.Builder().target(LatLng(lat, lon))
+                                .zoom(12.0)
+                                .tilt(20.0)
+                                .build()
+                            mapboxMap.cameraPosition = cameraPosition
                         }
                     }
 
-                    // If no location found set it to the castle of good hope
-                    if (lat == 0.0 && lon == 0.0) {
-                        lat = -33.9249
-                        lon = 18.4241
-                    }
 
+                    // If no location found set it to the castle of good hope
+                   /* if (lat == 0.0 && lon == 0.0) {
+                        lat =
+                        lon =
+                    }*/
                     // Move camera
-                    val cameraPosition = CameraPosition.Builder().target(
-                        LatLng(
-                            lat, lon
-                        )
-                    ).zoom(12.0).tilt(20.0).build()
-                    mapboxMap.cameraPosition = cameraPosition
+
+
 
                 } else {
                     ActivityCompat.requestPermissions(
                         requireActivity(),
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                         LOCATION_PERMISSION_REQUEST_CODE
+
+
                     )
                 }
 
                 // Create a new thread and query the api
                 thread {
-                    val bird = try {
-                        var apiWorker = APIWorker()
-                        apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
+                    try {
+                        val apiWorker = APIWorker()
+                        val birdJSON = apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
+                        extractFromJSON(birdJSON)
                     } catch (e: Exception) {
-                        return@thread
+                        e.printStackTrace()
                     }
-
-                    extractFromJSON(bird)
                 }
             }
         }
         return view
     }
+    private fun requestLocation() {
+        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    // Move camera to the user's current location
+                    val cameraPosition = CameraPosition.Builder().target(LatLng(latitude, longitude))
+                        .zoom(12.0)
+                        .tilt(20.0)
+                        .build()
+                    mapView?.getMapAsync { mapboxMap ->
+                        mapboxMap.cameraPosition = cameraPosition
+                    }
+                }
+            }
+    }
 
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, request location again
+                requestLocation()
+            } else {
+                // Permission denied, handle accordingly
+                // You may display a message or disable location features
+            }
+        }
+    }
     // Extract the data from the json response
     private fun extractFromJSON(birdJSON: String?) {
         if (!birdJSON.isNullOrEmpty()) {
             try {
-
                 birdJSON.trimIndent()
-
-                val locations = birdJSON.lines().map { line ->
+                val locations = birdJSON.lines().mapNotNull { line ->
                     val parts = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
                     if (parts.size >= 9) {
                         LocationDataClass(
-                            parts[0],
-                            parts[1],
-                            parts[2],
-                            parts[3],
-                            parts[4].toDouble(),
-                            parts[5].toDouble(),
-                            parts[6],
-                            parts[7],
-                            parts[8].toInt()
+                            parts[0], parts[1], parts[2], parts[3], parts[4].toDouble(),
+                            parts[5].toDouble(), parts[6], parts[7], parts[8].toInt()
                         )
                     } else {
                         null
                     }
-                }.filterNotNull()
+                }
 
                 // Add hotspots to the list
                 for (location in locations) {
-                    var newHotspot =
-                        HotspotModel(location.name, location.latitude, location.longitude)
+                    val newHotspot = HotspotModel(location.name, location.latitude, location.longitude)
                     HotspotList.add(newHotspot)
                     println(newHotspot)
                 }
@@ -155,8 +244,7 @@ class map : Fragment() {
                         }
                     }
                 }
-
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         } else {

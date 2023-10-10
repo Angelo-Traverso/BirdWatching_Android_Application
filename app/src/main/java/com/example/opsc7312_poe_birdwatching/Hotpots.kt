@@ -71,19 +71,7 @@ class Hotpots : AppCompatActivity() {
 
         transaction.commit()
 
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Request the permission
-            ActivityCompat.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
-        }else{requestLocation()}
 
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. Use it if available.
-                if (location != null) {
-                    // Use the location (location.latitude and location.longitude)
-                }
-            }
 
 
 
