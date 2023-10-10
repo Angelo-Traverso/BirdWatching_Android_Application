@@ -46,7 +46,7 @@
             android:layout_toEndOf="@+id/lineAppBar"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:text="Location"
+            android:text="@string/Location"
             android:textColor="@color/white"
             android:gravity="center"
             android:drawablePadding="6dp"
@@ -63,7 +63,7 @@
         android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_1"
+        android:id="@+id/menu_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -83,7 +83,7 @@
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_2"
+        android:id="@+id/menu_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -103,7 +103,7 @@
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_3"
+        android:id="@+id/menu_addObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -117,12 +117,10 @@
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/edit_square"
         app:tint="@color/white">
-
-
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_4"
+        android:id="@+id/menu_viewObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -140,7 +138,7 @@
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_5"
+        android:id="@+id/menu_challenges"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

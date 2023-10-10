@@ -82,11 +82,11 @@ class Hotpots : AppCompatActivity() {
         fabAnticlock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_anticlock)
 
         fabMenu = findViewById(R.id.fabMenu)
-        fab1 = findViewById(R.id.menu_item_1)
-        settings = findViewById(R.id.menu_item_2)
-        addObservation = findViewById(R.id.menu_item_3)
-        fab4 = findViewById(R.id.menu_item_4)
-        fab5 = findViewById(R.id.menu_item_5)
+        fab1 = findViewById(R.id.menu_game)
+        settings = findViewById(R.id.menu_settings)
+        addObservation = findViewById(R.id.menu_addObservation)
+        fab4 = findViewById(R.id.menu_viewObservation)
+        fab5 = findViewById(R.id.menu_challenges)
 
         addObservation.setOnClickListener{
             val intent = Intent(this, AddObservation::class.java )

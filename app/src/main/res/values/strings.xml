@@ -22,6 +22,8 @@
     <!--Sign up-->
     <string name="hotspots">Hotspots</string>
 
+    <!--Hotspots-->
+    <string name="Location">Location</string>
 
     <!--Content Descriptions-->
     <string name="Logo">Logo</string>
@@ -30,6 +32,7 @@
     <string name="HowMany">How many did you see?</string>
     <string name="When">When did you see it?</string>
     <string name="Where">Where did you see it?</string>
+    <string name="AddNote">Add a note</string>
 
     <!--Challenges-->
     <string name="Challenges">CHALLENGES</string>

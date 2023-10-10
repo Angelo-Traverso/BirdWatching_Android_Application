@@ -1,7 +1,6 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,8 +10,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
-import com.mapbox.mapboxsdk.geometry.LatLng
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
