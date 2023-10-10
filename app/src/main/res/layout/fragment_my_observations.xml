@@ -5,10 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".MyObservations">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
+        android:id="@+id/scrollObservations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:contentDescription="@string/AddObservation">
+
+        <LinearLayout
+            android:id="@+id/myObservationContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </FrameLayout>

@@ -96,13 +96,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etWhere"
         android:layout_marginStart="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textColorHint="@color/white"
         android:hint="Add a note"
-        />
+        android:minHeight="48dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColorHint="@color/white" />
 
     <Button
         android:id="@+id/btnSaveObservation"
@@ -118,17 +118,18 @@
         android:text="@string/SaveObservation"
         />
 
-    <Button
+    <TextView
         android:id="@+id/btnCancel"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/btnSaveObservation"
         android:layout_marginTop="16dp"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
+        android:textColor="@color/white"
         android:backgroundTint="@android:color/transparent"
-        android:layout_centerHorizontal="true"
-        android:text="@string/SaveObservation"
+        android:gravity="center"
+        android:text="@string/Cancel"
         />
 
 </RelativeLayout>
