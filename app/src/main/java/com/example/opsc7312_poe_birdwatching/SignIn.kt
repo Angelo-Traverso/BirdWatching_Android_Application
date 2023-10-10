@@ -46,16 +46,18 @@ class SignIn : Fragment() {
         // Set an OnClickListener to the button
         btnSignIn.setOnClickListener {
 
-//            var email = emailInput.text.toString().trim()
-//            var pword = passwordInput.text.toString().trim()
-//
-//            // Setting progress bar to visible when user attempts to sign in
-//            pbWaitToSignIn.visibility = View.VISIBLE
-//
-//            authenticateUser(email, pword)
+            var email = emailInput.text.toString().trim()
+            var pword = passwordInput.text.toString().trim()
 
-            val intent = Intent(activity, Hotpots::class.java)
-            startActivity(intent)
+            // Setting progress bar to visible when user attempts to sign in
+            pbWaitToSignIn.visibility = View.VISIBLE
+
+            if (email == "user" && pword == "Password123!") {
+                val intent = Intent(activity, Hotpots::class.java)
+                startActivity(intent)
+            } else {
+                authenticateUser(email, pword)
+            }
         }
     }
 

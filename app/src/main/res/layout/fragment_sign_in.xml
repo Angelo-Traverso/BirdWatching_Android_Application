@@ -23,6 +23,8 @@
             android:id="@+id/txtUserSignInEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="user"
+            android:textColor="@color/white"
             android:background="@android:color/transparent" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -46,6 +48,8 @@
             android:id="@+id/txtUserSignInPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Password123!"
+            android:textColor="@color/white"
             android:background="@android:color/transparent"
             android:inputType="textPassword" />
 
