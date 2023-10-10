@@ -5,24 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/appName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/app_name"
-        android:textSize="48sp"
-        android:fontFamily="@font/sedansc_regular"
-        android:textColor="@color/white"
-        android:gravity="center"/>
+    tools:context=".Settings">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appName"
         android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/app_name"
@@ -40,7 +28,5 @@
         android:layout_below="@id/tabLayout"
         android:contentDescription="sd"
         android:layout_marginTop="48dp" />
-
-
 
 </RelativeLayout>

@@ -23,6 +23,10 @@
     <!--Content Descriptions-->
     <string name="Logo">Logo</string>
 
+    <!--Add Observation-->
+    <string name="HowMany">How many did you see?</string>
+    <string name="When">When did you see it?</string>
+    <string name="Where">Where did you see it?</string>
 
     <!--Challenges-->
     <string name="Challenges">CHALLENGES</string>
@@ -30,7 +34,24 @@
     <string name="PointEarnedHeading">My points earned</string>
     <string name="WeeklyChallenges">Weekly Challenges</string>
 
+    <!--Settings Fragment-->
+    <string name="UserName">Jackson Fischer</string>
+    <string name="UserEmail">jFischer@gmail.com</string>
+    <string name="Settings"><b>Settings</b></string>
+    <string name="Units">Units</string>
+    <string name="MaxRadius">Max Radius</string>
+    <string name="About">About</string>
+    <string name="TempText">Proin id lobortis justo. Cras ornare egestas nibh ut blandit. Nunc euismod sollicitudin neque, nec blandit diam commodo vel. Suspendisse et ex sit amet ipsum vulputate semper non et urna.
+Quisque nec ex in lectus tincidunt pretium. Quisque dapibus mattis elit, non ullamcorper mi tempor eu. Vivamus elementum convallis bibendum. Sed cursus sodales lorem, at sagittis tortor aliquam ut. </string>
+
+    <string name="Metric">Metric</string>
+    <string name="Imperial">Imperial</string>
+    <string name="AddObservation">Add Observation</string>
 
 
+    <string name="mapbox_access_token">sk.eyJ1IjoiYW5nZWxvLXQiLCJhIjoiY2xuY3hyaWtpMGt5ZTJqcXNoNzh4cjkxdiJ9.VasjYafU8FXBUIgJMxyG-Q</string>
+
+    <string name="SelectSpecies">Select a species</string>
+    <string name="SaveObservation">Save Observation</string>
 
 </resources>

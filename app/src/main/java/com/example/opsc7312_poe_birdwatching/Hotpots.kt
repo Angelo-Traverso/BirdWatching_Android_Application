@@ -1,8 +1,16 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -10,22 +18,33 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.Style
+import java.util.*
+
 
 class Hotpots : AppCompatActivity() {
 
+    private val REQUEST_LOCATION_PERMISSION = 1001
 
     private var isMenuVisible = false;
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var fab1: FloatingActionButton
-    private lateinit var fab2: FloatingActionButton
-    private lateinit var fab3: FloatingActionButton
+    private lateinit var settings: FloatingActionButton
+    private lateinit var addObservation: FloatingActionButton
     private lateinit var fab4: FloatingActionButton
     private lateinit var fab5: FloatingActionButton
-    private var isFABOpen = false
+    private lateinit var tvCurrentLocation: TextView
 
 
-    ///
 
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
@@ -35,7 +54,39 @@ class Hotpots : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_hotpots)
+
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+
+
+
+        tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
+
+        val fragment = map()
+        transaction.replace(R.id.mainContainer, fragment)
+
+        transaction.addToBackStack(null)
+
+        transaction.commit()
+
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+        }else{requestLocation()}
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                // Got last known location. Use it if available.
+                if (location != null) {
+                    // Use the location (location.latitude and location.longitude)
+                }
+            }
+
+
+
         ///
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
@@ -44,125 +95,141 @@ class Hotpots : AppCompatActivity() {
 
         fabMenu = findViewById(R.id.fabMenu)
         fab1 = findViewById(R.id.menu_item_1)
-        fab2 = findViewById(R.id.menu_item_2)
-        fab3 = findViewById(R.id.menu_item_3)
+        settings = findViewById(R.id.menu_item_2)
+        addObservation = findViewById(R.id.menu_item_3)
         fab4 = findViewById(R.id.menu_item_4)
         fab5 = findViewById(R.id.menu_item_5)
-        val linearLayout = findViewById<LinearLayout>(R.id.linearAppBar)
 
+        addObservation.setOnClickListener{
+            val intent = Intent(this, AddObservation::class.java )
+            startActivity(intent)
+
+            // Close the menu when item clicked
+            close()
+
+        }
+
+        settings.setOnClickListener{
+            val intent = Intent(this, Settings::class.java)
+            startActivity(intent)
+
+            // Close the menu when item clicked
+            close()
+
+        }
+        fab5.setOnClickListener{
+            loadChallengesFragment()
+
+            // Close the menu when item clicked
+            close()
+        }
         fabMenu.setOnClickListener {
-            if (isOpen) {
-                fab1.startAnimation(fabClose)
-                fab2.startAnimation(fabClose)
-                fab3.startAnimation(fabClose)
-                fab4.startAnimation(fabClose)
-                fab5.startAnimation(fabClose)
-                fabMenu.startAnimation(fabAnticlock)
-                isOpen = false
-            } else {
-                fabMenu.startAnimation(fabClock)
-                fab1.startAnimation(fabOpen)
-                fab2.startAnimation(fabOpen)
-                fab3.startAnimation(fabOpen)
-                fab4.startAnimation(fabOpen)
-                fab5.startAnimation(fabOpen)
-                isOpen = true
-            }
-
-            //showFabMenu(it)
-
-          /*  if (!isFABOpen) {
-
-                showFabMenu();
-            } else {
-                closeFABMenu();
-            }*/
-        }
-    }
-
-    private fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(this, view)
-        popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
-            // Handle menu item click here
-            when (menuItem.itemId) {
-                R.id.menuGame -> {
-                    // Handle menu item 1 click
-                    true
-                }
-                R.id.menuSettings -> {
-                    // Handle menu item 2 click
-                    true
-                }
-                R.id.menuAddSighting -> {
-                    // Handle menu item 2 click
-                    true
-                }
-                R.id.menuViewSighting -> {
-                    // Handle menu item 2 click
-                    true
-                }
-                R.id.menuRewards -> {
-                    // Handle menu item 2 click
-                    true
-                }
-                else -> false
+            if(isOpen())
+            {
+                close()
+            }else
+            {
+                open()
             }
         }
-        popupMenu.show()
     }
 
-    private fun showFabMenu() {
-        /*val popupView = LayoutInflater.from(this).inflate(R.layout.fab_menu_layout, null)
-        val popupWindow = PopupWindow(
-            popupView,
-            300,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+    private fun requestLocation() {
+        Log.d("Location", "requestLocation called")
+        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // Calculate the y-offset to position the popup above the FAB
-        val yOffset = -(popupWindow.height + anchor.height)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    tvCurrentLocation.text = "Latitude: $latitude, Longitude: $longitude"
 
-        // Example: Set actions for menu items
-        val menuItem1 = popupView.findViewById<ImageButton>(R.id.menu_item_1)
-        menuItem1.setOnClickListener {
-            // Handle menu item 1 click
-            // Add your logic here
-            popupWindow.dismiss()
+                    // Perform reverse geocoding to get country/region code
+                  //  getCountryCodeFromLocation(location)
+                } else {
+                    tvCurrentLocation.text = "Location not available"
+                }
+            }
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_LOCATION_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted, you can now access the user's location
+                    // Call a function to start receiving location updates
+                } else {
+                    // Permission denied
+                    // Handle accordingly (e.g., display a message or disable location features)
+                }
+            }
+        }
+    }
+    private fun open()
+    {
+        fabMenu.startAnimation(fabClock)
+        fab1.startAnimation(fabOpen)
+        settings.startAnimation(fabOpen)
+        addObservation.startAnimation(fabOpen)
+        fab4.startAnimation(fabOpen)
+        fab5.startAnimation(fabOpen)
+        isOpen = true
+
+    }
+
+    private fun isOpen() : Boolean
+    {
+        if (isOpen) {
+            fab1.startAnimation(fabClose)
+            settings.startAnimation(fabClose)
+            addObservation.startAnimation(fabClose)
+            fab4.startAnimation(fabClose)
+            fab5.startAnimation(fabClose)
+            fabMenu.startAnimation(fabAnticlock)
+            return true
+
+        } else {
+            fabMenu.startAnimation(fabClock)
+            fab1.startAnimation(fabOpen)
+            settings.startAnimation(fabOpen)
+            addObservation.startAnimation(fabOpen)
+            fab4.startAnimation(fabOpen)
+            fab5.startAnimation(fabOpen)
+            return false
         }
 
-        val menuItem2 = popupView.findViewById<ImageButton>(R.id.menu_item_2)
-        menuItem2.setOnClickListener {
-            // Handle menu item 2 click
-            // Add your logic here
-            popupWindow.dismiss()
-        }
+    }
 
-        // Show the popup menu above the FAB
-        popupWindow.showAsDropDown(anchor, 0, yOffset)*/
-
-        isFABOpen = true
-
-        fabMenu.animate().translationY(-resources.getDimension(R.dimen.standard_55))
-        fab1.animate().translationY(-resources.getDimension(R.dimen.standard_105))
-        fab2.animate().translationY(-resources.getDimension(R.dimen.standard_155))
-        fab3.animate().translationY(-resources.getDimension(R.dimen.standard_205))
-        fab4.animate().translationY(-resources.getDimension(R.dimen.standard_255))
-        fab5.animate().translationY(-resources.getDimension(R.dimen.standard_305))
-
+    private fun close()
+    {
+        fab1.startAnimation(fabClose)
+        settings.startAnimation(fabClose)
+        addObservation.startAnimation(fabClose)
+        fab4.startAnimation(fabClose)
+        fab5.startAnimation(fabClose)
+        fabMenu.startAnimation(fabAnticlock)
+        isOpen = false
 
     }
 
-    private fun closeFABMenu() {
-        isFABOpen=false
-        val fabMenuTranslationY = fabMenu.translationY
-
-        fab1.animate().translationY(fabMenuTranslationY)
-        fab2.animate().translationY(fabMenuTranslationY)
-        fab3.animate().translationY(fabMenuTranslationY)
-        fab4.animate().translationY(fabMenuTranslationY)
-        fab5.animate().translationY(fabMenuTranslationY)
-
+    private fun loadChallengesFragment() {
+        val challengesFragment = Challenges()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainContainer, challengesFragment)
+            .addToBackStack(null) // If you want to allow back navigation
+            .commit()
     }
-
 }

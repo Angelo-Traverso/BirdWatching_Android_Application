@@ -1,39 +1,34 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.Toast
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SignIn.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignIn : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var emailInput: TextInputEditText
+    private lateinit var passwordInput: TextInputEditText
+    private lateinit var btnSignIn: Button
+    private lateinit var pbWaitToSignIn: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
@@ -43,34 +38,59 @@ class SignIn : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Find the button by ID
-        val signInButton: Button = view.findViewById(R.id.btnSignIn)
+        pbWaitToSignIn = view.findViewById(R.id.pbWaitToSignIn)
+        btnSignIn = view.findViewById(R.id.btnSignIn)
+        emailInput = view.findViewById(R.id.txtUserSignInEmail)
+        passwordInput = view.findViewById(R.id.txtUserSignInPassword)
 
         // Set an OnClickListener to the button
-        signInButton.setOnClickListener {
-            // Handle button click here
-            // Start your activity when the button is clicked
+        btnSignIn.setOnClickListener {
+
+//            var email = emailInput.text.toString().trim()
+//            var pword = passwordInput.text.toString().trim()
+//
+//            // Setting progress bar to visible when user attempts to sign in
+//            pbWaitToSignIn.visibility = View.VISIBLE
+//
+//            authenticateUser(email, pword)
+
             val intent = Intent(activity, Hotpots::class.java)
             startActivity(intent)
         }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignIn.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignIn().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun authenticateUser(email: String, password: String) {
+
+        var storedPassword = ""
+
+        if (!ToolBox.users.isEmpty()) {
+            storedPassword = ToolBox.users[0].Hash
+        }
+
+        // Compare the stored hashed password with the provided password
+        if (!(storedPassword.isNullOrEmpty()) && verifyPassword(password, storedPassword)) {
+
+            // Authentication successful
+            ToolBox.user = ToolBox.users[0]
+            val intent = Intent(activity, Hotpots::class.java)
+            startActivity(intent)
+
+            pbWaitToSignIn.visibility = View.GONE
+
+        } else {
+            // Authentication failed
+            pbWaitToSignIn.visibility = View.GONE
+
+            val errToast = Toast.makeText(
+                requireContext(), "Incorrect username or password", Toast.LENGTH_LONG
+            )
+
+            errToast.setGravity(Gravity.BOTTOM, 0, 25)
+            errToast.show()
+        }
+    }
+
+    private fun verifyPassword(password: String, storedPassword: String): Boolean {
+        return PasswordHandler.hashPassword(password.toString().trim()) == storedPassword
     }
 }

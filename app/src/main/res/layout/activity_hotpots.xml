@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/relMain"
     tools:context=".Hotpots">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearAppBar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -16,46 +18,49 @@
 
         <TextView
             android:id="@+id/tvHotspots"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
-            android:layout_weight="1"
+            android:layout_centerVertical="true"
             android:text="@string/hotspots"
             android:textColor="@color/white"
             android:textSize="22sp" />
 
-        <!-- Vertical line -->
         <View
+            android:id="@+id/lineAppBar"
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
-            android:layout_weight="0.01"
+            android:layout_toEndOf="@+id/tvHotspots"
             android:alpha="0.1"
             android:foreground="@color/white" />
 
-        <ImageView
-            android:id="@+id/ivLocationIcon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:src="@drawable/location"
-            app:tint="@color/white" />
-
         <TextView
-            android:id="@+id/currentLocation"
-            android:layout_width="0dp"
+            android:id="@+id/tvCurrentLocation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_toEndOf="@+id/lineAppBar"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:text="Location"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:drawablePadding="6dp"
+            app:drawableStartCompat="@drawable/location_small"
+            app:drawableTint="@color/white" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
+    <!--Map display-->
+    <FrameLayout
+        android:id="@+id/mainContainer"
+        android:layout_below="@+id/linearAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/menu_item_1"

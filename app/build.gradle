@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.opsc7312_poe_birdwatching'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.opsc7312_poe_birdwatching"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -33,6 +33,12 @@ android {
 }
 
 dependencies {
+
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
+    implementation "com.google.android.gms:play-services-location:20.0.0"
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-core:5.0.0'
+
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
