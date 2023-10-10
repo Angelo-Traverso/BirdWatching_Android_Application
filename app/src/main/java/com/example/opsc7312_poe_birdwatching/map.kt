@@ -112,14 +112,7 @@ class map : Fragment() {
                         lat = -33.9249
                         lon = 18.4241
                     }
-
-                    //move camera
-                    val cameraPosition = CameraPosition.Builder().target(
-                        LatLng(
-                            lat, lon
-                        )
-                    ).zoom(12.0).tilt(20.0).build()
-                    mapboxMap.cameraPosition = cameraPosition
+                  //  mapboxMap.cameraPosition = cameraPosition
 
                 } else {
                     ActivityCompat.requestPermissions(
@@ -132,6 +125,7 @@ class map : Fragment() {
                 GetBirdData()
 
             }
+
         }
         return view
     }
@@ -175,6 +169,8 @@ class map : Fragment() {
                         mapboxMap.cameraPosition = cameraPosition
                     }
                 }
+
+
             }
     }
 

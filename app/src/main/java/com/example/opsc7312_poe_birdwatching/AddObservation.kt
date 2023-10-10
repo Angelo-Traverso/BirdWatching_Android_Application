@@ -1,6 +1,7 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
+import android.app.DatePickerDialog
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -21,6 +22,7 @@ import com.google.android.gms.location.LocationServices
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -31,6 +33,7 @@ class AddObservation : AppCompatActivity() {
     private lateinit var geocoder: Geocoder
     private lateinit var userLocation : Location
     private lateinit var etSelectSpecies:EditText
+    private lateinit var etWhen: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,11 @@ class AddObservation : AppCompatActivity() {
         requestLocation()
 
         etSelectSpecies = findViewById(R.id.etSelectSpecies)
+        etWhen = findViewById(R.id.etWhen)
 
+        etWhen.setOnClickListener{
+            showCalendarDialog()
+        }
 
         geocoder = Geocoder(this, Locale.getDefault())
 
@@ -62,7 +69,6 @@ class AddObservation : AppCompatActivity() {
                 //extractFromJSON(bird)
             }
         }
-
     }
 
         // Extracts species from returned JSON
@@ -161,4 +167,32 @@ class AddObservation : AppCompatActivity() {
 
         dialog.show()
     }
+
+    //  Calender Dialog
+    private fun showCalendarDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(selectedYear, selectedMonth, selectedDay)
+
+                val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+                val formattedDate = dateFormat.format(selectedDate.time)
+
+                etWhen.setText(formattedDate)
+            },
+            year,
+            month,
+            day
+        )
+
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePickerDialog.show()
+    }
+
 }
