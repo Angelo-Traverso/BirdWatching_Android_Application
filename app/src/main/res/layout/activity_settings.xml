@@ -11,44 +11,41 @@
         android:id="@+id/tvBackSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Back"
         android:layout_margin="16dp"
-        android:textColor="@color/white"
-        />
+        android:text="@string/Back"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/tvLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:layout_margin="16dp"
-        android:layout_toEndOf="@id/tvBackSettings"
         android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:layout_toEndOf="@+id/tvBackSettings"
         android:gravity="end"
-        android:textColor="@color/white"
-        />
+        android:text="@string/logout"
+        android:textColor="@color/white" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBackSettings"
         android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/app_name"
         android:paddingBottom="6dp"
         app:tabIndicatorColor="@color/tab_indicator"
-        android:layout_below="@+id/tvBackSettings"
         app:tabIndicatorFullWidth="false"
         app:tabMode="fixed"
-        app:tabTextColor="@color/white">
-    </com.google.android.material.tabs.TabLayout>
+        app:tabTextColor="@color/white"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tabLayout"
-        android:contentDescription="sd"
-        android:layout_marginTop="48dp" />
+        android:layout_marginTop="48dp"
+        android:contentDescription="sd" />
 
 </RelativeLayout>
