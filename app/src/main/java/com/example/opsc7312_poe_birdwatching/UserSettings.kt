@@ -20,6 +20,8 @@ class UserSettings : Fragment() {
 
     private lateinit var btnMetric: Button
     private lateinit var btnImperial: Button
+    private lateinit var tvSliderText: TextView
+    private lateinit var sliderDistance: RangeSlider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +33,10 @@ class UserSettings : Fragment() {
         val view = inflater.inflate(R.layout.fragment_user_settings, container, false)
 
         //---SLIDER---
-        val sliderDistance = view.findViewById<RangeSlider>(R.id.sliderDistance)
-        val tvSliderText = view.findViewById<TextView>(R.id.tvMaxRadius)
+        sliderDistance = view.findViewById(R.id.sliderDistance)
+        tvSliderText = view.findViewById(R.id.tvMaxRadius)
 
+        //set slider to users preference
         sliderDistance.setValues(ToolBox.users[ToolBox.userID].MaxDistance.toFloat())
 
         // Set the track color
@@ -51,7 +54,14 @@ class UserSettings : Fragment() {
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
 
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
-            val displayValue = "$value Km"
+            var unit = "km"
+
+            if (!ToolBox.users[ToolBox.userID].MeasurementUnitsIsKM)
+            {
+                unit = "mile"
+            }
+
+            val displayValue = "$value $unit"
             tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
             ToolBox.users[ToolBox.userID].MaxDistance = value.toDouble()
         }
@@ -87,6 +97,11 @@ class UserSettings : Fragment() {
         ViewCompat.setBackgroundTintList(btnImperial, unselectedColorStateList)
 
         ToolBox.users[ToolBox.userID].MeasurementUnitsIsKM = true
+
+        var value = ToolBox.users[ToolBox.userID].MaxDistance.toFloat()
+        var unit = "km"
+        val displayValue = "$value $unit"
+        tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
     }
 
     private fun ToImperial() {
@@ -99,5 +114,10 @@ class UserSettings : Fragment() {
         ViewCompat.setBackgroundTintList(btnMetric, unselectedColorStateList)
 
         ToolBox.users[ToolBox.userID].MeasurementUnitsIsKM = false
+
+        var value = ToolBox.users[ToolBox.userID].MaxDistance.toFloat()
+        var unit = "mile"
+        val displayValue = "$value $unit"
+        tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
     }
 }
