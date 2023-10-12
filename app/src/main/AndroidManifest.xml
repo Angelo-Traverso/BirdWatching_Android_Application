@@ -21,6 +21,7 @@
         <activity
             android:name=".Game.GameActivity"
             android:exported="false" />
+
         <activity
             android:name=".AddObservation"
             android:exported="false" />
