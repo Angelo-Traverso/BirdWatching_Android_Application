@@ -32,7 +32,6 @@ import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.Style
 import java.util.*
 
-
 class Hotpots : AppCompatActivity() {
 
     private val REQUEST_LOCATION_PERMISSION = 1001
@@ -45,8 +44,6 @@ class Hotpots : AppCompatActivity() {
     private lateinit var fab4: FloatingActionButton
     private lateinit var menuChallenges: FloatingActionButton
     private lateinit var tvCurrentLocation: TextView
-
-
 
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
@@ -62,22 +59,13 @@ class Hotpots : AppCompatActivity() {
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
 
-
-
         tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
 
         val fragment = map()
         transaction.replace(R.id.mainContainer, fragment)
-
         transaction.addToBackStack(null)
-
         transaction.commit()
 
-
-
-
-
-        ///
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fabClock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
@@ -99,8 +87,6 @@ class Hotpots : AppCompatActivity() {
         addObservation.setOnClickListener{
             val intent = Intent(this, AddObservation::class.java )
             startActivity(intent)
-
-            // Close the menu when item clicked
             close()
 
         }
@@ -108,16 +94,14 @@ class Hotpots : AppCompatActivity() {
         settings.setOnClickListener{
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
-
-            // Close the menu when item clicked
             close()
         }
+
         menuChallenges.setOnClickListener{
             loadChallengesFragment()
-
-            // Close the menu when item clicked
             close()
         }
+
         fabMenu.setOnClickListener {
             if(isOpen())
             {
@@ -127,6 +111,7 @@ class Hotpots : AppCompatActivity() {
                 open()
             }
         }
+
     }
 
     private fun requestLocation() {
@@ -158,7 +143,6 @@ class Hotpots : AppCompatActivity() {
             }
     }
 
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -173,6 +157,7 @@ class Hotpots : AppCompatActivity() {
             }
         }
     }
+
     private fun open()
     {
         fabMenu.startAnimation(fabClock)
