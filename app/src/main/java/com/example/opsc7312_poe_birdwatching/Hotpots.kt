@@ -34,9 +34,10 @@ import java.util.*
 
 class Hotpots : AppCompatActivity() {
 
-    private val REQUEST_LOCATION_PERMISSION = 1001
+//    private val REQUEST_LOCATION_PERMISSION = 1001
+//
+//    private var isMenuVisible = false;
 
-    private var isMenuVisible = false;
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
     private lateinit var settings: FloatingActionButton
@@ -44,9 +45,6 @@ class Hotpots : AppCompatActivity() {
     private lateinit var fab4: FloatingActionButton
     private lateinit var menuChallenges: FloatingActionButton
     private lateinit var tvCurrentLocation: TextView
-
-
-
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
     private lateinit var fabClock: Animation
@@ -55,28 +53,18 @@ class Hotpots : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_hotpots)
 
         val fragmentManager: FragmentManager = supportFragmentManager
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
 
-
-
         tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
 
         val fragment = map()
         transaction.replace(R.id.mainContainer, fragment)
-
         transaction.addToBackStack(null)
-
         transaction.commit()
 
-
-
-
-
-        ///
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fabClock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
@@ -89,92 +77,83 @@ class Hotpots : AppCompatActivity() {
         fab4 = findViewById(R.id.menu_viewObservation)
         menuChallenges = findViewById(R.id.menu_challenges)
 
-        menuGame.setOnClickListener{
+        menuGame.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
             close()
         }
 
-        addObservation.setOnClickListener{
-            val intent = Intent(this, AddObservation::class.java )
+        addObservation.setOnClickListener {
+            val intent = Intent(this, AddObservation::class.java)
             startActivity(intent)
-
-            // Close the menu when item clicked
             close()
 
         }
 
-        settings.setOnClickListener{
+        settings.setOnClickListener {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
-
-            // Close the menu when item clicked
             close()
 
         }
-        menuChallenges.setOnClickListener{
+        menuChallenges.setOnClickListener {
             loadChallengesFragment()
-
-            // Close the menu when item clicked
             close()
         }
         fabMenu.setOnClickListener {
-            if(isOpen())
-            {
+            if (isOpen()) {
                 close()
-            }else
-            {
+            } else {
                 open()
             }
         }
     }
 
-    private fun requestLocation() {
-        Log.d("Location", "requestLocation called")
-        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+//    private fun requestLocation() {
+//        Log.d("Location", "requestLocation called")
+//        val fusedLocationClient: FusedLocationProviderClient =
+//            LocationServices.getFusedLocationProviderClient(this)
+//
+//        if (ActivityCompat.checkSelfPermission(
+//                this, ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                this, Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            return
+//        }
+//        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+//                if (location != null) {
+//                    val latitude = location.latitude
+//                    val longitude = location.longitude
+//                    tvCurrentLocation.text = "Latitude: $latitude, Longitude: $longitude"
+//
+//                    // Perform reverse geocoding to get country/region code
+//                    //  getCountryCodeFromLocation(location)
+//                } else {
+//                    tvCurrentLocation.text = "Location not available"
+//                }
+//            }
+//    }
+//
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        when (requestCode) {
+//            REQUEST_LOCATION_PERMISSION -> {
+//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    // Permission granted, you can now access the user's location
+//                    // Call a function to start receiving location updates
+//                } else {
+//                    // Permission denied
+//                    // Handle accordingly (e.g., display a message or disable location features)
+//                }
+//            }
+//        }
+//    }
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    tvCurrentLocation.text = "Latitude: $latitude, Longitude: $longitude"
-
-                    // Perform reverse geocoding to get country/region code
-                  //  getCountryCodeFromLocation(location)
-                } else {
-                    tvCurrentLocation.text = "Location not available"
-                }
-            }
-    }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_LOCATION_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted, you can now access the user's location
-                    // Call a function to start receiving location updates
-                } else {
-                    // Permission denied
-                    // Handle accordingly (e.g., display a message or disable location features)
-                }
-            }
-        }
-    }
-    private fun open()
-    {
+    private fun open() {
         fabMenu.startAnimation(fabClock)
         menuGame.startAnimation(fabOpen)
         settings.startAnimation(fabOpen)
@@ -185,8 +164,7 @@ class Hotpots : AppCompatActivity() {
 
     }
 
-    private fun isOpen() : Boolean
-    {
+    private fun isOpen(): Boolean {
         if (isOpen) {
             menuGame.startAnimation(fabClose)
             settings.startAnimation(fabClose)
@@ -208,8 +186,7 @@ class Hotpots : AppCompatActivity() {
 
     }
 
-    private fun close()
-    {
+    private fun close() {
         menuGame.startAnimation(fabClose)
         settings.startAnimation(fabClose)
         addObservation.startAnimation(fabClose)
@@ -222,8 +199,7 @@ class Hotpots : AppCompatActivity() {
 
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.relMain, challengesFragment)
+        supportFragmentManager.beginTransaction().replace(R.id.relMain, challengesFragment)
             .addToBackStack(null) // If you want to allow back navigation
             .commit()
     }

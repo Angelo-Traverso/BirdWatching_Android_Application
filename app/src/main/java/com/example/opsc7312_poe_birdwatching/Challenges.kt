@@ -9,25 +9,8 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [Challenges.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Challenges : Fragment() {
     private lateinit var challengeList: List<Challenge_Object> // List of challenges
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the correct layout for this fragment
@@ -42,12 +25,10 @@ class Challenges : Fragment() {
         for ((i, challenge) in challengeList.withIndex()) {
             val challengeItemView = LayoutInflater.from(requireContext()).inflate(R.layout.challenge_item_layout, null) // Change to the correct layout
 
-
             val tvChallengeDescription = challengeItemView.findViewById<TextView>(R.id.tvChallengeDescription)
             val progressBar = challengeItemView.findViewById<ProgressBar>(R.id.progressBar)
             val tvProgress = challengeItemView.findViewById<TextView>(R.id.tvProgress)
             val tvPoints = challengeItemView.findViewById<TextView>(R.id.tvPoints)
-
 
             // Send user back
             val backTextView: TextView = view.findViewById(R.id.tvBack)
@@ -83,24 +64,5 @@ class Challenges : Fragment() {
         challenges.add(Challenge_Object("Challenge 3", 75, 20))
 
         return challenges
-    }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Challenges.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Challenges().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
