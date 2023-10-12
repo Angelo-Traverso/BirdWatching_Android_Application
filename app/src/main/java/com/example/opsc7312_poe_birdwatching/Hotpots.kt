@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -37,11 +38,11 @@ class Hotpots : AppCompatActivity() {
 
     private var isMenuVisible = false;
     private lateinit var fabMenu: FloatingActionButton
-    private lateinit var fab1: FloatingActionButton
+    private lateinit var menuGame: FloatingActionButton
     private lateinit var settings: FloatingActionButton
     private lateinit var addObservation: FloatingActionButton
     private lateinit var fab4: FloatingActionButton
-    private lateinit var fab5: FloatingActionButton
+    private lateinit var menuChallenges: FloatingActionButton
     private lateinit var tvCurrentLocation: TextView
 
 
@@ -71,22 +72,25 @@ class Hotpots : AppCompatActivity() {
 
         transaction.commit()
 
-
-
-
-
-        ///
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fabClock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
         fabAnticlock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_anticlock)
 
         fabMenu = findViewById(R.id.fabMenu)
-        fab1 = findViewById(R.id.menu_item_1)
+        menuGame = findViewById(R.id.menu_item_1)
         settings = findViewById(R.id.menu_item_2)
         addObservation = findViewById(R.id.menu_item_3)
         fab4 = findViewById(R.id.menu_item_4)
-        fab5 = findViewById(R.id.menu_item_5)
+        menuChallenges = findViewById(R.id.menu_item_5)
+
+        menuGame.setOnClickListener{
+            val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+
+            // Close the menu when item clicked
+            close()
+        }
 
         addObservation.setOnClickListener{
             val intent = Intent(this, AddObservation::class.java )
@@ -105,7 +109,7 @@ class Hotpots : AppCompatActivity() {
             close()
 
         }
-        fab5.setOnClickListener{
+        menuChallenges.setOnClickListener{
             loadChallengesFragment()
 
             // Close the menu when item clicked
@@ -169,11 +173,11 @@ class Hotpots : AppCompatActivity() {
     private fun open()
     {
         fabMenu.startAnimation(fabClock)
-        fab1.startAnimation(fabOpen)
+        menuGame.startAnimation(fabOpen)
         settings.startAnimation(fabOpen)
         addObservation.startAnimation(fabOpen)
         fab4.startAnimation(fabOpen)
-        fab5.startAnimation(fabOpen)
+        menuChallenges.startAnimation(fabOpen)
         isOpen = true
 
     }
@@ -181,21 +185,21 @@ class Hotpots : AppCompatActivity() {
     private fun isOpen() : Boolean
     {
         if (isOpen) {
-            fab1.startAnimation(fabClose)
+            menuGame.startAnimation(fabClose)
             settings.startAnimation(fabClose)
             addObservation.startAnimation(fabClose)
             fab4.startAnimation(fabClose)
-            fab5.startAnimation(fabClose)
+            menuChallenges.startAnimation(fabClose)
             fabMenu.startAnimation(fabAnticlock)
             return true
 
         } else {
             fabMenu.startAnimation(fabClock)
-            fab1.startAnimation(fabOpen)
+            menuGame.startAnimation(fabOpen)
             settings.startAnimation(fabOpen)
             addObservation.startAnimation(fabOpen)
             fab4.startAnimation(fabOpen)
-            fab5.startAnimation(fabOpen)
+            menuChallenges.startAnimation(fabOpen)
             return false
         }
 
@@ -203,11 +207,11 @@ class Hotpots : AppCompatActivity() {
 
     private fun close()
     {
-        fab1.startAnimation(fabClose)
+        menuGame.startAnimation(fabClose)
         settings.startAnimation(fabClose)
         addObservation.startAnimation(fabClose)
         fab4.startAnimation(fabClose)
-        fab5.startAnimation(fabClose)
+        menuChallenges.startAnimation(fabClose)
         fabMenu.startAnimation(fabAnticlock)
         isOpen = false
 
