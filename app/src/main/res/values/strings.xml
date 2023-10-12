@@ -18,6 +18,8 @@
     <string name="name">Name</string>
     <string name="repeatPassword">Repeat Password</string>
 
+    <!--Settings-->
+    <string name="logout">Logout</string>
 
     <!--Sign up-->
     <string name="hotspots">Hotspots</string>

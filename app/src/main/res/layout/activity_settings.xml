@@ -7,6 +7,27 @@
     android:background="@color/app_background"
     tools:context=".Settings">
 
+    <TextView
+        android:id="@+id/tvBackSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Back"
+        android:layout_margin="16dp"
+        android:textColor="@color/white"
+        />
+
+    <TextView
+        android:id="@+id/tvLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logout"
+        android:layout_margin="16dp"
+        android:layout_toEndOf="@id/tvBackSettings"
+        android:layout_alignParentEnd="true"
+        android:gravity="end"
+        android:textColor="@color/white"
+        />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -16,6 +37,7 @@
         android:contentDescription="@string/app_name"
         android:paddingBottom="6dp"
         app:tabIndicatorColor="@color/tab_indicator"
+        android:layout_below="@+id/tvBackSettings"
         app:tabIndicatorFullWidth="false"
         app:tabMode="fixed"
         app:tabTextColor="@color/white">
