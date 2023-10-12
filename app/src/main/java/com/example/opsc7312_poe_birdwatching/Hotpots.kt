@@ -23,7 +23,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
-//import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -95,6 +94,7 @@ class Hotpots : AppCompatActivity() {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
             close()
+
         }
 
         menuChallenges.setOnClickListener{
