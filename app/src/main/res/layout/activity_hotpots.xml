@@ -52,15 +52,16 @@
             android:drawablePadding="6dp"
             app:drawableStartCompat="@drawable/location_small"
             app:drawableTint="@color/white" />
-
     </RelativeLayout>
 
     <!--Map display-->
-    <FrameLayout
-        android:id="@+id/mainContainer"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_below="@+id/linearAppBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:ignore="SpeakableTextPresentCheck"
+        app:layout_constraintVertical_bias="0.5"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/menu_game"
@@ -78,8 +79,6 @@
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/controller"
         app:tint="@color/white">
-
-
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

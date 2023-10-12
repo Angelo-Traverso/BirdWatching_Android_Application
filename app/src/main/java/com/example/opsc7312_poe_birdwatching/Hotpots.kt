@@ -3,48 +3,51 @@ package com.example.opsc7312_poe_birdwatching
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
-import android.media.Image
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
+import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
+import com.example.opsc7312_poe_birdwatching.Models.LocationDataClass
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlin.concurrent.thread
 
-import com.mapbox.mapboxsdk.Mapbox
-import com.mapbox.mapboxsdk.maps.MapView
-import com.mapbox.mapboxsdk.maps.Style
-import java.util.*
+class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
-class Hotpots : AppCompatActivity() {
+    //map and location
+    private lateinit var mMap: GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var mapView: MapView
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
+    private var HotspotList = mutableListOf<HotspotModel>()
+    private var lat = 0.0
+    private var lon = 0.0
 
-//    private val REQUEST_LOCATION_PERMISSION = 1001
-//
-//    private var isMenuVisible = false;
-
+    //nav
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
     private lateinit var settings: FloatingActionButton
     private lateinit var addObservation: FloatingActionButton
     private lateinit var fab4: FloatingActionButton
     private lateinit var menuChallenges: FloatingActionButton
-    private lateinit var tvCurrentLocation: TextView
+
+    //private lateinit var tvCurrentLocation: TextView
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
     private lateinit var fabClock: Animation
@@ -55,16 +58,15 @@ class Hotpots : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotpots)
 
-        val fragmentManager: FragmentManager = supportFragmentManager
-        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        //MAP
+        mapView = findViewById(R.id.mapView)
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
 
-        tvCurrentLocation = findViewById(R.id.tvCurrentLocation)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        val fragment = map()
-        transaction.replace(R.id.mainContainer, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-
+        //NAV
+        //region
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fabClock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
@@ -77,19 +79,17 @@ class Hotpots : AppCompatActivity() {
         fab4 = findViewById(R.id.menu_viewObservation)
         menuChallenges = findViewById(R.id.menu_challenges)
 
+
         menuGame.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
             close()
         }
-
         addObservation.setOnClickListener {
             val intent = Intent(this, AddObservation::class.java)
             startActivity(intent)
             close()
-
         }
-
         settings.setOnClickListener {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
@@ -107,51 +107,157 @@ class Hotpots : AppCompatActivity() {
                 open()
             }
         }
+        //endregion
     }
 
-//    private fun requestLocation() {
-//        Log.d("Location", "requestLocation called")
-//        val fusedLocationClient: FusedLocationProviderClient =
-//            LocationServices.getFusedLocationProviderClient(this)
-//
-//        if (ActivityCompat.checkSelfPermission(
-//                this, ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                this, Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            return
-//        }
-//        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-//                if (location != null) {
-//                    val latitude = location.latitude
-//                    val longitude = location.longitude
-//                    tvCurrentLocation.text = "Latitude: $latitude, Longitude: $longitude"
-//
-//                    // Perform reverse geocoding to get country/region code
-//                    //  getCountryCodeFromLocation(location)
-//                } else {
-//                    tvCurrentLocation.text = "Location not available"
-//                }
-//            }
-//    }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        when (requestCode) {
-//            REQUEST_LOCATION_PERMISSION -> {
-//                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    // Permission granted, you can now access the user's location
-//                    // Call a function to start receiving location updates
-//                } else {
-//                    // Permission denied
-//                    // Handle accordingly (e.g., display a message or disable location features)
-//                }
-//            }
-//        }
-//    }
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Check for location permission
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            mMap.isMyLocationEnabled = true
+
+            // get users lcoation
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    lat = location.latitude
+                    lon = location.longitude
+                }
+            }
+
+            //if no location found set it to the castle of good hope
+            if (lat == 0.0 && lon == 0.0) {
+                lat = -33.9249
+                lon = 18.4241
+            }
+
+            val userLocation = LatLng(lat, lon)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+
+            GetBirdData()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    //hotspots
+    //region
+
+    //requests the bird data from the API using paramiters
+    private fun GetBirdData() {
+        //create a new thread and query the api
+        thread {
+            val bird = try {
+                var apiWorker = APIWorker()
+                apiWorker.QueryeBird(lon, lat, ToolBox.users[ToolBox.userID].MaxDistance)
+                    ?.readText()
+            } catch (e: Exception) {
+                return@thread
+            }
+
+            if (!bird.isNullOrEmpty()) extractFromJSON(bird)
+        }
+    }
+
+    //takes json responce and extracts data
+    private fun extractFromJSON(birdJSON: String?) {
+        if (!birdJSON.isNullOrEmpty()) {
+            try {
+
+                birdJSON.trimIndent()
+
+                val locations = birdJSON.lines().map { line ->
+                    val parts = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
+                    if (parts.size >= 9) {
+                        LocationDataClass(
+                            parts[0],
+                            parts[1],
+                            parts[2],
+                            parts[3],
+                            parts[4].toDouble(),
+                            parts[5].toDouble(),
+                            parts[6],
+                            parts[7],
+                            parts[8].toInt()
+                        )
+                    } else {
+                        null
+                    }
+                }.filterNotNull()
+
+                // Add hotspots to the list
+                for (location in locations) {
+                    var newHotspot =
+                        HotspotModel(location.name, location.latitude, location.longitude)
+                    HotspotList.add(newHotspot)
+                    println(newHotspot)
+                }
+
+                UpdateMarkers(locations);
+
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        } else {
+            var b = 0
+        }
+    }
+
+    //puts markers on map
+    private fun UpdateMarkers(locations: List<LocationDataClass>) {
+        try {
+            runOnUiThread {
+                for (location in locations) {
+                    mMap.addMarker(
+                        MarkerOptions().position(LatLng(location.latitude, location.longitude))
+                            .title(location.name)
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    //endregion
+
+    //location
+    //region
+
+    //requests location permission
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, enable location on the map
+                if (ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
+                }
+                mMap.isMyLocationEnabled = true
+            } else {
+                //permission denied
+            }
+        }
+    }
+
+    //endregion
+
+    //nav popup
+    //region
 
     private fun open() {
         fabMenu.startAnimation(fabClock)
@@ -183,7 +289,6 @@ class Hotpots : AppCompatActivity() {
             menuChallenges.startAnimation(fabOpen)
             return false
         }
-
     }
 
     private fun close() {
@@ -194,13 +299,35 @@ class Hotpots : AppCompatActivity() {
         menuChallenges.startAnimation(fabClose)
         fabMenu.startAnimation(fabAnticlock)
         isOpen = false
-
     }
 
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
         supportFragmentManager.beginTransaction().replace(R.id.relMain, challengesFragment)
-            .addToBackStack(null) // If you want to allow back navigation
-            .commit()
+            .addToBackStack(null).commit()
     }
+    //endregion
+
+    //on...
+    //region
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+    //endregion
 }
