@@ -195,7 +195,7 @@ class map : Fragment() {
         thread {
             val bird = try {
                 var apiWorker = APIWorker()
-                apiWorker.QueryeBird(lon, lat, ToolBox.user.MaxDistance)?.readText()
+                apiWorker.QueryeBird(lon, lat, ToolBox.users[ToolBox.userID].MaxDistance)?.readText()
             } catch (e: Exception) {
                 return@thread
             }

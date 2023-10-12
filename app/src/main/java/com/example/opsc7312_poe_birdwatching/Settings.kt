@@ -28,8 +28,7 @@ class Settings : AppCompatActivity() {
 
         Logout.setOnClickListener()
         {
-            ToolBox.user.Name = ""
-            ToolBox.user.Hash = ""
+            ToolBox.userID = -1
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

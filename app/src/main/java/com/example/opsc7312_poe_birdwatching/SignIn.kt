@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -52,7 +53,10 @@ class SignIn : Fragment() {
             // Setting progress bar to visible when user attempts to sign in
             pbWaitToSignIn.visibility = View.VISIBLE
 
-            if (email == "user" && pword == "Password123!") {
+            if (email == "email@example.com" && pword == "Password123!") {
+                val newUser = UsersModel(ToolBox.users.count(), "user", "email@example.com", "", true, 5.0, 0)
+                ToolBox.users.add(newUser)
+                ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
                 val intent = Intent(activity, Hotpots::class.java)
                 startActivity(intent)
             } else {
@@ -64,16 +68,17 @@ class SignIn : Fragment() {
     private fun authenticateUser(email: String, password: String) {
 
         var storedPassword = ""
+        val index = ToolBox.users.indexOfFirst { it.Email == email }
 
-        if (!ToolBox.users.isEmpty()) {
-            storedPassword = ToolBox.users[0].Hash
+        if (index != -1) {
+            storedPassword = ToolBox.users[index].Hash
         }
 
         // Compare the stored hashed password with the provided password
         if (!(storedPassword.isNullOrEmpty()) && verifyPassword(password, storedPassword)) {
 
             // Authentication successful
-            ToolBox.user = ToolBox.users[0]
+            ToolBox.userID = ToolBox.users.count()
             val intent = Intent(activity, Hotpots::class.java)
             startActivity(intent)
 

@@ -23,7 +23,7 @@
             android:id="@+id/txtUserSignInEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="user"
+            android:text="email@example.com"
             android:textColor="@color/white"
             android:background="@android:color/transparent" />
 

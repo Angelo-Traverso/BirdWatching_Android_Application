@@ -10,7 +10,8 @@ import com.example.opsc7312_poe_birdwatching.Models.Challenges
 class ToolBox : Application() {
 
     companion object {
-        var user = UsersModel()
+        //var user = UsersModel()
+        var userID = -1
         var users = arrayListOf<UsersModel>()
         var usersProgress = arrayListOf<User_Progress>()
         var usersObservations = arrayListOf<UserObservation>()
