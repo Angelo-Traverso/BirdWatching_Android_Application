@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 //import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -90,11 +91,9 @@ class Hotpots : AppCompatActivity() {
         menuChallenges = findViewById(R.id.menu_challenges)
 
         menuGame.setOnClickListener{
-          /*  val intent = Intent(this, GameActivity::class.java)
+            val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
-
-            // Close the menu when item clicked
-            close()*/
+            close()
         }
 
         addObservation.setOnClickListener{
@@ -112,7 +111,6 @@ class Hotpots : AppCompatActivity() {
 
             // Close the menu when item clicked
             close()
-
         }
         menuChallenges.setOnClickListener{
             loadChallengesFragment()
