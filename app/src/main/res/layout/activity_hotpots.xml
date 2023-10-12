@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/apk/res-android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/relMain"
     tools:context=".Hotpots">
 
     <RelativeLayout
@@ -20,9 +20,9 @@
             android:id="@+id/tvHotspots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
             android:text="@string/hotspots"
             android:textColor="@color/white"
             android:textSize="22sp" />
@@ -31,18 +31,19 @@
             android:id="@+id/lineAppBar"
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/tvHotspots"
             android:alpha="0.1"
             android:foreground="@color/white" />
 
         <TextView
-            android:id="@+id/tvCurrentLocation"
+            android:id="@+id/tvSelectedLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_centerVertical="false"
+            android:layout_marginTop="12dp"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/lineAppBar"
@@ -52,6 +53,36 @@
             android:textColor="@color/white"
             app:drawableStartCompat="@drawable/location_small"
             app:drawableTint="@color/white" />
+
+        <Button
+            android:id="@+id/btnDriving"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/tvSelectedLocation"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/lineAppBar"
+            android:text="Drive" />
+
+        <Button
+            android:id="@+id/btnWalking"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/tvSelectedLocation"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/btnDriving"
+            android:text="Walk" />
+
+        <Button
+            android:id="@+id/btnCycling"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/tvSelectedLocation"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/btnWalking"
+            android:text="Cycle" />
     </RelativeLayout>
 
     <FrameLayout
@@ -67,7 +98,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/standard_bottom_sheet"
         app:layout_constraintVertical_bias="0.5"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:layout_below="@+id/linearAppBar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/menu_game"
@@ -101,6 +133,7 @@
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/settings"
         app:tint="@color/white">
+
 
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
@@ -166,10 +199,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="46dp"
         android:contentDescription="s"
-        app:backgroundTint="@color/app_background"
         app:elevation="6dp"
+        app:backgroundTint="@color/app_background"
         app:srcCompat="@drawable/widgets"
-        app:tint="@color/white" />
-
+        app:tint="@color/white"/>
 
 </RelativeLayout>
