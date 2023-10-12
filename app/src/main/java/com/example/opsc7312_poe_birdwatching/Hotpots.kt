@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
@@ -120,14 +121,18 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         ) {
             mMap.isMyLocationEnabled = true
 
-            // get users lcoation
+            // get users location
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
                     lat = location.latitude
                     lon = location.longitude
                 }
             }
-
+            // On Click for marker
+            mMap.setOnMarkerClickListener { marker ->
+                navigateToMarker(marker.position)
+                true
+            }
             //if no location found set it to the castle of good hope
             if (lat == 0.0 && lon == 0.0) {
                 lat = -33.9249
@@ -144,6 +149,37 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
+        }
+    }
+
+    // Open google maps with route enabled
+    private fun navigateToMarker(markerPosition: LatLng) {
+
+        // Check if the user's location is available
+        if (lat != 0.0 && lon != 0.0) {
+
+            // Creating a URI for Google Maps with the navigation intent
+            val uri = "google.navigation:q=${markerPosition.latitude},${markerPosition.longitude}&mode=d".toUri()
+
+            // Creating an intent to launch Google Maps for navigation
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.setPackage("com.google.android.apps.maps")
+
+            // Check if Google Maps app is available on the device
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+
+            } else {
+                // Google Maps app is not available, handle accordingly (e.g., open in a web browser)
+                // You can modify this based on your app's requirements
+                val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(browserIntent)
+            }
+        } else {
+
+            // Location is not available
+            Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
+
         }
     }
 
