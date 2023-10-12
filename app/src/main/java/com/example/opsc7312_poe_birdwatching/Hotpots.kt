@@ -1,23 +1,36 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
+import android.media.Image
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
+import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.Style
+import java.util.*
 
 class Hotpots : AppCompatActivity() {
 
@@ -31,6 +44,8 @@ class Hotpots : AppCompatActivity() {
     private lateinit var fab4: FloatingActionButton
     private lateinit var menuChallenges: FloatingActionButton
     private lateinit var tvCurrentLocation: TextView
+
+
 
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
@@ -57,6 +72,11 @@ class Hotpots : AppCompatActivity() {
 
         transaction.commit()
 
+
+
+
+
+        ///
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fabClock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
