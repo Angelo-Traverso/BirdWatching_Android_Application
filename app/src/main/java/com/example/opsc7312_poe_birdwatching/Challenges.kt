@@ -42,11 +42,18 @@ class Challenges : Fragment() {
         for ((i, challenge) in challengeList.withIndex()) {
             val challengeItemView = LayoutInflater.from(requireContext()).inflate(R.layout.challenge_item_layout, null) // Change to the correct layout
 
+
             val tvChallengeDescription = challengeItemView.findViewById<TextView>(R.id.tvChallengeDescription)
             val progressBar = challengeItemView.findViewById<ProgressBar>(R.id.progressBar)
             val tvProgress = challengeItemView.findViewById<TextView>(R.id.tvProgress)
             val tvPoints = challengeItemView.findViewById<TextView>(R.id.tvPoints)
 
+
+            // Send user back
+            val backTextView: TextView = view.findViewById(R.id.tvBack)
+            backTextView.setOnClickListener {
+                activity?.onBackPressed()
+            }
             // Set the challenge details
             tvChallengeDescription.text = challenge.description
             progressBar.max = 100 // Set the maximum progress value (assuming it's a percentage)

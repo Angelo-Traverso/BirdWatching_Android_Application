@@ -112,14 +112,7 @@ class map : Fragment() {
                         lat = -33.9249
                         lon = 18.4241
                     }
-
-                    //move camera
-                    val cameraPosition = CameraPosition.Builder().target(
-                        LatLng(
-                            lat, lon
-                        )
-                    ).zoom(12.0).tilt(20.0).build()
-                    mapboxMap.cameraPosition = cameraPosition
+                  //  mapboxMap.cameraPosition = cameraPosition
 
                 } else {
                     ActivityCompat.requestPermissions(
@@ -132,6 +125,7 @@ class map : Fragment() {
                 GetBirdData()
 
             }
+
         }
         return view
     }
@@ -151,18 +145,12 @@ class map : Fragment() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
+                    ToolBox.userLocation = location
                     val latitude = location.latitude
                     val longitude = location.longitude
                     // Move camera to the user's current location
@@ -175,6 +163,8 @@ class map : Fragment() {
                         mapboxMap.cameraPosition = cameraPosition
                     }
                 }
+
+
             }
     }
 

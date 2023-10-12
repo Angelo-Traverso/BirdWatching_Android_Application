@@ -1,6 +1,7 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.app.Application
+import android.location.Location
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.User_Progress
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
@@ -14,5 +15,6 @@ class ToolBox : Application() {
         var usersProgress = arrayListOf<User_Progress>()
         var usersObservations = arrayListOf<UserObservation>()
         var challenges = arrayListOf<Challenges>()
+        var userLocation: Location? = null
     }
 }

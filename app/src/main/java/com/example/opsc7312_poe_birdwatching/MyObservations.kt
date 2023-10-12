@@ -1,59 +1,113 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.example.opsc7312_poe_birdwatching.Models.UserObservation
+import java.text.SimpleDateFormat
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MyObservations.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MyObservations : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var llObservationContainer: LinearLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        // Populate the UserObservation List in ToolBox
+        populateUserObservation()
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_observations, container, false)
+        val view = inflater.inflate(R.layout.fragment_my_observations, container, false)
+
+        llObservationContainer = view.findViewById(R.id.myObservationContainer)
+
+        // Add a view for every element
+        for (observation in ToolBox.usersObservations) {
+            addObservationViewToContainer(observation)
+        }
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyObservations.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyObservations().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    //  Populates the usersObservation List in ToolBox
+    private fun populateUserObservation() {
+        Log.d("What is going on", "IDK");
+        val dateString = "2001/01/25"
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+
+        val utilDate: Date? = dateFormat.parse(dateString)
+
+        val sqlDate = if (utilDate != null) {
+            java.sql.Date(utilDate.time)
+        } else {
+            null
+        }
+
+        // Check if date is null before creating UserObservation
+        if (sqlDate != null) {
+            val userObservationEntry1 =
+                UserObservation("1", "ST10081927", sqlDate, "Paco", ToolBox.userLocation ?: Location(""))
+            val userObservationEntry2 = UserObservation(
+                "2",
+                "ST10081928",
+                sqlDate,
+                "What",
+                ToolBox.userLocation ?: Location("")
+            )
+            val userObservationEntry3 = UserObservation(
+                "3",
+                "ST10081929",
+                sqlDate,
+                "Test",
+                ToolBox.userLocation ?: Location("")
+            )
+            ToolBox.usersObservations.add(userObservationEntry1)
+            ToolBox.usersObservations.add(userObservationEntry2)
+            ToolBox.usersObservations.add(userObservationEntry3)
+            ToolBox.usersObservations.forEach { Log.d("User Observation", it.toString()) }
+
+        } else {
+            // Error parsing to Date format
+        }
+
     }
+
+    //  Function Adds new view to container for every userObservation instance
+    private fun addObservationViewToContainer(userObservation: UserObservation) {
+        val inflater = LayoutInflater.from(requireContext())
+        val observationView = inflater.inflate(R.layout.my_observations_display_layout, null)
+        val line = inflater.inflate(R.layout.line, null)
+
+        // Populate the fields with data from UserObservation
+        observationView.findViewById<TextView>(R.id.tvBirdName).text = userObservation.BirdName
+        observationView.findViewById<TextView>(R.id.tvScientificName).text =
+            userObservation.BirdName
+        // Displaying location - should display location normal name
+        observationView.findViewById<TextView>(R.id.tvLocation).text =
+            userObservation.Location.longitude.toString() + " " + userObservation.Location.latitude.toString()
+        observationView.findViewById<TextView>(R.id.tvDateSpotted).text =
+            userObservation.Date.toString()
+
+        // Add the inflated custom view to the linear layout
+        llObservationContainer.addView(observationView)
+        llObservationContainer.addView(line)
+    }
+
 }

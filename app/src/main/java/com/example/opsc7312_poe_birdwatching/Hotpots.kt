@@ -72,17 +72,22 @@ class Hotpots : AppCompatActivity() {
 
         transaction.commit()
 
+
+
+
+
+        ///
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fabClock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
         fabAnticlock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_anticlock)
 
         fabMenu = findViewById(R.id.fabMenu)
-        menuGame = findViewById(R.id.menu_item_1)
-        settings = findViewById(R.id.menu_item_2)
-        addObservation = findViewById(R.id.menu_item_3)
-        fab4 = findViewById(R.id.menu_item_4)
-        menuChallenges = findViewById(R.id.menu_item_5)
+        menuGame = findViewById(R.id.menu_game)
+        settings = findViewById(R.id.menu_settings)
+        addObservation = findViewById(R.id.menu_addObservation)
+        fab4 = findViewById(R.id.menu_viewObservation)
+        menuChallenges = findViewById(R.id.menu_challenges)
 
         menuGame.setOnClickListener{
             val intent = Intent(this, GameActivity::class.java)
@@ -220,7 +225,7 @@ class Hotpots : AppCompatActivity() {
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.mainContainer, challengesFragment)
+            .replace(R.id.relMain, challengesFragment)
             .addToBackStack(null) // If you want to allow back navigation
             .commit()
     }
