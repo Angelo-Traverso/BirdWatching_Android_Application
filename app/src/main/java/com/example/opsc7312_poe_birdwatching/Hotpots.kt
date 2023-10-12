@@ -41,7 +41,7 @@ class Hotpots : AppCompatActivity() {
     private lateinit var settings: FloatingActionButton
     private lateinit var addObservation: FloatingActionButton
     private lateinit var fab4: FloatingActionButton
-    private lateinit var fab5: FloatingActionButton
+    private lateinit var menuGame: FloatingActionButton
     private lateinit var tvCurrentLocation: TextView
 
 
@@ -86,7 +86,7 @@ class Hotpots : AppCompatActivity() {
         settings = findViewById(R.id.menu_settings)
         addObservation = findViewById(R.id.menu_addObservation)
         fab4 = findViewById(R.id.menu_viewObservation)
-        fab5 = findViewById(R.id.menu_challenges)
+        menuGame = findViewById(R.id.menu_challenges)
 
         addObservation.setOnClickListener{
             val intent = Intent(this, AddObservation::class.java )
@@ -105,7 +105,7 @@ class Hotpots : AppCompatActivity() {
             close()
 
         }
-        fab5.setOnClickListener{
+        menuGame.setOnClickListener{
             loadChallengesFragment()
 
             // Close the menu when item clicked
@@ -173,7 +173,7 @@ class Hotpots : AppCompatActivity() {
         settings.startAnimation(fabOpen)
         addObservation.startAnimation(fabOpen)
         fab4.startAnimation(fabOpen)
-        fab5.startAnimation(fabOpen)
+        menuGame.startAnimation(fabOpen)
         isOpen = true
 
     }
@@ -185,7 +185,7 @@ class Hotpots : AppCompatActivity() {
             settings.startAnimation(fabClose)
             addObservation.startAnimation(fabClose)
             fab4.startAnimation(fabClose)
-            fab5.startAnimation(fabClose)
+            menuGame.startAnimation(fabClose)
             fabMenu.startAnimation(fabAnticlock)
             return true
 
@@ -195,7 +195,7 @@ class Hotpots : AppCompatActivity() {
             settings.startAnimation(fabOpen)
             addObservation.startAnimation(fabOpen)
             fab4.startAnimation(fabOpen)
-            fab5.startAnimation(fabOpen)
+            menuGame.startAnimation(fabOpen)
             return false
         }
 
@@ -207,7 +207,7 @@ class Hotpots : AppCompatActivity() {
         settings.startAnimation(fabClose)
         addObservation.startAnimation(fabClose)
         fab4.startAnimation(fabClose)
-        fab5.startAnimation(fabClose)
+        menuGame.startAnimation(fabClose)
         fabMenu.startAnimation(fabAnticlock)
         isOpen = false
 
