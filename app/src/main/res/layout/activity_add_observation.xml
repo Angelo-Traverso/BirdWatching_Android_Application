@@ -92,15 +92,18 @@
     <EditText
         android:id="@+id/etNote"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_below="@+id/etWhere"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/rectangle_border"
         android:hint="@string/AddNote"
         android:minHeight="48dp"
+        android:paddingTop="8dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:gravity="start"
         android:textColorHint="@color/white" />
 
     <Button
