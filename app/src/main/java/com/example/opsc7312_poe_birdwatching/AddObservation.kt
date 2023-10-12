@@ -11,10 +11,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -38,6 +35,12 @@ class AddObservation : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_observation)
+
+        // Send user back
+        val cancelTextView: TextView = findViewById(R.id.btnCancel)
+        cancelTextView.setOnClickListener {
+            onBackPressed()
+        }
 
         requestLocation()
 
