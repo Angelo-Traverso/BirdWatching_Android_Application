@@ -43,7 +43,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     private var lat = 0.0
     private var lon = 0.0
 
-
     //nav
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
