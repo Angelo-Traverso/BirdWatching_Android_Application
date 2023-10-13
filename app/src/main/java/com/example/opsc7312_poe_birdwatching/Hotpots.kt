@@ -160,7 +160,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             thread {
                 scope.launch {
                     val hotspots = apiWorker.getHotspots(lat, lon)
-                    apiWorker.getBirds()
+                    ToolBox.birds = apiWorker.getBirds()
                     UpdateMarkers(hotspots)
                 }
             }
@@ -173,42 +173,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             )
         }
     }
-
-    // Open google maps with route enabled
-   /* private fun navigateToMarker(markerPosition: LatLng) {
-
-        // Check if the user's location is available
-        if (lat != 0.0 && lon != 0.0) {
-
-            // Creating a URI for Google Maps with the navigation intent
-            val uri =
-                "google.navigation:q=${markerPosition.latitude},${markerPosition.longitude}&mode=d".toUri()
-
-            // Creating an intent to launch Google Maps for navigation
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.setPackage("com.google.android.apps.maps")
-
-            // Check if Google Maps app is available on the device
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-
-            } else {
-                // Google Maps app is not available, handle accordingly (e.g., open in a web browser)
-                // You can modify this based on your app's requirements
-                val browserIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(browserIntent)
-            }
-        } else {
-
-            // Location is not available
-            Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
-
-        }
-    }*/
-
-    //hotspots
-    //region
-
 
     //puts markers on map
     private fun UpdateMarkers(locations: List<HotspotModel>) {
@@ -225,8 +189,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             e.printStackTrace()
         }
     }
-
-    //endregion
 
     //location
     //region

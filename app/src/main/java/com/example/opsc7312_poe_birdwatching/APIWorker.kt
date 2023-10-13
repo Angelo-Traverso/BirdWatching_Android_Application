@@ -64,7 +64,7 @@ class APIWorker {
                     var newHotspot =
                         HotspotModel(location.name, location.latitude, location.longitude)
                     HotspotList.add(newHotspot)
-                    println(newHotspot)
+                //    println(newHotspot)
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -89,7 +89,7 @@ class APIWorker {
         } catch (e: MalformedURLException) {
             e.printStackTrace()
         }
-        println("------------------ queryGetHotspots URL: $url")
+       // println("------------------ queryGetHotspots URL: $url")
         return url
     }
 
@@ -137,7 +137,7 @@ class APIWorker {
         } catch (e: MalformedURLException) {
             e.printStackTrace()
         }
-        println("------------------ queryGetSpecies URL: $url")
+       // println("------------------ queryGetSpecies URL: $url")
         return url
     }
 
@@ -180,7 +180,7 @@ class APIWorker {
                         birdData.commonName
                     )
                     BirdList.add(newBird)
-                    println(newBird.commonName)
+      //              println(newBird.commonName)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -203,7 +203,7 @@ class APIWorker {
         } catch (e: MalformedURLException) {
             e.printStackTrace()
         }
-        println("------------------ queryGetSpeciesData URL: $url")
+    //    println("------------------ queryGetSpeciesData URL: $url")
         return url
     }
 }
