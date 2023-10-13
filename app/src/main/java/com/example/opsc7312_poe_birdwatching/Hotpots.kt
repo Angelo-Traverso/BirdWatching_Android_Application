@@ -138,12 +138,18 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
             // On Click for marker
             mMap.setOnMarkerClickListener { marker ->
+                val bottomSheetFragment = BottomSheetHotspot()
                 val intent = Intent(this, Navigation::class.java)
                 intent.putExtra("LATITUDE", lat)
                 intent.putExtra("LONGITUDE", lon)
                 intent.putExtra("DEST_LAT", marker.position.latitude)
                 intent.putExtra("DEST_LNG", marker.position.longitude)
-                startActivity(intent)
+                //
+                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+
+                bottomSheetFragment.setButtonClickListener {
+                    startActivity(intent)
+                }
 
                 /*navigateToMarker(marker.position)*/
                 true
