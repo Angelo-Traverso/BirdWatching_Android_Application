@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -40,6 +41,10 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-location:21.0.1"
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    // Mapview
+    implementation 'com.mapbox.maps:android:10.16.1'
+    implementation "com.mapbox.navigation:android:2.10.1"
+    implementation "com.mapbox.navigation:ui-dropin:2.15.3"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

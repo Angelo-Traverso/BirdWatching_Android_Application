@@ -40,6 +40,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     private var lat = 0.0
     private var lon = 0.0
 
+
     //nav
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
@@ -128,17 +129,25 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                     lon = location.longitude
                 }
             }
-            // On Click for marker
-            mMap.setOnMarkerClickListener { marker ->
-                navigateToMarker(marker.position)
-                true
-            }
+
             //if no location found set it to the castle of good hope
             if (lat == 0.0 && lon == 0.0) {
                 lat = -33.9249
                 lon = 18.4241
             }
 
+            // On Click for marker
+            mMap.setOnMarkerClickListener { marker ->
+                val intent = Intent(this, Navigation::class.java)
+                intent.putExtra("LATITUDE", lat)
+                intent.putExtra("LONGITUDE", lon)
+                intent.putExtra("DEST_LAT", marker.position.latitude)
+                intent.putExtra("DEST_LNG", marker.position.longitude)
+                startActivity(intent)
+
+                /*navigateToMarker(marker.position)*/
+                true
+            }
             val userLocation = LatLng(lat, lon)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
 
@@ -153,7 +162,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Open google maps with route enabled
-    private fun navigateToMarker(markerPosition: LatLng) {
+   /* private fun navigateToMarker(markerPosition: LatLng) {
 
         // Check if the user's location is available
         if (lat != 0.0 && lon != 0.0) {
@@ -181,7 +190,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
 
         }
-    }
+    }*/
 
     //hotspots
     //region

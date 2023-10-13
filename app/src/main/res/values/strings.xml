@@ -61,5 +61,6 @@ Quisque nec ex in lectus tincidunt pretium. Quisque dapibus mattis elit, non ull
 
     <string name="SelectSpecies">Select a species</string>
     <string name="SaveObservation">Save Observation</string>
+    <string name="title_activity_navigation">Navigation</string>
 
 </resources>
