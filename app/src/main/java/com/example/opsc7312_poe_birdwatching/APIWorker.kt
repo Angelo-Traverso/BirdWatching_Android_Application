@@ -221,8 +221,6 @@ class APIWorker {
             return SightingsList
         }
 
-
-
         return SightingsList
     }
 

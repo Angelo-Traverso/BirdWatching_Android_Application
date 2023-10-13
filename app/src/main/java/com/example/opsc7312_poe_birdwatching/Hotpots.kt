@@ -142,31 +142,23 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             // On Click for marker
             mMap.setOnMarkerClickListener { marker ->
 
-                val worker = APIWorker()
+                getLocationData(marker.position.latitude, marker.position.longitude)
 
-
-               /* ToolBox.hotspotSightings =
-                    worker.getHotspotBirdData(marker.position.latitude, marker.position.longitude)*/
-
-
-
-                //Log.d("List Size!!!!!!!", ToolBox.hotspotSightings.size.toString())
-
-                val bottomSheetFragment = BottomSheetHotspot()
-                val intent = Intent(this, Navigation::class.java)
-                intent.putExtra("LATITUDE", lat)
-                intent.putExtra("LONGITUDE", lon)
-                intent.putExtra("DEST_LAT", marker.position.latitude)
-                intent.putExtra("DEST_LNG", marker.position.longitude)
-
-                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-
-                bottomSheetFragment.displaySightingsInBottomSheet(this, ToolBox.hotspotSightings)
-
-                // Navigation button click
-                bottomSheetFragment.setButtonClickListener {
-                    startActivity(intent)
-                }
+//                val bottomSheetFragment = BottomSheetHotspot()
+//                val intent = Intent(this, Navigation::class.java)
+//                intent.putExtra("LATITUDE", lat)
+//                intent.putExtra("LONGITUDE", lon)
+//                intent.putExtra("DEST_LAT", marker.position.latitude)
+//                intent.putExtra("DEST_LNG", marker.position.longitude)
+//
+//                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+//
+//                bottomSheetFragment.displaySightingsInBottomSheet(this, ToolBox.hotspotSightings)
+//
+//                // Navigation button click
+//                bottomSheetFragment.setButtonClickListener {
+//                    startActivity(intent)
+//                }
 
                 /*navigateToMarker(marker.position)*/
                 true
@@ -183,6 +175,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                     val hotspots = apiWorker.getHotspots(lat, lon)
                     ToolBox.birds = apiWorker.getBirds()
                     UpdateMarkers(hotspots)
+                    ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lon)
                 }
             }
 
@@ -192,6 +185,17 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
+        }
+    }
+    private fun getLocationData(lat: Double, lng: Double)
+    {
+        var apiWorker = APIWorker()
+        val scope = CoroutineScope(Dispatchers.Default)
+
+        thread {
+            scope.launch {
+                ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lng)
+            }
         }
     }
 
