@@ -11,6 +11,7 @@ class ToolBox : Application() {
 
     companion object {
         //var user = UsersModel()
+        var userRegion = ""
         var userID = -1
         var users = arrayListOf<UsersModel>()
         var usersProgress = arrayListOf<User_Progress>()

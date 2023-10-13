@@ -27,6 +27,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 class Hotpots : AppCompatActivity(), OnMapReadyCallback {
@@ -142,7 +145,17 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             val userLocation = LatLng(lat, lon)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
 
-            GetBirdData()
+            var apiWorker = APIWorker()
+            val scope = CoroutineScope(Dispatchers.Default)
+
+            thread {
+                scope.launch {
+                    val hotspots = apiWorker.getHotspots(lat, lon)
+                    apiWorker.getBirds()
+                    UpdateMarkers(hotspots)
+                }
+            }
+
         } else {
             ActivityCompat.requestPermissions(
                 this,
@@ -159,7 +172,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         if (lat != 0.0 && lon != 0.0) {
 
             // Creating a URI for Google Maps with the navigation intent
-            val uri = "google.navigation:q=${markerPosition.latitude},${markerPosition.longitude}&mode=d".toUri()
+            val uri =
+                "google.navigation:q=${markerPosition.latitude},${markerPosition.longitude}&mode=d".toUri()
 
             // Creating an intent to launch Google Maps for navigation
             val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -186,74 +200,15 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     //hotspots
     //region
 
-    //requests the bird data from the API using paramiters
-    private fun GetBirdData() {
-        //create a new thread and query the api
-        thread {
-            val bird = try {
-                var apiWorker = APIWorker()
-                apiWorker.QueryeBird(lon, lat, ToolBox.users[ToolBox.userID].MaxDistance)
-                    ?.readText()
-            } catch (e: Exception) {
-                return@thread
-            }
-
-            if (!bird.isNullOrEmpty()) extractFromJSON(bird)
-        }
-    }
-
-    //takes json responce and extracts data
-    private fun extractFromJSON(birdJSON: String?) {
-        if (!birdJSON.isNullOrEmpty()) {
-            try {
-
-                birdJSON.trimIndent()
-
-                val locations = birdJSON.lines().map { line ->
-                    val parts = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)".toRegex())
-                    if (parts.size >= 9) {
-                        LocationDataClass(
-                            parts[0],
-                            parts[1],
-                            parts[2],
-                            parts[3],
-                            parts[4].toDouble(),
-                            parts[5].toDouble(),
-                            parts[6],
-                            parts[7],
-                            parts[8].toInt()
-                        )
-                    } else {
-                        null
-                    }
-                }.filterNotNull()
-
-                // Add hotspots to the list
-                for (location in locations) {
-                    var newHotspot =
-                        HotspotModel(location.name, location.latitude, location.longitude)
-                    HotspotList.add(newHotspot)
-                    println(newHotspot)
-                }
-
-                UpdateMarkers(locations);
-
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        } else {
-            var b = 0
-        }
-    }
 
     //puts markers on map
-    private fun UpdateMarkers(locations: List<LocationDataClass>) {
+    private fun UpdateMarkers(locations: List<HotspotModel>) {
         try {
             runOnUiThread {
                 for (location in locations) {
                     mMap.addMarker(
-                        MarkerOptions().position(LatLng(location.latitude, location.longitude))
-                            .title(location.name)
+                        MarkerOptions().position(LatLng(location.Lat, location.Lon))
+                            .title(location.Name)
                     )
                 }
             }
