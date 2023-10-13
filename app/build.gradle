@@ -46,6 +46,8 @@ dependencies {
     implementation "com.mapbox.navigation:android:2.10.1"
     implementation "com.mapbox.navigation:ui-dropin:2.15.3"
 
+    implementation 'com.google.code.gson:gson:2.8.8'
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'

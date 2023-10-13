@@ -53,25 +53,25 @@ class AddObservation : AppCompatActivity() {
 
         geocoder = Geocoder(this, Locale.getDefault())
 
-        thread {
-            val bird = try {
-               // val countryCode = getCountryCodeFromLocation(userLocation)
-                val apiWorker = APIWorker()
-                apiWorker.querySpeciesPerRegion("ZA-WC")?.readText()
-            } catch (e: Exception) {
-                null
-            }
-
-            // Print the result to the console
-            Log.d("Bird species data:", "$bird")
-            val speciesList = extractSpeciesListFromJson(bird)
-            etSelectSpecies.setOnClickListener {
-                showSpeciesDialog(speciesList)
-            }
-            if (bird != null) {
-                //extractFromJSON(bird)
-            }
-        }
+//        thread {
+//            val bird = try {
+//               // val countryCode = getCountryCodeFromLocation(userLocation)
+//                val apiWorker = APIWorker()
+//                apiWorker.querySpeciesPerRegion("ZA-WC")?.readText()
+//            } catch (e: Exception) {
+//                null
+//            }
+//
+//            // Print the result to the console
+//            Log.d("Bird species data:", "$bird")
+//            val speciesList = extractSpeciesListFromJson(bird)
+//            etSelectSpecies.setOnClickListener {
+//                showSpeciesDialog(speciesList)
+//            }
+//            if (bird != null) {
+//                //extractFromJSON(bird)
+//            }
+//        }
     }
 
         // Extracts species from returned JSON
