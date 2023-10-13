@@ -16,6 +16,7 @@ class ToolBox : Application() {
         var usersObservations = arrayListOf<UserObservation>()
         var challenges = arrayListOf<Challenges>()
         var userLocation: Location? = null
+        var hotspotSightings: List<SightingModel> = mutableListOf()
         var birds: List<BirdModel> = mutableListOf()
     }
 }

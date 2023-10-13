@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
@@ -140,15 +141,29 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
             // On Click for marker
             mMap.setOnMarkerClickListener { marker ->
+
+                val worker = APIWorker()
+
+
+               /* ToolBox.hotspotSightings =
+                    worker.getHotspotBirdData(marker.position.latitude, marker.position.longitude)*/
+
+
+
+                //Log.d("List Size!!!!!!!", ToolBox.hotspotSightings.size.toString())
+
                 val bottomSheetFragment = BottomSheetHotspot()
                 val intent = Intent(this, Navigation::class.java)
                 intent.putExtra("LATITUDE", lat)
                 intent.putExtra("LONGITUDE", lon)
                 intent.putExtra("DEST_LAT", marker.position.latitude)
                 intent.putExtra("DEST_LNG", marker.position.longitude)
-                //
+
                 bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
 
+                bottomSheetFragment.displaySightingsInBottomSheet(this, ToolBox.hotspotSightings)
+
+                // Navigation button click
                 bottomSheetFragment.setButtonClickListener {
                     startActivity(intent)
                 }
@@ -156,6 +171,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                 /*navigateToMarker(marker.position)*/
                 true
             }
+
             val userLocation = LatLng(lat, lon)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
 

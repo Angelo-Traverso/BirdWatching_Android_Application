@@ -45,8 +45,6 @@ class AddObservation : AppCompatActivity() {
 
         requestLocation()
 
-
-
         etSelectSpecies = findViewById(R.id.etSelectSpecies)
         etSelectSpecies.setOnClickListener{
             showSpeciesDialog(ToolBox.birds)

@@ -205,7 +205,7 @@ class APIWorker {
         return url
     }
 
-    public fun getHotspotBirdData(lat: Double, lon: Double): List<SightingModel>
+    public  fun getHotspotBirdData(lat: Double, lon: Double): List<SightingModel>
     {
         var SightingsList: List<SightingModel> = mutableListOf()
 
@@ -217,8 +217,11 @@ class APIWorker {
 
         if (!sighting.isNullOrEmpty()) {
             SightingsList = extractHotspotBirdData(sighting)
+            Log.d("List Size !!!!!!",SightingsList.size.toString())
             return SightingsList
         }
+
+
 
         return SightingsList
     }
@@ -239,13 +242,17 @@ class APIWorker {
                     val obsDate = jsonObject.getString("obsDt")
 
                     val newSighting = SightingModel(commonName, howMany, obsDate)
+                    Log.d("MODEL!!!!!!!!!!!",newSighting.howMany.toString())
                     SightingsList.add(newSighting)
                     println(newSighting)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                Log.d("MODEL!!!!!!!!!!!","Broken!!!!!!!!")
             }
         }
+
+        Log.d("LOOPPPY","Didnt make LOOP")
 
         return SightingsList
     }
