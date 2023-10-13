@@ -14,6 +14,7 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import org.json.JSONArray
@@ -44,7 +45,14 @@ class AddObservation : AppCompatActivity() {
 
         requestLocation()
 
+
+
         etSelectSpecies = findViewById(R.id.etSelectSpecies)
+        etSelectSpecies.setOnClickListener{
+            showSpeciesDialog(ToolBox.birds)
+        }
+
+
         etWhen = findViewById(R.id.etWhen)
 
         etWhen.setOnClickListener{
@@ -53,47 +61,7 @@ class AddObservation : AppCompatActivity() {
 
         geocoder = Geocoder(this, Locale.getDefault())
 
-//        thread {
-//            val bird = try {
-//               // val countryCode = getCountryCodeFromLocation(userLocation)
-//                val apiWorker = APIWorker()
-//                apiWorker.querySpeciesPerRegion("ZA-WC")?.readText()
-//            } catch (e: Exception) {
-//                null
-//            }
-//
-//            // Print the result to the console
-//            Log.d("Bird species data:", "$bird")
-//            val speciesList = extractSpeciesListFromJson(bird)
-//            etSelectSpecies.setOnClickListener {
-//                showSpeciesDialog(speciesList)
-//            }
-//            if (bird != null) {
-//                //extractFromJSON(bird)
-//            }
-//        }
     }
-
-        // Extracts species from returned JSON
-        private fun extractSpeciesListFromJson(jsonResponse: String?): List<String> {
-            val speciesList = mutableListOf<String>()
-
-            jsonResponse?.let {
-                try {
-                    val jsonArray = JSONArray(it)
-
-                    // Extract species names from the JSONArray
-                    for (i in 0 until jsonArray.length()) {
-                        val speciesName = jsonArray.getString(i)
-                        speciesList.add(speciesName)
-                    }
-                } catch (e: JSONException) {
-                    Log.e("JSON Parsing Error", "Error parsing JSON", e)
-                }
-            }
-
-            return speciesList
-        }
 
     //  Request users' current location
     private fun requestLocation() {
@@ -134,7 +102,7 @@ class AddObservation : AppCompatActivity() {
 
         }
     }
-    private fun showSpeciesDialog(speciesList: List<String>) {
+    private fun showSpeciesDialog(speciesList: List<BirdModel>) {
         val dialogView = layoutInflater.inflate(R.layout.species_dialog, null)
         val etSearch = dialogView.findViewById<EditText>(R.id.etSearch)
         val listView = dialogView.findViewById<ListView>(android.R.id.list)
@@ -146,15 +114,25 @@ class AddObservation : AppCompatActivity() {
 
         val dialog = builder.create()
 
+        val comName : MutableList<String> = mutableListOf()
+
+        for (bird in speciesList)
+        {
+            comName.add(bird.commonName)
+        }
+
         // Create an adapter for the list view using the provided species list
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, speciesList)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, comName)
         listView.adapter = adapter
+
+        etSearch.requestFocus()
 
         // Handle search functionality
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("AfterTextChanged", "Text: $s")
                 adapter.filter.filter(s)
             }
 
