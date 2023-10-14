@@ -1,5 +1,6 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -42,6 +43,11 @@ class UserSettings : Fragment() {
         // Set the track color
         sliderDistance.trackActiveTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
+
+        // Set tick color
+        sliderDistance.tickTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
+
         // Set the track color
         sliderDistance.trackActiveTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
@@ -49,9 +55,7 @@ class UserSettings : Fragment() {
         // Set the thumb color
         sliderDistance.thumbTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
-        // Set the thumb color
-        sliderDistance.thumbTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
+
 
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
             var unit = "km"
