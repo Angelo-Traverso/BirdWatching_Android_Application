@@ -149,7 +149,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                     val hotspots = apiWorker.getHotspots(lat, lon)
                     ToolBox.birds = apiWorker.getBirds()
                     UpdateMarkers(hotspots)
-                    ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lon)
                 }
             }
             // On Click for marker

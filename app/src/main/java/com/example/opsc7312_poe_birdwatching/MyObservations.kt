@@ -63,12 +63,20 @@ class MyObservations : Fragment() {
         // Check if date is null before creating UserObservation
         if (sqlDate != null) {
             val userObservationEntry1 =
-                UserObservation("1", "ST10081927", sqlDate, "Paco", ToolBox.userLocation ?: Location(""))
+                UserObservation(
+                    "1",
+                    "ST10081927",
+                    sqlDate,
+                    "Paco",
+                    "100",
+                    ToolBox.userLocation ?: Location("")
+                )
             val userObservationEntry2 = UserObservation(
                 "2",
                 "ST10081928",
                 sqlDate,
                 "What",
+                "100",
                 ToolBox.userLocation ?: Location("")
             )
             val userObservationEntry3 = UserObservation(
@@ -76,6 +84,7 @@ class MyObservations : Fragment() {
                 "ST10081929",
                 sqlDate,
                 "Test",
+                "100",
                 ToolBox.userLocation ?: Location("")
             )
             ToolBox.usersObservations.add(userObservationEntry1)

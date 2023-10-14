@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Button
 import com.example.opsc7312_poe_birdwatching.Hotpots
 import com.example.opsc7312_poe_birdwatching.R
+import com.example.opsc7312_poe_birdwatching.ToolBox
 import java.util.*
 
 class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, attrs), Runnable {
@@ -105,6 +106,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
                 if (ducks.isEmpty()) {
                     isPlaying = false
+                    ToolBox.topRoundInDuckHunt++
                     nextLevel(canvas)
                 }
 

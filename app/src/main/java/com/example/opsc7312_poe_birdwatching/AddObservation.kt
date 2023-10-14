@@ -6,32 +6,32 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.opsc7312_poe_birdwatching.Models.BirdModel
+import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
+import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.thread
-
 
 
 class AddObservation : AppCompatActivity() {
 
     private lateinit var geocoder: Geocoder
-    private lateinit var userLocation : Location
-    private lateinit var etSelectSpecies:EditText
+    private lateinit var userLocation: Location
+    private lateinit var etSelectSpecies: EditText
     private lateinit var etWhen: EditText
+    private lateinit var btnSave: Button
+    private lateinit var etHowMany: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,27 +44,100 @@ class AddObservation : AppCompatActivity() {
         }
 
         requestLocation()
+        geocoder = Geocoder(this, Locale.getDefault())
 
         etSelectSpecies = findViewById(R.id.etSelectSpecies)
-        etSelectSpecies.setOnClickListener{
+        etSelectSpecies.setOnClickListener {
             showSpeciesDialog(ToolBox.birds)
         }
 
-
         etWhen = findViewById(R.id.etWhen)
-
-        etWhen.setOnClickListener{
+        etWhen.setOnClickListener {
             showCalendarDialog()
         }
 
-        geocoder = Geocoder(this, Locale.getDefault())
+        btnSave = findViewById(R.id.btnSaveObservation)
+        btnSave.setOnClickListener {
+            addNewObs()
+        }
 
+        etHowMany = findViewById(R.id.etHowMany)
+
+    }
+
+    private fun addNewObs() {
+        try {
+
+            if (validateForm()) {
+                val obsID = ""
+                val userID = ToolBox.userID.toString()
+
+                val dateText = etWhen.text.toString()
+                val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+                val utilDate = dateFormat.parse(dateText)
+                val sqlDate = Date(utilDate.time)
+
+                val birdName = ""
+                val location = userLocation
+                val howMany = etHowMany.text.toString().trim()
+
+                var newObs = UserObservation(obsID, userID, sqlDate, birdName, howMany, location)
+                ToolBox.usersObservations.add(newObs)
+            }
+
+        } catch (ex: Exception) {
+            Log.w("log", ex.toString())
+            ex.printStackTrace()
+        }
+    }
+
+    private fun validateForm(): Boolean {
+        try {
+            var valid = true
+            val birdName: String = etSelectSpecies.text.toString().trim()
+            val date: String = etWhen.text.toString().trim()
+            val amount: String = etHowMany.text.toString().trim()
+
+            if (userLocation == null) {
+                val toast = Toast.makeText(this, "Location required", Toast.LENGTH_LONG)
+                toast.show()
+                valid = false
+            }
+
+            if (TextUtils.isEmpty(birdName)) {
+                etSelectSpecies.error = "Name is required"
+                valid = false
+            }
+
+            if (TextUtils.isEmpty(date)) {
+                etWhen.error = "Date is required"
+                valid = false
+            }
+
+            if (TextUtils.isEmpty(amount)) {
+                etHowMany.error = "Amount is required"
+                valid = false
+            }
+
+            //try conver to date, if fails it will be handled in the exception
+            val dateText = etWhen.text.toString()
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+            val utilDate = dateFormat.parse(dateText)
+            val sqlDate = Date(utilDate.time)
+
+            return valid
+        } catch (ex: Exception) {
+            Log.w("log", ex.toString())
+            ex.printStackTrace()
+            return false
+        }
     }
 
     //  Request users' current location
     private fun requestLocation() {
         Log.d("Location", "requestLocation called")
-        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        val fusedLocationClient: FusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(this)
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -80,26 +153,28 @@ class AddObservation : AppCompatActivity() {
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     userLocation = location
-                    Log.d("Region Code",getCountryCodeFromLocation(userLocation))
+                    Log.d("Region Code", getCountryCodeFromLocation(userLocation))
                 }
             }
     }
 
     //  Gets current region code
-    private fun getCountryCodeFromLocation(location: Location) : String{
-        val addresses: List<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+    private fun getCountryCodeFromLocation(location: Location): String {
+        val addresses: List<Address>? =
+            geocoder.getFromLocation(location.latitude, location.longitude, 1)
         if (!addresses.isNullOrEmpty()) {
             val countryCode = addresses[0].countryCode
             // Do something with the country code (e.g., display it)
             Log.d("CountryCode", "Country Code: $countryCode")
 
             return countryCode
-        }else
-        {
+        } else {
             return "Not found"
 
         }
     }
+
+    //
     private fun showSpeciesDialog(speciesList: List<BirdModel>) {
         val dialogView = layoutInflater.inflate(R.layout.species_dialog, null)
         val etSearch = dialogView.findViewById<EditText>(R.id.etSearch)
@@ -112,10 +187,9 @@ class AddObservation : AppCompatActivity() {
 
         val dialog = builder.create()
 
-        val comName : MutableList<String> = mutableListOf()
+        val comName: MutableList<String> = mutableListOf()
 
-        for (bird in speciesList)
-        {
+        for (bird in speciesList) {
             comName.add(bird.commonName)
         }
 
@@ -148,6 +222,7 @@ class AddObservation : AppCompatActivity() {
     }
 
     //  Calender Dialog
+//  Calender Dialog
     private fun showCalendarDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -156,7 +231,7 @@ class AddObservation : AppCompatActivity() {
 
         val datePickerDialog = DatePickerDialog(
             this,
-            { _, selectedYear, selectedMonth, selectedDay ->
+            {_ , selectedYear, selectedMonth, selectedDay ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(selectedYear, selectedMonth, selectedDay)
 
@@ -170,8 +245,7 @@ class AddObservation : AppCompatActivity() {
             day
         )
 
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePickerDialog.datePicker.maxDate = System.currentTimeMillis() + 1000
         datePickerDialog.show()
     }
-
 }
