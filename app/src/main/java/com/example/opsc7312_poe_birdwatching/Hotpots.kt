@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.example.opsc7312_poe_birdwatching.Models.LocationDataClass
+import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -43,7 +45,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     private var HotspotList = mutableListOf<HotspotModel>()
     private var lat = 0.0
     private var lon = 0.0
-
+    private val sightingsList: List<SightingModel> = mutableListOf()
     //nav
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
@@ -139,34 +141,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                 lon = 18.4241
             }
 
-            // On Click for marker
-            mMap.setOnMarkerClickListener { marker ->
-
-                getLocationData(marker.position.latitude, marker.position.longitude)
-
-//                val bottomSheetFragment = BottomSheetHotspot()
-//                val intent = Intent(this, Navigation::class.java)
-//                intent.putExtra("LATITUDE", lat)
-//                intent.putExtra("LONGITUDE", lon)
-//                intent.putExtra("DEST_LAT", marker.position.latitude)
-//                intent.putExtra("DEST_LNG", marker.position.longitude)
-//
-//                bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
-//
-//                bottomSheetFragment.displaySightingsInBottomSheet(this, ToolBox.hotspotSightings)
-//
-//                // Navigation button click
-//                bottomSheetFragment.setButtonClickListener {
-//                    startActivity(intent)
-//                }
-
-                /*navigateToMarker(marker.position)*/
-                true
-            }
-
-            val userLocation = LatLng(lat, lon)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
-
             var apiWorker = APIWorker()
             val scope = CoroutineScope(Dispatchers.Default)
 
@@ -178,6 +152,35 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                     ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lon)
                 }
             }
+            // On Click for marker
+            mMap.setOnMarkerClickListener { marker ->
+
+                getLocationData(marker.position.latitude, marker.position.longitude)
+
+                val intent = Intent(this, Navigation::class.java)
+                intent.putExtra("LATITUDE", lat)
+                intent.putExtra("LONGITUDE", lon)
+                intent.putExtra("DEST_LAT", marker.position.latitude)
+                intent.putExtra("DEST_LNG", marker.position.longitude)
+
+                val bottomSheetFragment = BottomSheetHotspot()
+                //bottomSheetFragment.displaySightingsInBottomSheet(this@Hotpots, ToolBox.hotspotSightings)
+                bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
+
+
+                // Navigation button click
+                bottomSheetFragment.setButtonClickListener {
+                    startActivity(intent)
+                }
+
+                /*navigateToMarker(marker.position)*/
+                true
+            }
+
+            val userLocation = LatLng(lat, lon)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+
+
 
         } else {
             ActivityCompat.requestPermissions(
