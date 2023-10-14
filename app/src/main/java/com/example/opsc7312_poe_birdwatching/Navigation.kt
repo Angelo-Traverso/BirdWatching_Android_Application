@@ -109,6 +109,11 @@ class Navigation : AppCompatActivity() {
     }
 
     /**
+    * Stores whether the user's progress is completed or not
+    */
+    private var isNavigationInProgress = false
+
+    /**
      * Debug tool used to play, pause and seek route progress events that can be used to produce mocked location updates along the route.
      */
     private val mapboxReplayer = MapboxReplayer()
