@@ -15,7 +15,7 @@
         android:background="@color/app_background"
         android:orientation="horizontal"
         app:layout_anchorGravity="top"
-        android:elevation="1dp"
+        android:elevation="10dp"
         android:weightSum="4">
 
         <TextView
@@ -27,33 +27,8 @@
             android:layout_centerVertical="true"
             android:text="@string/hotspots"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="26sp" />
 
-        <View
-            android:id="@+id/lineAppBar"
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@+id/tvHotspots"
-            android:alpha="0.1"
-            android:foreground="@color/white" />
-
-        <TextView
-            android:id="@+id/tvCurrentLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_toEndOf="@+id/lineAppBar"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:text="@string/Location"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:drawablePadding="6dp"
-            app:drawableStartCompat="@drawable/location_small"
-            app:drawableTint="@color/white" />
     </RelativeLayout>
 
     <!--Map display-->
@@ -166,7 +141,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="46dp"
         android:contentDescription="s"
-        app:elevation="6dp"
+        app:elevation="10dp"
         app:backgroundTint="@color/app_background"
         app:srcCompat="@drawable/widgets"
         app:tint="@color/white"/>

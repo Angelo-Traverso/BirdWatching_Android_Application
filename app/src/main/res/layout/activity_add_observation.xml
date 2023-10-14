@@ -73,27 +73,10 @@
         />
 
     <EditText
-        android:id="@+id/etWhere"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etWhen"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:textColorHint="@color/white"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:hint="@string/Where"
-        android:drawableStart="@drawable/location"
-        android:drawableTint="@color/white"
-        android:drawableEnd="@drawable/arrow_rightpx"
-        />
-
-    <EditText
         android:id="@+id/etNote"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@+id/etWhere"
+        android:layout_below="@+id/etWhen"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -109,12 +92,12 @@
     <Button
         android:id="@+id/btnSaveObservation"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:layout_below="@+id/etNote"
         android:layout_marginTop="16dp"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:elevation="16dp"
+        android:elevation="10dp"
         android:backgroundTint="@color/tab_indicator"
         android:layout_centerHorizontal="true"
         android:text="@string/SaveObservation"

@@ -2,47 +2,61 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/round_corner_sheet">
+    android:background="@drawable/round_corner_sheet"
+    android:orientation="vertical">
 
-   <TextView
-       android:id="@+id/tvBottomSheetHeading"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:textColor="@color/black"
-       android:layout_marginTop="16dp"
-       android:text="Monte Vista - Plattekloof Glen (Hotspot name placeholder)"
-       android:layout_gravity="center"
-       />
+    <!-- <TextView
+         android:id="@+id/tvBottomSheetHeading"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/black"
+         android:layout_marginTop="16dp"
+         android:text="Monte Vista - Plattekloof Glen (Hotspot name placeholder)"
+         android:layout_gravity="center"
+         />-->
 
-   <Button
-       android:id="@+id/btnStartNavigation"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="16dp"
-       android:backgroundTint="@color/tab_indicator"
-       android:textColor="@color/white"
-       android:text="Start Navigation"
-       android:layout_gravity="center"
-       android:drawableTint="@color/white"
-       android:drawableEnd="@drawable/navigate_24px"
-       />
+    <View
+        android:id="@+id/dragLine"
+        android:layout_width="100dp"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:alpha="0.3"
+        android:background="@color/black" />
 
-   <TextView
-       android:id="@+id/tvHotspotInformation"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:textColor="@color/black"
-       android:layout_marginTop="16dp"
-       android:layout_marginStart="16dp"
-       android:text="Information"
-       android:layout_gravity="start"
-       />
+    <Button
+        android:id="@+id/btnStartNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/tab_indicator"
+        android:drawableEnd="@drawable/navigate_24px"
+        android:drawableTint="@color/white"
+        android:text="Start Navigation"
+        android:textColor="@color/white" />
 
-   <LinearLayout
-       android:id="@+id/linearViewHotspotInformation"
-       android:layout_width="match_parent"
-       android:layout_height="400dp"
-       android:orientation="vertical"/>
+    <TextView
+        android:id="@+id/tvHotspotInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Information"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <ScrollView
+        android:id="@+id/scrollInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/linearViewHotspotInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </LinearLayout>

@@ -109,6 +109,11 @@ class Navigation : AppCompatActivity() {
     }
 
     /**
+    * Stores whether the user's progress is completed or not
+    */
+    private var isNavigationInProgress = false
+
+    /**
      * Debug tool used to play, pause and seek route progress events that can be used to produce mocked location updates along the route.
      */
     private val mapboxReplayer = MapboxReplayer()
@@ -361,9 +366,9 @@ class Navigation : AppCompatActivity() {
         )
     }
 
-    /*
+    /**
     * Gets the Latitude and Longitude from hotspots activity using an extra
-    * */
+    */
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
     private var destLat: Double = 0.0
@@ -379,7 +384,7 @@ class Navigation : AppCompatActivity() {
      */
     private val routesObserver = RoutesObserver { routeUpdateResult ->
         if (routeUpdateResult.navigationRoutes.isNotEmpty()) {
-// generate route geometries asynchronously and render them
+            // generate route geometries asynchronously and render them
             routeLineApi.setNavigationRoutes(
                 routeUpdateResult.navigationRoutes
             ) { value ->
@@ -388,11 +393,11 @@ class Navigation : AppCompatActivity() {
                 }
             }
 
-// update the camera position to account for the new route
+            // update the camera position to account for the new route
             viewportDataSource.onRouteChanged(routeUpdateResult.navigationRoutes.first())
             viewportDataSource.evaluate()
         } else {
-// remove the route line and route arrow from the map
+            // remove the route line and route arrow from the map
             val style = binding.mapView.getMapboxMap().getStyle()
             if (style != null) {
                 routeLineApi.clearRouteLine { value ->
@@ -404,7 +409,7 @@ class Navigation : AppCompatActivity() {
                 routeArrowView.render(style, routeArrowApi.clearArrows())
             }
 
-// remove the route reference from camera position evaluations
+            // remove the route reference from camera position evaluations
             viewportDataSource.clearRouteData()
             viewportDataSource.evaluate()
         }
@@ -419,8 +424,8 @@ class Navigation : AppCompatActivity() {
                 mapboxNavigation.registerRouteProgressObserver(routeProgressObserver)
                 mapboxNavigation.registerRouteProgressObserver(replayProgressObserver)
                 mapboxNavigation.registerVoiceInstructionsObserver(voiceInstructionsObserver)
-// start the trip session to being receiving location updates in free drive
-// and later when a route is set also receiving route progress updates
+                // start the trip session to being receiving location updates in free drive
+                // and later when a route is set also receiving route progress updates
                 mapboxNavigation.startTripSession()
             }
 
@@ -490,16 +495,16 @@ class Navigation : AppCompatActivity() {
             viewportDataSource.followingPadding = followingPadding
         }
 
-// make sure to use the same DistanceFormatterOptions across different features
+        // make sure to use the same DistanceFormatterOptions across different features
         val distanceFormatterOptions =
             DistanceFormatterOptions.Builder(this).unitType(UnitType.METRIC).build()
 
-// initialize maneuver api that feeds the data to the top banner maneuver view
+        // initialize maneuver api that feeds the data to the top banner maneuver view
         maneuverApi = MapboxManeuverApi(
             MapboxDistanceFormatter(distanceFormatterOptions)
         )
 
-// initialize bottom progress view
+        // initialize bottom progress view
         tripProgressApi = MapboxTripProgressApi(
             TripProgressUpdateFormatter.Builder(this)
                 .distanceRemainingFormatter(
@@ -530,30 +535,30 @@ class Navigation : AppCompatActivity() {
             Locale.US.language
         )
 
-// initialize route line, the withRouteLineBelowLayerId is specified to place
-// the route line below road labels layer on the map
-// the value of this option will depend on the style that you are using
-// and under which layer the route line should be placed on the map layers stack
+        // initialize route line, the withRouteLineBelowLayerId is specified to place
+        // the route line below road labels layer on the map
+        // the value of this option will depend on the style that you are using
+        // and under which layer the route line should be placed on the map layers stack
         val mapboxRouteLineOptions = MapboxRouteLineOptions.Builder(this)
             .withRouteLineBelowLayerId("road-label-navigation")
             .build()
         routeLineApi = MapboxRouteLineApi(mapboxRouteLineOptions)
         routeLineView = MapboxRouteLineView(mapboxRouteLineOptions)
 
-// initialize maneuver arrow view to draw arrows on the map
+        // initialize maneuver arrow view to draw arrows on the map
         val routeArrowOptions = RouteArrowOptions.Builder(this).build()
         routeArrowView = MapboxRouteArrowView(routeArrowOptions)
 
-// load map style
+        // load map style
         binding.mapView.getMapboxMap().loadStyleUri(NavigationStyles.NAVIGATION_DAY_STYLE) {
-// add long click listener that search for a route to the clicked destination
+            // add long click listener that search for a route to the clicked destination
             binding.mapView.gestures.addOnMapClickListener { point ->
                 findRoute(destLng, destLat)
                 true
             }
         }
 
-// initialize view interactions
+        // initialize view interactions
         binding.stop.setOnClickListener {
             clearRouteAndStopNavigation()
         }
@@ -566,11 +571,11 @@ class Navigation : AppCompatActivity() {
             binding.recenter.showTextAndExtend(BUTTON_ANIMATION_DURATION)
         }
         binding.soundButton.setOnClickListener {
-// mute/unmute voice instructions
+            // mute/unMute voice instructions
             isVoiceInstructionsMuted = !isVoiceInstructionsMuted
         }
 
-// set initial sounds button state
+        // set initial sounds button state
         binding.soundButton.unmute()
     }
 
@@ -588,12 +593,12 @@ class Navigation : AppCompatActivity() {
         MapboxNavigationApp.setup(
             NavigationOptions.Builder(this)
                 .accessToken(getString(R.string.mapbox_access_token))
-// comment out the location engine setting block to disable simulation
+                // comment out the location engine setting block to disable simulation
                 .locationEngine(replayLocationEngine)
                 .build()
         )
 
-// initialize location puck
+        // initialize location puck
         binding.mapView.location.apply {
             setLocationProvider(navigationLocationProvider)
             this.locationPuck = LocationPuck2D(

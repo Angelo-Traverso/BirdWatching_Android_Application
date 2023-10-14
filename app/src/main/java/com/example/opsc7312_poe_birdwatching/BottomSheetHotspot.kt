@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.marginTop
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -66,7 +67,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         })
 
         // Find the view in the top part of the bottom sheet
-        val topViewToClick = view.findViewById<View>(R.id.tvBottomSheetHeading)
+        val topViewToClick = view.findViewById<View>(R.id.dragLine)
 
         topViewToClick.setOnClickListener {
             // Expand the bottom sheet when the top view is clicked
@@ -106,7 +107,13 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
             // Inflate the hotspot_sighting layout
             val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
-
+            // Set margins
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.setMargins(0, 16, 0, 0)
+            hotspotSightingView.layoutParams = layoutParams
             // TextViews
             val commonNameTextView = hotspotSightingView.findViewById<TextView>(R.id.tvCommonName)
             val howManyTextView = hotspotSightingView.findViewById<TextView>(R.id.tvHowMany)
@@ -126,7 +133,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 2
             )
-
+            line.alpha = 0.5f
             line.setBackgroundColor(Color.BLACK)
             bottomSheetView.addView(line)
         }
