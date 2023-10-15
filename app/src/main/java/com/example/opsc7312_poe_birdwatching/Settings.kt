@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout
 class Settings : AppCompatActivity() {
 
     private lateinit var Logout: TextView
+    private lateinit var Back: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +22,7 @@ class Settings : AppCompatActivity() {
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
         val viewPager: ViewPager = findViewById(R.id.viewPager)
         Logout = findViewById(R.id.tvLogout)
+        Back = findViewById(R.id.tvBackSettings)
 
         val pagerAdapter = PagerAdapterSettings(supportFragmentManager)
         viewPager.adapter = pagerAdapter
@@ -31,6 +33,11 @@ class Settings : AppCompatActivity() {
             ToolBox.userID = -1
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+
+        Back.setOnClickListener()
+        {
+            onBackPressed()
         }
     }
 }
