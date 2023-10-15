@@ -359,4 +359,8 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         thread = Thread(this)
         thread?.start()
     }
+
+    fun stop() {
+        isPlaying = false
+    }
 }

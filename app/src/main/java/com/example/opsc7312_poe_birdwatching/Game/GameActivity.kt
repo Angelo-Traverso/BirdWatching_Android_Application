@@ -25,4 +25,10 @@ class GameActivity : AppCompatActivity() {
     private fun run(){
         gameView.resume()
     }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        gameView.stop()
+    }
 }
