@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.location.Location
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -99,7 +100,7 @@ import java.util.Locale
  * You can disable simulation by commenting out the [replayLocationEngine] setter in [NavigationOptions].
  * Then, the device's real location will be used.
  * - At any point in time you can finish guidance or select a new destination.
- * - You can use buttons to mute/unmute voice instructions, recenter the camera, or show the route overview.
+ * - You can use buttons to mute/unMute voice instructions, recenter the camera, or show the route overview.
  */
 @OptIn(ExperimentalPreviewMapboxNavigationAPI::class)
 class Navigation : AppCompatActivity() {
@@ -549,10 +550,15 @@ class Navigation : AppCompatActivity() {
         val routeArrowOptions = RouteArrowOptions.Builder(this).build()
         routeArrowView = MapboxRouteArrowView(routeArrowOptions)
 
+        // Show the start navigation label
+        val startNavigationLabel = findViewById<TextView>(R.id.startNavigationLabel)
+        startNavigationLabel.visibility = View.VISIBLE
+
         // load map style
         binding.mapView.getMapboxMap().loadStyleUri(NavigationStyles.NAVIGATION_DAY_STYLE) {
             // add long click listener that search for a route to the clicked destination
             binding.mapView.gestures.addOnMapClickListener { point ->
+                startNavigationLabel.visibility = View.GONE  // Hide the label
                 findRoute(destLng, destLat)
                 true
             }
@@ -577,6 +583,8 @@ class Navigation : AppCompatActivity() {
 
         // set initial sounds button state
         binding.soundButton.unmute()
+
+
     }
 
     override fun onDestroy() {
@@ -679,27 +687,27 @@ class Navigation : AppCompatActivity() {
     }
 
     private fun setRouteAndStartNavigation(routes: List<NavigationRoute>) {
-// set routes, where the first route in the list is the primary route that
-// will be used for active guidance
+        // set routes, where the first route in the list is the primary route that
+        // will be used for active guidance
         mapboxNavigation.setNavigationRoutes(routes)
 
-// show UI elements
+        // show UI elements
         binding.soundButton.visibility = View.VISIBLE
         binding.routeOverview.visibility = View.VISIBLE
         binding.tripProgressCard.visibility = View.VISIBLE
 
-// move the camera to overview when new route is available
+        // move the camera to overview when new route is available
         navigationCamera.requestNavigationCameraToOverview()
     }
 
     private fun clearRouteAndStopNavigation() {
-// clear
+        // clear
         mapboxNavigation.setNavigationRoutes(listOf())
 
-// stop simulation
+        // stop simulation
         mapboxReplayer.stop()
 
-// hide UI elements
+        // hide UI elements
         binding.soundButton.visibility = View.INVISIBLE
         binding.maneuverView.visibility = View.INVISIBLE
         binding.routeOverview.visibility = View.INVISIBLE
