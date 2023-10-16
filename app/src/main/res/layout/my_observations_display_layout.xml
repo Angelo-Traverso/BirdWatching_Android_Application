@@ -43,4 +43,17 @@
         app:drawableStartCompat="@drawable/calender_small"
         app:drawableTint="@color/white" />
 
+    <TextView
+        android:id="@+id/tvViewObsNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDateSpotted"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        android:text=""
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/edit_square"
+        app:drawableTint="@color/white" />
+
 </RelativeLayout>

@@ -10,31 +10,29 @@
         android:id="@+id/tvAddObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/AddObservation"
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        android:fontFamily="@font/sedansc_regular"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        />
+        android:fontFamily="@font/sedansc_regular"
+        android:text="@string/AddObservation"
+        android:textColor="@color/white"
+        android:textSize="28sp" />
 
     <EditText
         android:id="@+id/etSelectSpecies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="false"
         android:layout_below="@+id/tvAddObservation"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textColorHint="@color/white"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        android:hint="@string/SelectSpecies"
         android:drawableStart="@drawable/bird"
-        android:drawableTint="@color/white"
         android:drawableEnd="@drawable/arrow_rightpx"
-        />
+        android:drawableTint="@color/white"
+        android:focusable="false"
+        android:hint="@string/SelectSpecies"
+        android:textAlignment="center"
+        android:textColorHint="@color/white"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etHowMany"
@@ -42,17 +40,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etSelectSpecies"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:textColorHint="@color/white"
-        android:textAlignment="center"
-        android:inputType="number"
-        android:textSize="16sp"
-        android:hint="@string/HowMany"
+        android:layout_marginEnd="16dp"
         android:drawableStart="@drawable/hash"
-        android:drawableTint="@color/white"
         android:drawableEnd="@drawable/arrow_rightpx"
-        />
+        android:drawableTint="@color/white"
+        android:hint="@string/HowMany"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColorHint="@color/white"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etWhen"
@@ -60,17 +57,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etHowMany"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:textColorHint="@color/white"
-        android:focusable="false"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:hint="@string/When"
+        android:layout_marginEnd="16dp"
         android:drawableStart="@drawable/calendar"
-        android:drawableTint="@color/white"
         android:drawableEnd="@drawable/arrow_rightpx"
-        />
+        android:drawableTint="@color/white"
+        android:focusable="false"
+        android:hint="@string/When"
+        android:textAlignment="center"
+        android:textColorHint="@color/white"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etNote"
@@ -81,12 +77,12 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rectangle_border"
+        android:gravity="start"
         android:hint="@string/AddNote"
         android:minHeight="48dp"
-        android:paddingTop="8dp"
         android:paddingStart="16dp"
+        android:paddingTop="8dp"
         android:paddingEnd="16dp"
-        android:gravity="start"
         android:textColorHint="@color/white" />
 
     <Button
@@ -94,27 +90,25 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_below="@+id/etNote"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:elevation="10dp"
-        android:backgroundTint="@color/tab_indicator"
         android:layout_centerHorizontal="true"
-        android:text="@string/SaveObservation"
-        />
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:backgroundTint="@color/tab_indicator"
+        android:elevation="10dp"
+        android:text="@string/SaveObservation" />
 
     <TextView
         android:id="@+id/btnCancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnSaveObservation"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="40dp"
-        android:textColor="@color/white"
         android:backgroundTint="@android:color/transparent"
         android:gravity="center"
         android:text="@string/Back"
-        />
+        android:textColor="@color/white" />
 
 </RelativeLayout>

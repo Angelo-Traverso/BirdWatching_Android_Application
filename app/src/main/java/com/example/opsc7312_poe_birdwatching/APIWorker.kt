@@ -6,6 +6,10 @@ import com.example.opsc7312_poe_birdwatching.Models.*
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import org.json.JSONArray
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import kotlin.concurrent.thread
@@ -271,5 +275,35 @@ class APIWorker {
         }
            println("------------------ queryGetHotspotBirdData URL: $url")
         return url
+    }
+
+    fun CoordsToLocation(lat: Double, lng: Double): String {
+        val apiURL =
+            "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}"
+
+        val url = URL(apiURL)
+        val connection = url.openConnection() as HttpURLConnection
+
+        try {
+            connection.connect()
+            val responseCode = connection.responseCode
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val inputStream = connection.inputStream
+                val inputReader = BufferedReader(InputStreamReader(inputStream))
+                val jsonResponse = JSONObject(inputReader.readText())
+                val displayName = jsonResponse.getString("name")
+
+                return displayName
+
+            } else {
+                println("ERROR: $responseCode")
+            }
+        } catch (e: java.lang.Exception) {
+            Log.i("ERROR", e.toString())
+        } finally {
+            connection.disconnect()
+        }
+        return "Place not found"
     }
 }

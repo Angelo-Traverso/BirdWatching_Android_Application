@@ -5,4 +5,4 @@ import android.location.Location
 import java.sql.Date
 import java.sql.Time
 
-data class UserObservation(val ObservationID: String, val UserID: String, val Date: Date, val BirdName: String, val Amount: String, val Location: Location)
+data class UserObservation(val ObservationID: String, val UserID: String, val Date: Date, val BirdName: String, val Amount: String, val Location: Location, val Note: String, val PlaceName: String)

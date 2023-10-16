@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,15 +44,24 @@ class MyObservations : Fragment() {
         val inflater = LayoutInflater.from(requireContext())
         val observationView = inflater.inflate(R.layout.my_observations_display_layout, null)
         val line = inflater.inflate(R.layout.line, null)
+        val worker = APIWorker()
 
         // Populate the fields with data from UserObservation
-        observationView.findViewById<TextView>(R.id.tvBirdName).text = userObservation.BirdName + " (x${userObservation.Amount})"
+        observationView.findViewById<TextView>(R.id.tvBirdName).text =
+            userObservation.BirdName + " (x${userObservation.Amount})"
 
         // Displaying location - should display location normal name
         observationView.findViewById<TextView>(R.id.tvLocation).text =
-            userObservation.Location.longitude.toString() + " " + userObservation.Location.latitude.toString()
+            userObservation.PlaceName + "\n" + userObservation.Location.longitude.toString() + " " + userObservation.Location.latitude.toString()
         observationView.findViewById<TextView>(R.id.tvDateSpotted).text =
             userObservation.Date.toString()
+
+        if (userObservation.Note.isNotEmpty()) {
+            observationView.findViewById<TextView>(R.id.tvViewObsNote).text = userObservation.Note
+        } else {
+            observationView.findViewById<TextView>(R.id.tvViewObsNote).isVisible = false
+        }
+
 
         // Add the inflated custom view to the linear layout
         llObservationContainer.addView(observationView)

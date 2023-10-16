@@ -20,9 +20,13 @@ import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 
 class AddObservation : AppCompatActivity() {
@@ -31,6 +35,7 @@ class AddObservation : AppCompatActivity() {
     private lateinit var userLocation: Location
     private lateinit var etSelectSpecies: EditText
     private lateinit var etWhen: EditText
+    private lateinit var etNote: EditText
     private lateinit var btnSave: Button
     private lateinit var etHowMany: EditText
     private lateinit var cancelTextView: TextView
@@ -65,7 +70,7 @@ class AddObservation : AppCompatActivity() {
         }
 
         etHowMany = findViewById(R.id.etHowMany)
-
+        etNote = findViewById(R.id.etNote)
     }
 
     //save the new obs to the list
@@ -84,9 +89,21 @@ class AddObservation : AppCompatActivity() {
                 val birdName = etSelectSpecies.text.toString().trim()
                 val location = userLocation
                 val howMany = etHowMany.text.toString().trim()
+                val note = etNote.text.toString().trim()
 
-                var newObs = UserObservation(obsID, userID, sqlDate, birdName, howMany, location)
-                ToolBox.usersObservations.add(newObs)
+
+                var apiWorker = APIWorker()
+                val scope = CoroutineScope(Dispatchers.Default)
+
+                thread {
+                    scope.launch {
+                        val placeName = apiWorker.CoordsToLocation(userLocation.latitude, userLocation.longitude)
+                        var newObs = UserObservation(obsID, userID, sqlDate, birdName, howMany, location, note, placeName)
+                        ToolBox.usersObservations.add(newObs)
+                    }
+                }
+
+
             }
 
         } catch (ex: Exception) {
