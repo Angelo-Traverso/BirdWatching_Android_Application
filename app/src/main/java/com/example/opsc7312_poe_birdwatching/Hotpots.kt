@@ -21,6 +21,7 @@ import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.example.opsc7312_poe_birdwatching.Models.LocationDataClass
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
+import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -128,18 +129,16 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         getCurrentLocation { lat, lon ->
             this.lat = lat
             this.lon = lon
-        }
 
-        //query eBird and get the nearby hotspots and the birds in the region
-        var apiWorker = APIWorker()
-        val scope = CoroutineScope(Dispatchers.Default)
+            //get the nearby hotspots
+            getNearByHotspots()
 
-        thread {
-            scope.launch {
-                val hotspots = apiWorker.getHotspots(lat, lon)
-                ToolBox.birds = apiWorker.getBirds()
-                UpdateMarkers(hotspots)
-            }
+            //add users Obs
+            addUserObs()
+
+            //move camera
+            val userLocation = LatLng(lat, lon)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
         }
 
         // On Click for marker
@@ -166,15 +165,60 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             /*navigateToMarker(marker.position)*/
             true
         }
-
-        //move camera
-        val userLocation = LatLng(lat, lon)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
     }
+
+    private fun addUserObs(){
+        if (ToolBox.usersObservations.isNotEmpty()) {
+            for (location in ToolBox.usersObservations) {
+                mMap.addMarker(
+                    MarkerOptions().position(
+                        LatLng(
+                            location.Location.latitude,
+                            location.Location.longitude
+                        )
+                    )
+                        .title("User Sighting: " + location.BirdName)
+                )
+            }
+        }
+    }
+
+    private fun getNearByHotspots() {
+        //query eBird and get the nearby hotspots and the birds in the region
+        var apiWorker = APIWorker()
+        val scope = CoroutineScope(Dispatchers.Default)
+
+        thread {
+            scope.launch {
+                val hotspots = apiWorker.getHotspots(lat, lon)
+                ToolBox.birds = apiWorker.getBirds()
+                UpdateMarkers(hotspots)
+            }
+        }
+    }
+
+    //puts markers on map
+    private fun UpdateMarkers(locations: List<HotspotModel>) {
+        try {
+            runOnUiThread {
+                for (location in locations) {
+                    mMap.addMarker(
+                        MarkerOptions().position(LatLng(location.Lat, location.Lon))
+                            .title(location.Name)
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    //location
+    //region
 
     //method to handel the fusedLocationClient logic and if no lcoation is found use a hard coded location
     //this is a callback as it needs to finish what it is working on before the rest of the map logic can continue
-    fun getCurrentLocation(callback: (Double, Double) -> Unit) {
+    private fun getCurrentLocation(callback: (Double, Double) -> Unit) {
         // Check for location permission
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -210,25 +254,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
-    //puts markers on map
-    private fun UpdateMarkers(locations: List<HotspotModel>) {
-        try {
-            runOnUiThread {
-                for (location in locations) {
-                    mMap.addMarker(
-                        MarkerOptions().position(LatLng(location.Lat, location.Lon))
-                            .title(location.Name)
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    //location
-    //region
 
     //requests location permission
     override fun onRequestPermissionsResult(
