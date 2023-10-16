@@ -1,5 +1,6 @@
 package com.example.opsc7312_poe_birdwatching
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.opsc7312_poe_birdwatching.Models.Challenge_Object
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.w3c.dom.Text
 
 class Challenges : Fragment() {

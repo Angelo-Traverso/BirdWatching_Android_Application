@@ -112,8 +112,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             close()
         }
         menuChallenges.setOnClickListener {
-            loadChallengesFragment()
             close()
+            loadChallengesFragment()
         }
         fabMenu.setOnClickListener {
             if (isOpen()) {
@@ -314,11 +314,23 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     private fun open() {
         fabMenu.startAnimation(fabClock)
+        fabMenu.isEnabled = true
+
         menuGame.startAnimation(fabOpen)
+        menuGame.isEnabled = true
+
         menuSettings.startAnimation(fabOpen)
+        menuSettings.isEnabled = true
+
         menuAddObservation.startAnimation(fabOpen)
+        menuAddObservation.isEnabled = true
+
         menuMyObs.startAnimation(fabOpen)
+        menuMyObs.isEnabled = true
+
         menuChallenges.startAnimation(fabOpen)
+        menuChallenges.isEnabled = true
+
         isOpen = true
 
     }
@@ -346,10 +358,20 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     private fun close() {
         menuGame.startAnimation(fabClose)
+        menuGame.isEnabled = false
+
         menuSettings.startAnimation(fabClose)
+        menuSettings.isEnabled = false
+
         menuAddObservation.startAnimation(fabClose)
+        menuAddObservation.isEnabled = false
+
         menuMyObs.startAnimation(fabClose)
+        menuMyObs.isEnabled = false
+
         menuChallenges.startAnimation(fabClose)
+        menuChallenges.isEnabled = false
+
         fabMenu.startAnimation(fabAnticlock)
         isOpen = false
     }
@@ -357,6 +379,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
 
+
+        fabMenu.isEnabled = false
         // Replace the fragment
         supportFragmentManager.beginTransaction()
             .replace(android.R.id.content, challengesFragment)
@@ -385,6 +409,11 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        fabMenu.isEnabled = true
     }
     //endregion
 }
