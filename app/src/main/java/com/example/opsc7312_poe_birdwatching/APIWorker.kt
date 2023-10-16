@@ -257,7 +257,7 @@ class APIWorker {
 
     private fun queryGetHotspotBirdData(lng: Double, lat: Double): URL?
     {
-        val EBIRD_URL = "https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${lng}&sort=species&back=30&dist=1&key=ijiunrr4nqen"
+        val EBIRD_URL = "https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${lng}&sort=species&back=30&dist=1"
         val API_KEY = "ijiunrr4nqen"
 
         val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(

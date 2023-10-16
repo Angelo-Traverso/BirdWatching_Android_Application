@@ -20,16 +20,12 @@ class MyObservations : Fragment() {
 
     private lateinit var llObservationContainer: LinearLayout
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         // Populate the UserObservation List in ToolBox
         populateUserObservation()
-        arguments?.let {
-
-        }
+        arguments?.let {}
     }
 
     override fun onCreateView(
@@ -62,30 +58,14 @@ class MyObservations : Fragment() {
 
         // Check if date is null before creating UserObservation
         if (sqlDate != null) {
-            val userObservationEntry1 =
-                UserObservation(
-                    "1",
-                    "ST10081927",
-                    sqlDate,
-                    "Paco",
-                    "100",
-                    ToolBox.userLocation ?: Location("")
-                )
+            val userObservationEntry1 = UserObservation(
+                "1", "ST10081927", sqlDate, "Paco", "100", ToolBox.userLocation ?: Location("")
+            )
             val userObservationEntry2 = UserObservation(
-                "2",
-                "ST10081928",
-                sqlDate,
-                "What",
-                "100",
-                ToolBox.userLocation ?: Location("")
+                "2", "ST10081928", sqlDate, "What", "100", ToolBox.userLocation ?: Location("")
             )
             val userObservationEntry3 = UserObservation(
-                "3",
-                "ST10081929",
-                sqlDate,
-                "Test",
-                "100",
-                ToolBox.userLocation ?: Location("")
+                "3", "ST10081929", sqlDate, "Test", "100", ToolBox.userLocation ?: Location("")
             )
             ToolBox.usersObservations.add(userObservationEntry1)
             ToolBox.usersObservations.add(userObservationEntry2)

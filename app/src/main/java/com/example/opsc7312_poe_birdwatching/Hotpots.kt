@@ -28,6 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -167,7 +168,11 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun addUserObs(){
+    //markers
+    //region
+
+    //show any user obs on the map in a different color
+    private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
             for (location in ToolBox.usersObservations) {
                 mMap.addMarker(
@@ -177,12 +182,14 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                             location.Location.longitude
                         )
                     )
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         .title("User Sighting: " + location.BirdName)
                 )
             }
         }
     }
 
+    //get all nearby hostpsot to the user, based on their chosen distance
     private fun getNearByHotspots() {
         //query eBird and get the nearby hotspots and the birds in the region
         var apiWorker = APIWorker()
@@ -212,6 +219,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             e.printStackTrace()
         }
     }
+
+    //endregion
 
     //location
     //region
