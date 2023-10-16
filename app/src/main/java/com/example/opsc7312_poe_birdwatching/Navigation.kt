@@ -99,7 +99,7 @@ import java.util.Locale
  * You can disable simulation by commenting out the [replayLocationEngine] setter in [NavigationOptions].
  * Then, the device's real location will be used.
  * - At any point in time you can finish guidance or select a new destination.
- * - You can use buttons to mute/unmute voice instructions, recenter the camera, or show the route overview.
+ * - You can use buttons to mute/unMute voice instructions, recenter the camera, or show the route overview.
  */
 @OptIn(ExperimentalPreviewMapboxNavigationAPI::class)
 class Navigation : AppCompatActivity() {
@@ -679,27 +679,27 @@ class Navigation : AppCompatActivity() {
     }
 
     private fun setRouteAndStartNavigation(routes: List<NavigationRoute>) {
-// set routes, where the first route in the list is the primary route that
-// will be used for active guidance
+        // set routes, where the first route in the list is the primary route that
+        // will be used for active guidance
         mapboxNavigation.setNavigationRoutes(routes)
 
-// show UI elements
+        // show UI elements
         binding.soundButton.visibility = View.VISIBLE
         binding.routeOverview.visibility = View.VISIBLE
         binding.tripProgressCard.visibility = View.VISIBLE
 
-// move the camera to overview when new route is available
+        // move the camera to overview when new route is available
         navigationCamera.requestNavigationCameraToOverview()
     }
 
     private fun clearRouteAndStopNavigation() {
-// clear
+        // clear
         mapboxNavigation.setNavigationRoutes(listOf())
 
-// stop simulation
+        // stop simulation
         mapboxReplayer.stop()
 
-// hide UI elements
+        // hide UI elements
         binding.soundButton.visibility = View.INVISIBLE
         binding.maneuverView.visibility = View.INVISIBLE
         binding.routeOverview.visibility = View.INVISIBLE
