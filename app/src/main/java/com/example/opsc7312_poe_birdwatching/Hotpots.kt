@@ -46,6 +46,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     private var lat = 0.0
     private var lon = 0.0
     private val sightingsList: List<SightingModel> = mutableListOf()
+
     //nav
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
@@ -123,6 +124,52 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        getCurrentLocation { lat, lon ->
+            this.lat = lat
+            this.lon = lon
+        }
+
+        var apiWorker = APIWorker()
+        val scope = CoroutineScope(Dispatchers.Default)
+
+        thread {
+            scope.launch {
+                val hotspots = apiWorker.getHotspots(lat, lon)
+                ToolBox.birds = apiWorker.getBirds()
+                UpdateMarkers(hotspots)
+            }
+        }
+
+        // On Click for marker
+        mMap.setOnMarkerClickListener { marker ->
+
+            getLocationData(marker.position.latitude, marker.position.longitude)
+
+            val intent = Intent(this, Navigation::class.java)
+            intent.putExtra("LATITUDE", lat)
+            intent.putExtra("LONGITUDE", lon)
+            intent.putExtra("DEST_LAT", marker.position.latitude)
+            intent.putExtra("DEST_LNG", marker.position.longitude)
+
+            val bottomSheetFragment = BottomSheetHotspot()
+            //bottomSheetFragment.displaySightingsInBottomSheet(this@Hotpots, ToolBox.hotspotSightings)
+            bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
+
+
+            // Navigation button click
+            bottomSheetFragment.setButtonClickListener {
+                startActivity(intent)
+            }
+
+            /*navigateToMarker(marker.position)*/
+            true
+        }
+
+        val userLocation = LatLng(lat, lon)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+    }
+
+    fun getCurrentLocation(callback: (Double, Double) -> Unit) {
         // Check for location permission
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -130,60 +177,13 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         ) {
             mMap.isMyLocationEnabled = true
 
-            // get users location
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
-                    lat = location.latitude
-                    lon = location.longitude
-                }
+                    val lat = location.latitude
+                    val lon = location.longitude
+                    callback(lat, lon)
+                } ?: callback(-33.9249, 18.4241)
             }
-
-            //if no location found set it to the castle of good hope
-            if (lat == 0.0 && lon == 0.0) {
-                lat = -33.9249
-                lon = 18.4241
-            }
-
-            var apiWorker = APIWorker()
-            val scope = CoroutineScope(Dispatchers.Default)
-
-            thread {
-                scope.launch {
-                    val hotspots = apiWorker.getHotspots(lat, lon)
-                    ToolBox.birds = apiWorker.getBirds()
-                    UpdateMarkers(hotspots)
-                }
-            }
-            // On Click for marker
-            mMap.setOnMarkerClickListener { marker ->
-
-                getLocationData(marker.position.latitude, marker.position.longitude)
-
-                val intent = Intent(this, Navigation::class.java)
-                intent.putExtra("LATITUDE", lat)
-                intent.putExtra("LONGITUDE", lon)
-                intent.putExtra("DEST_LAT", marker.position.latitude)
-                intent.putExtra("DEST_LNG", marker.position.longitude)
-
-                val bottomSheetFragment = BottomSheetHotspot()
-                //bottomSheetFragment.displaySightingsInBottomSheet(this@Hotpots, ToolBox.hotspotSightings)
-                bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
-
-
-                // Navigation button click
-                bottomSheetFragment.setButtonClickListener {
-                    startActivity(intent)
-                }
-
-                /*navigateToMarker(marker.position)*/
-                true
-            }
-
-            val userLocation = LatLng(lat, lon)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
-
-
-
         } else {
             ActivityCompat.requestPermissions(
                 this,
@@ -191,9 +191,11 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         }
+
+
     }
-    private fun getLocationData(lat: Double, lng: Double)
-    {
+
+    private fun getLocationData(lat: Double, lng: Double) {
         var apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
 
