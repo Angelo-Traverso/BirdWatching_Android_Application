@@ -44,10 +44,13 @@ class Challenges : Fragment() {
 
             // Set the challenge details
             tvChallengeDescription.text = challenge.description
-            progressBar.max = 100 // Set the maximum progress value (assuming it's a percentage)
+
+            progressBar.max = challenge.required
+
             progressBar.progress = challenge.progress
-            tvProgress.text =
-                "${challenge.progress}/100" // Adjust as per your progress representation
+
+            tvProgress.text = "${challenge.progress}/${challenge.required}"
+
             tvPoints.text = "+${challenge.pointsToGet} points"
 
             // Set top margin
@@ -71,7 +74,7 @@ class Challenges : Fragment() {
         challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 1))
 
         //travel to two hotspots
-        challenges.add(Challenge_Object("Travel to two hotspots", 0, 2, 1))
+        challenges.add(Challenge_Object("Travel to two hotspots", ToolBox.tripsCompleted, 2, 1))
 
         //duckhunt level
         challenges.add(Challenge_Object("Reach the 7th round in duck hunt", ToolBox.topRoundInDuckHunt, 7, 1))
