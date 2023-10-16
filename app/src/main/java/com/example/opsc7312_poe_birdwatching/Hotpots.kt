@@ -42,12 +42,12 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mapView: MapView
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
-    private var HotspotList = mutableListOf<HotspotModel>()
     private var lat = 0.0
     private var lon = 0.0
+    private var HotspotList = mutableListOf<HotspotModel>()
     private val sightingsList: List<SightingModel> = mutableListOf()
 
-    //nav
+    //nav buttons
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
     private lateinit var menuSettings: FloatingActionButton
@@ -55,7 +55,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var menuMyObs: FloatingActionButton
     private lateinit var menuChallenges: FloatingActionButton
 
-    //private lateinit var tvCurrentLocation: TextView
+    //menu movement
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
     private lateinit var fabClock: Animation
@@ -66,14 +66,13 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotpots)
 
-        //MAP
+        //MAP code
         mapView = findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //NAV
+        //NAV menu popup code
         //region
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
@@ -121,14 +120,17 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         //endregion
     }
 
+    //when google maps is ready this code will execute
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        //get the users current location
         getCurrentLocation { lat, lon ->
             this.lat = lat
             this.lon = lon
         }
 
+        //query eBird and get the nearby hotspots and the birds in the region
         var apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
 
@@ -165,10 +167,13 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             true
         }
 
+        //move camera
         val userLocation = LatLng(lat, lon)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
     }
 
+    //method to handel the fusedLocationClient logic and if no lcoation is found use a hard coded location
+    //this is a callback as it needs to finish what it is working on before the rest of the map logic can continue
     fun getCurrentLocation(callback: (Double, Double) -> Unit) {
         // Check for location permission
         if (ContextCompat.checkSelfPermission(
@@ -191,14 +196,14 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         }
-
-
     }
 
+    //method to query eBird and get data for a hotspot
     private fun getLocationData(lat: Double, lng: Double) {
         var apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
 
+        //using threading to query external resorces
         thread {
             scope.launch {
                 ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lng)
