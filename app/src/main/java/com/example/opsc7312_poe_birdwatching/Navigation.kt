@@ -1,6 +1,7 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.location.Location
@@ -44,6 +45,7 @@ import com.mapbox.navigation.core.trip.session.LocationObserver
 import com.mapbox.navigation.core.trip.session.RouteProgressObserver
 import com.mapbox.navigation.core.trip.session.VoiceInstructionsObserver
 import com.example.opsc7312_poe_birdwatching.databinding.ActivityNavigationBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.navigation.base.formatter.UnitType
 import com.mapbox.navigation.ui.base.util.MapboxNavigationConsumer
 import com.mapbox.navigation.ui.maneuver.api.MapboxManeuverApi
@@ -550,6 +552,15 @@ class Navigation : AppCompatActivity() {
         val routeArrowOptions = RouteArrowOptions.Builder(this).build()
         routeArrowView = MapboxRouteArrowView(routeArrowOptions)
 
+        // initialize exitNav button
+        val exitNav = findViewById<FloatingActionButton>(R.id.btnExitNav)
+
+        // Navigate back to hotspots
+        exitNav.setOnClickListener{
+            val intent = Intent(this, Hotpots::class.java)
+            startActivity(intent)
+        }
+
         // Show the start navigation label
         val startNavigationLabel = findViewById<TextView>(R.id.startNavigationLabel)
         startNavigationLabel.visibility = View.VISIBLE
@@ -567,6 +578,7 @@ class Navigation : AppCompatActivity() {
         // initialize view interactions
         binding.stop.setOnClickListener {
             clearRouteAndStopNavigation()
+            startNavigationLabel.visibility = View.VISIBLE
         }
         binding.recenter.setOnClickListener {
             navigationCamera.requestNavigationCameraToFollowing()
