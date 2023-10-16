@@ -2,6 +2,7 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -32,15 +33,17 @@ class AddObservation : AppCompatActivity() {
     private lateinit var etWhen: EditText
     private lateinit var btnSave: Button
     private lateinit var etHowMany: EditText
+    private lateinit var cancelTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_observation)
 
         // Send user back
-        val cancelTextView: TextView = findViewById(R.id.btnCancel)
+        cancelTextView = findViewById(R.id.btnCancel)
         cancelTextView.setOnClickListener {
-            onBackPressed()
+            val intent = Intent(this, Hotpots::class.java)
+            startActivity(intent)
         }
 
         requestLocation()
@@ -170,11 +173,10 @@ class AddObservation : AppCompatActivity() {
             return countryCode
         } else {
             return "Not found"
-
         }
     }
 
-    //
+    //Shows searchable list of all regional bird species
     private fun showSpeciesDialog(speciesList: List<BirdModel>) {
         val dialogView = layoutInflater.inflate(R.layout.species_dialog, null)
         val etSearch = dialogView.findViewById<EditText>(R.id.etSearch)
@@ -222,7 +224,7 @@ class AddObservation : AppCompatActivity() {
     }
 
     //  Calender Dialog
-//  Calender Dialog
+    //  Calender Dialog
     private fun showCalendarDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)

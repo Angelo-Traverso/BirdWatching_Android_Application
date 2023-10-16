@@ -1,7 +1,9 @@
 package com.example.opsc7312_poe_birdwatching.Game
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.opsc7312_poe_birdwatching.Hotpots
 import com.example.opsc7312_poe_birdwatching.R
 import com.example.opsc7312_poe_birdwatching.databinding.ActivityGameBinding
 
@@ -28,7 +30,8 @@ class GameActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        super.onBackPressed()
         gameView.stop()
+        val intent = Intent(this, Hotpots::class.java)
+        startActivity(intent)
     }
 }
