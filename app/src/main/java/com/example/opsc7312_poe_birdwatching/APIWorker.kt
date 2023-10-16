@@ -16,12 +16,14 @@ import kotlin.concurrent.thread
 
 class APIWorker {
 
+    //get nearby hotspots
     public fun getHotspots(lat: Double, lon: Double): List<HotspotModel> {
         var HotspotList: List<HotspotModel> = mutableListOf()
 
         val bird = try {
             queryGetHotspots(lon, lat, ToolBox.users[ToolBox.userID].MaxDistance)?.readText()
         } catch (e: Exception) {
+            println("========================================== getHotspots" + e.toString())
             return HotspotList
         }
 
@@ -33,6 +35,7 @@ class APIWorker {
         return HotspotList
     }
 
+    //extract the hotspots from the json responce
     private fun extractHotSpots(birdJSON: String?): List<HotspotModel> {
         var HotspotList: MutableList<HotspotModel> = mutableListOf()
 
@@ -70,6 +73,7 @@ class APIWorker {
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
+                println("==========================================" + e.toString())
             }
         } else {
         }
@@ -77,6 +81,7 @@ class APIWorker {
         return (HotspotList);
     }
 
+    //query ebird to get hotspots near a geopoint
     private fun queryGetHotspots(lng: Double, lat: Double, dist: Double): URL? {
         val EBIRD_URL =
             "https://api.ebird.org/v2/ref/hotspot/geo?lat=${lat}&lng=${lng}&dist=${dist}"
@@ -90,10 +95,12 @@ class APIWorker {
             url = URL(buildUri.toString())
         } catch (e: MalformedURLException) {
             e.printStackTrace()
+            println("========================================== queryGetHotspots" + e.toString())
         }
         // println("------------------ queryGetHotspots URL: $url")
         return url
     }
+
 
     public fun getBirds(): List<BirdModel> {
         var BirdList: List<BirdModel> = mutableListOf()
@@ -102,6 +109,7 @@ class APIWorker {
         val birdSciNames = try {
             queryGetRegionalSciName(ToolBox.userRegion)?.readText() //takes region in, returns long json string
         } catch (e: Exception) {
+            println("========================================== getBirds" + e.toString())
             return BirdList
         }
 
@@ -109,6 +117,7 @@ class APIWorker {
             val birdNames = try {
                 queryGetFullBirdData(extractRegionalSciName(birdSciNames))?.readText()
             } catch (e: Exception) {
+                println("========================================== getBirds" + e.toString())
                 return BirdList
             }
 
@@ -137,6 +146,7 @@ class APIWorker {
         try {
             url = URL(buildUri.toString())
         } catch (e: MalformedURLException) {
+            println("========================================== queryGetRegionalSciName" + e.toString())
             e.printStackTrace()
         }
         // println("------------------ queryGetSpecies URL: $url")
@@ -185,6 +195,7 @@ class APIWorker {
                     // println(newBird.commonName)
                 }
             } catch (e: Exception) {
+                println("========================================== extractBirdNames" + e.toString())
                 e.printStackTrace()
             }
         }
@@ -203,6 +214,7 @@ class APIWorker {
         try {
             url = URL(buildUri.toString())
         } catch (e: MalformedURLException) {
+            println("========================================== queryGetFullBirdData" + e.toString())
             e.printStackTrace()
         }
         //    println("------------------ queryGetSpeciesData URL: $url")
@@ -216,12 +228,13 @@ class APIWorker {
         val sighting = try {
             queryGetHotspotBirdData(lon, lat)?.readText()
         } catch (e: Exception) {
+            println("========================================== getHotspotBirdData" + e.toString())
             return SightingsList
         }
 
         if (!sighting.isNullOrEmpty()) {
             SightingsList = extractHotspotBirdData(sighting)
-            Log.d("List Size !!!!!!",SightingsList.size.toString())
+           // Log.d("List Size !!!!!!",SightingsList.size.toString())
             return SightingsList
         }
 
@@ -244,17 +257,15 @@ class APIWorker {
                     val obsDate = jsonObject.getString("obsDt")
 
                     val newSighting = SightingModel(commonName, howMany, obsDate)
-                    Log.d("MODEL!!!!!!!!!!!",newSighting.howMany.toString())
+                    //Log.d("MODEL!!!!!!!!!!!",newSighting.howMany.toString())
                     SightingsList.add(newSighting)
                     println(newSighting)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("MODEL!!!!!!!!!!!","Broken!!!!!!!!")
+                println("========================================== extractHotspotBirdData" + e.toString())
             }
         }
-
-        Log.d("LOOPPPY","Didnt make LOOP")
 
         return SightingsList
     }
@@ -271,6 +282,7 @@ class APIWorker {
         try {
             url = URL(buildUri.toString())
         } catch (e: MalformedURLException) {
+            println("========================================== queryGetHotspotBirdData" + e.toString())
             e.printStackTrace()
         }
            println("------------------ queryGetHotspotBirdData URL: $url")
@@ -300,6 +312,7 @@ class APIWorker {
                 println("ERROR: $responseCode")
             }
         } catch (e: java.lang.Exception) {
+            println("========================================== CoordsToLocation" + e.toString())
             Log.i("ERROR", e.toString())
         } finally {
             connection.disconnect()

@@ -34,7 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
-class Hotpots : AppCompatActivity(), OnMapReadyCallback {
+class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     //map and location
     private var isPermissionGranted = false
@@ -44,6 +44,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private var lat = 0.0
     private var lon = 0.0
+    private var destlat = 0.0
+    private var destlon = 0.0
     private var HotspotList = mutableListOf<HotspotModel>()
     private val sightingsList: List<SightingModel> = mutableListOf()
 
@@ -166,31 +168,12 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
         // On Click for marker
         mMap.setOnMarkerClickListener { marker ->
-
             getLocationData(marker.position.latitude, marker.position.longitude)
-
-            val intent = Intent(this, Navigation::class.java)
-            intent.putExtra("LATITUDE", lat)
-            intent.putExtra("LONGITUDE", lon)
-            intent.putExtra("DEST_LAT", marker.position.latitude)
-            intent.putExtra("DEST_LNG", marker.position.longitude)
-
-            val bottomSheetFragment = BottomSheetHotspot()
-            //bottomSheetFragment.displaySightingsInBottomSheet(this@Hotpots, ToolBox.hotspotSightings)
-            bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
-
-
-            // Navigation button click
-            bottomSheetFragment.setButtonClickListener {
-                startActivity(intent)
-            }
-
-            /*navigateToMarker(marker.position)*/
             true
         }
     }
 
-    //markers
+    //---markers
     //region
 
     //show any user obs on the map in a different color
@@ -220,8 +203,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         thread {
             scope.launch {
                 val hotspots = apiWorker.getHotspots(lat, lon)
-                ToolBox.birds = apiWorker.getBirds()
                 UpdateMarkers(hotspots)
+                ToolBox.birds = apiWorker.getBirds()
             }
         }
     }
@@ -244,7 +227,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
     //endregion
 
-    //location
+    //---location
     //region
 
     //method to handel the fusedLocationClient logic and if no lcoation is found use a hard coded location
@@ -269,14 +252,39 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
     //method to query eBird and get data for a hotspot
     private fun getLocationData(lat: Double, lng: Double) {
-        var apiWorker = APIWorker()
+
+        val apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
 
-        //using threading to query external resorces
+        //using threading to query external resources
         thread {
             scope.launch {
                 ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lng)
+
+                destlat = lat
+                destlon = lng
+                // Call the callback to show the bottom sheet and start the intent
+                runOnUiThread {
+                    onLocationDataReceived()
+                }
             }
+        }
+    }
+
+    //when the data has been saved then load the bottom fragment
+    override fun onLocationDataReceived() {
+        // This method is called when getLocationData has completed.
+        val intent = Intent(this, Navigation::class.java)
+        intent.putExtra("LATITUDE", this.lat)
+        intent.putExtra("LONGITUDE", this.lon)
+        intent.putExtra("DEST_LAT", destlat)
+        intent.putExtra("DEST_LNG", destlon)
+
+        val bottomSheetFragment = BottomSheetHotspot()
+        bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
+
+        bottomSheetFragment.setButtonClickListener {
+            startActivity(intent)
         }
     }
 
@@ -298,7 +306,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
     //endregion
 
-    //nav popup
+    //---nav popup
     //region
 
     private fun open() {
@@ -350,7 +358,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
     }
     //endregion
 
-    //on...
+    //---on...
     //region
     override fun onResume() {
         super.onResume()
@@ -372,4 +380,11 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         mapView.onLowMemory()
     }
     //endregion
+}
+
+//interface to handel callbacks to allow the popup for markers to wait for the correct data to be loaded
+//this is needed as without the callback the fragment will be laoded before the data has been saved, resulting in an empty fragment appearing
+//now it only appears once the data has been laoded
+interface LocationDataCallback {
+    fun onLocationDataReceived()
 }
