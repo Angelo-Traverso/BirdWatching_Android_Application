@@ -24,10 +24,7 @@ import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -40,6 +37,7 @@ import kotlin.concurrent.thread
 class Hotpots : AppCompatActivity(), OnMapReadyCallback {
 
     //map and location
+    private var isPermissionGranted = false
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mapView: MapView
@@ -120,6 +118,30 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         //endregion
+
+        initializeMap()
+    }
+
+    private fun initializeMap() {
+        // Initialize the map if permission has been granted
+        if (isPermissionGranted) {
+            // Initialize and configure the map here
+            getCurrentLocation { lat, lon ->
+                this.lat = lat
+                this.lon = lon
+                getNearByHotspots()
+                addUserObs()
+                val userLocation = LatLng(lat, lon)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+            }
+        } else {
+            // Request location permission
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
     }
 
     //when google maps is ready this code will execute
@@ -233,8 +255,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                 this, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            isPermissionGranted = true // Permission is granted
             mMap.isMyLocationEnabled = true
-
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
                     val lat = location.latitude
@@ -242,12 +264,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
                     callback(lat, lon)
                 } ?: callback(-33.9249, 18.4241)
             }
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
         }
     }
 
@@ -272,17 +288,10 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, enable location on the map
-                if (ActivityCompat.checkSelfPermission(
-                        this, Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        this, Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return
-                }
-                mMap.isMyLocationEnabled = true
+                isPermissionGranted = true
+                initializeMap()
             } else {
-                //permission denied
+                // Permission denied, handle it as needed
             }
         }
     }
