@@ -25,7 +25,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun run(){
-        gameView.resume()
+        gameView.start()
     }
 
     @Deprecated("Deprecated in Java")

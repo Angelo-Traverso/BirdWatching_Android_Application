@@ -68,6 +68,7 @@ class AddObservation : AppCompatActivity() {
 
     }
 
+    //save the new obs to the list
     private fun addNewObs() {
         try {
 
@@ -80,7 +81,7 @@ class AddObservation : AppCompatActivity() {
                 val utilDate = dateFormat.parse(dateText)
                 val sqlDate = Date(utilDate.time)
 
-                val birdName = ""
+                val birdName = etSelectSpecies.text.toString().trim()
                 val location = userLocation
                 val howMany = etHowMany.text.toString().trim()
 
@@ -94,6 +95,7 @@ class AddObservation : AppCompatActivity() {
         }
     }
 
+    //validate the form
     private fun validateForm(): Boolean {
         try {
             var valid = true
@@ -223,7 +225,6 @@ class AddObservation : AppCompatActivity() {
         dialog.show()
     }
 
-    //  Calender Dialog
     //  Calender Dialog
     private fun showCalendarDialog() {
         val calendar = Calendar.getInstance()

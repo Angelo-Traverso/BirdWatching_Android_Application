@@ -34,6 +34,8 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     private val heartImage: Bitmap
     private val pauseButton: RectF = RectF(0F, 0F, 0F, 0F)
 
+
+    //method to setup the games visuals and initial ducks
     init {
         ducks.add(Duck(0F, 100F, 30, "R", true))
         ducks.add(Duck(1000F, 100F, 40, "L", true))
@@ -98,6 +100,9 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         hearts.add(Heart(200F, 1F))
     }
 
+    //main game logic
+    //whilst the user is playing repeat the code inside, resets background then loops through remaning ducks
+    //makes the ducks move, and checks of th educk has been pressed on or if its made it to the other side of the screen
     @SuppressLint("ClickableViewAccessibility")
     override fun run() {
         while (isPlaying) {
@@ -149,6 +154,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         }
     }
 
+    //whever the user presses on the screen find what was pressed
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
@@ -166,6 +172,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         return true
     }
 
+    //find the duck the user pressed on
     private fun findTappedDuck(touchX: Float, touchY: Float): Duck? {
         for (duck in ducks) {
             if (touchX >= duck.x && touchX <= duck.x + duckImageR.width && touchY >= duck.y && touchY <= duck.y + duckImageR.height) {
@@ -175,6 +182,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         return null
     }
 
+    //move to the next level, reset background, add new ducks ot the list
     private fun nextLevel(canvas: Canvas) {
 
         level++
@@ -201,6 +209,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
     }
 
+    //remove a heart or stop the game whever a bird makes it to the other side
     private fun looseLife() {
         lives--
 
@@ -225,6 +234,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         }
     }
 
+    //show a fragment allowing the user to restart or exit
     private fun showGameOverPopup() {
         val dialogView = View.inflate(context, R.layout.game_dialog_game_over, null)
         val dialogBuilder = AlertDialog.Builder(context)
@@ -249,6 +259,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         alertDialog.show()
     }
 
+    //show a fragment allowing the user to resume or exit
     private fun showPausePopup() {
         val dialogView = View.inflate(context, R.layout.game_dialog_pause, null)
         val dialogBuilder = AlertDialog.Builder(context)
@@ -260,7 +271,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         val resumeButton = dialogView.findViewById<Button>(R.id.btnResume)
         resumeButton.setOnClickListener {
             isPlaying = true
-            resume()
+            start()
             alertDialog.dismiss()
         }
 
@@ -274,6 +285,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         alertDialog.show()
     }
 
+    //reset the game values and restrart
     private fun restartGame() {
         ducks.clear()
         hearts.clear()
@@ -283,32 +295,37 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         lives = 3
         level = 0
         isPlaying = true
-        resume()
+        start()
     }
 
+    //draw the remaining hearts
     private fun drawHeart(canvas: Canvas, heart: Heart) {
         canvas.drawBitmap(
             heartImage, heart.x, heart.y, null
         )
     }
 
+    //draw the duck on the front end, this method is called for each duck on each game tick
     private fun drawDuck(canvas: Canvas, duck: Duck) {
         if (duck.direction == "R") canvas.drawBitmap(duckImageR, duck.x, duck.y, null)
         else canvas.drawBitmap(duckImageL, duck.x, duck.y, null)
     }
 
+    //draw the pistol to the front end
     private fun drawPistol(canvas: Canvas) {
         canvas.drawBitmap(
             pistol, (canvas.width / 2).toFloat(), (canvas.height - pistol.height).toFloat(), null
         )
     }
 
+    //draw the blood visual to the front end whenever a duck is pressed
     private fun drawBlood(canvas: Canvas, duck: Duck) {
         canvas.drawBitmap(
             blood, (duck.x - duckImageL.width / 2), (duck.y - duckImageL.height / 2), null
         )
     }
 
+    //draw the gunshot visual to the front end whenever a duck is pressed
     private fun drawGunshot(canvas: Canvas) {
         canvas.drawBitmap(
             gunshot,
@@ -318,6 +335,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
+    //draw the pasue button to the front end
     private fun drawPauseButton(canvas: Canvas) {
         val paint = Paint()
         paint.color = Color.TRANSPARENT
@@ -340,6 +358,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
+    //draw the current level to the front end
     private fun drawLevelDisplay(canvas: Canvas) {
         val paint = Paint()
         paint.color = Color.WHITE
@@ -354,12 +373,14 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
-    fun resume() {
+    //resume/start the game
+    fun start() {
         isPlaying = true
         thread = Thread(this)
         thread?.start()
     }
 
+    //stop the game
     fun stop() {
         isPlaying = false
     }

@@ -2,59 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/app_background"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
 
     <TextView
         android:id="@+id/tvBirdName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:textSize="16sp"
         android:gravity="start"
-        android:textStyle="bold"
-        android:text="African Darter"
-        />
-
-    <TextView
-        android:id="@+id/tvScientificName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBirdName"
-        android:layout_marginStart="16dp"
+        android:text=""
         android:textColor="@color/white"
-        android:gravity="start"
-        android:textStyle="italic"
-        android:text="African Darter"
-        />
-
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvScientificName"
+        android:layout_below="@+id/tvBirdName"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/white"
-        android:drawableTint="@color/white"
         android:gravity="start"
-        android:text="African Darter"
-        app:drawableStartCompat="@drawable/location_small" />
+        android:text=""
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/location_small"
+        app:drawableTint="@color/white" />
 
     <TextView
         android:id="@+id/tvDateSpotted"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLocation"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@+id/tvLocation"
-        android:textColor="@color/white"
         android:gravity="start"
-        android:drawableTint="@color/white"
-        android:text="African Darter"
-        app:drawableStartCompat="@drawable/calender_small" />
+        android:text=""
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/calender_small"
+        app:drawableTint="@color/white" />
 
 </RelativeLayout>
