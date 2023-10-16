@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.location.Location
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -549,10 +550,15 @@ class Navigation : AppCompatActivity() {
         val routeArrowOptions = RouteArrowOptions.Builder(this).build()
         routeArrowView = MapboxRouteArrowView(routeArrowOptions)
 
+        // Show the start navigation label
+        val startNavigationLabel = findViewById<TextView>(R.id.startNavigationLabel)
+        startNavigationLabel.visibility = View.VISIBLE
+
         // load map style
         binding.mapView.getMapboxMap().loadStyleUri(NavigationStyles.NAVIGATION_DAY_STYLE) {
             // add long click listener that search for a route to the clicked destination
             binding.mapView.gestures.addOnMapClickListener { point ->
+                startNavigationLabel.visibility = View.GONE  // Hide the label
                 findRoute(destLng, destLat)
                 true
             }
@@ -577,6 +583,8 @@ class Navigation : AppCompatActivity() {
 
         // set initial sounds button state
         binding.soundButton.unmute()
+
+
     }
 
     override fun onDestroy() {
