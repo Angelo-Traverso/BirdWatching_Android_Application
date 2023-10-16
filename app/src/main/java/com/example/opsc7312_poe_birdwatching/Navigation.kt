@@ -47,6 +47,9 @@ import com.mapbox.navigation.core.trip.session.VoiceInstructionsObserver
 import com.example.opsc7312_poe_birdwatching.databinding.ActivityNavigationBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.navigation.base.formatter.UnitType
+import com.mapbox.navigation.base.trip.model.RouteLegProgress
+import com.mapbox.navigation.base.trip.model.RouteProgress
+import com.mapbox.navigation.core.arrival.ArrivalObserver
 import com.mapbox.navigation.ui.base.util.MapboxNavigationConsumer
 import com.mapbox.navigation.ui.maneuver.api.MapboxManeuverApi
 import com.mapbox.navigation.ui.maneuver.view.MapboxManeuverView
@@ -184,6 +187,8 @@ class Navigation : AppCompatActivity() {
             40.0 * pixelDensity
         )
     }
+
+
 
     /**
      * Generates updates for the [MapboxManeuverView] to display the upcoming maneuver instructions
@@ -332,6 +337,30 @@ class Navigation : AppCompatActivity() {
         }
     }
 
+    val arrivalObserver = object : ArrivalObserver {
+
+        override fun onWaypointArrival(routeProgress: RouteProgress) {
+            // do something when the user arrives at a waypoint
+        }
+
+        override fun onNextRouteLegStart(routeLegProgress: RouteLegProgress) {
+            // do something when the user starts a new leg
+        }
+
+        override fun onFinalDestinationArrival(routeProgress: RouteProgress) {
+            ToolBox.tripsCompleted += 1
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapboxNavigation.registerArrivalObserver(arrivalObserver)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapboxNavigation.unregisterArrivalObserver(arrivalObserver)
+    }
     /**
      * Gets notified with progress along the currently active route.
      */
@@ -724,5 +753,14 @@ class Navigation : AppCompatActivity() {
         binding.maneuverView.visibility = View.INVISIBLE
         binding.routeOverview.visibility = View.INVISIBLE
         binding.tripProgressCard.visibility = View.INVISIBLE
+    }
+
+    /**
+    * When user reaches destination
+    */
+    fun onTripCompleted() {
+
+        ToolBox.tripsCompleted += 1
+
     }
 }

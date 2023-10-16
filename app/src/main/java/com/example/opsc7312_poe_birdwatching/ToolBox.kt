@@ -16,5 +16,6 @@ class ToolBox : Application() {
         var hotspotSightings: List<SightingModel> = mutableListOf()
         var birds: List<BirdModel> = mutableListOf()
         var topRoundInDuckHunt = 0
+        var tripsCompleted = 0
     }
 }
