@@ -29,6 +29,7 @@ class Challenges : Fragment() {
         val tvPoints = view.findViewById<TextView>(R.id.tvPoints)
 
         var totalPoints = 0;
+
         // Loop through the challenges and dynamically add them to the container
         for ((i, challenge) in challengeList.withIndex()) {
 

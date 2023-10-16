@@ -6,12 +6,15 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -353,8 +356,12 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
-        supportFragmentManager.beginTransaction().replace(R.id.relMain, challengesFragment)
-            .addToBackStack(null).commit()
+
+        // Replace the fragment
+        supportFragmentManager.beginTransaction()
+            .replace(android.R.id.content, challengesFragment)
+            .addToBackStack(null)
+            .commit()
     }
     //endregion
 
@@ -383,8 +390,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 }
 
 //interface to handel callbacks to allow the popup for markers to wait for the correct data to be loaded
-//this is needed as without the callback the fragment will be laoded before the data has been saved, resulting in an empty fragment appearing
-//now it only appears once the data has been laoded
+//this is needed as without the callback the fragment will be loaded before the data has been saved, resulting in an empty fragment appearing
+//now it only appears once the data has been loaded
 interface LocationDataCallback {
     fun onLocationDataReceived()
 }
