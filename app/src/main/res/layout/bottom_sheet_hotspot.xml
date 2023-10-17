@@ -1,28 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/round_corner_sheet"
     android:orientation="vertical">
 
-    <!-- <TextView
-         android:id="@+id/tvBottomSheetHeading"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textColor="@color/black"
-         android:layout_marginTop="16dp"
-         android:text="Monte Vista - Plattekloof Glen (Hotspot name placeholder)"
-         android:layout_gravity="center"
-         />-->
-
     <View
         android:id="@+id/dragLine"
-        android:layout_width="100dp"
-        android:layout_height="2dp"
+        android:layout_width="50dp"
+        android:layout_height="4dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:alpha="0.3"
         android:background="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="start|center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvBottomSheetHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"
+            android:text="Monte Vista - Plattekloof Glen"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/Location"
+            android:src="@drawable/navigate_48px"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNumOfSpecies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:alpha="0.7"
+        android:text="46 species"
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btnStartNavigation"

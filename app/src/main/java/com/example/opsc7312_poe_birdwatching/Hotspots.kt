@@ -5,31 +5,22 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
-import com.example.opsc7312_poe_birdwatching.Models.LocationDataClass
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
-import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +30,7 @@ import kotlin.concurrent.thread
 
 class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
+    private lateinit var locationName : String
     //map and location
     private var isPermissionGranted = false
     private lateinit var mMap: GoogleMap
@@ -169,9 +161,16 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
         }
 
+
+
         // On Click for marker
         mMap.setOnMarkerClickListener { marker ->
-            getLocationData(marker.position.latitude, marker.position.longitude)
+
+            // Setting location name
+            locationName = marker.title.toString()
+
+            // Getting location data to load in bottom sheet
+            getLocationData(marker.position.latitude, marker.position.longitude, marker)
             true
         }
     }
@@ -233,7 +232,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //---location
     //region
 
-    //method to handel the fusedLocationClient logic and if no lcoation is found use a hard coded location
+    //method to handel the fusedLocationClient logic and if no location is found use a hard coded location
     //this is a callback as it needs to finish what it is working on before the rest of the map logic can continue
     private fun getCurrentLocation(callback: (Double, Double) -> Unit) {
         // Check for location permission
@@ -254,10 +253,12 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //method to query eBird and get data for a hotspot
-    private fun getLocationData(lat: Double, lng: Double) {
+    private fun getLocationData(lat: Double, lng: Double, marker: Marker) {
 
         val apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
+        val bottomSheet = BottomSheetHotspot()
+        bottomSheet.setBottomSheetHeadingText(marker.title.toString())
 
         //using threading to query external resources
         thread {
@@ -283,7 +284,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         intent.putExtra("DEST_LAT", destlat)
         intent.putExtra("DEST_LNG", destlon)
 
-        val bottomSheetFragment = BottomSheetHotspot()
+        // Instance of bottomSheetFragment + setting location name
+        val bottomSheetFragment = BottomSheetHotspot.newInstance(locationName)
         bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
 
         bottomSheetFragment.setButtonClickListener {

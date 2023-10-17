@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetHotspot : BottomSheetDialogFragment() {
 
+    private lateinit var totalSpeciesTextView: TextView
     /*
     * Button click listener for sheet button
     * */
@@ -38,6 +39,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         val startNavigationButton = view.findViewById<Button>(R.id.btnStartNavigation)
 
         startNavigationButton.setOnClickListener {
+
             // Notify the listener when the button is clicked
             buttonClickListener?.invoke()
         }
@@ -47,6 +49,8 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         // Testing execution order for view created vs displaySightingsInBottomSheet
         Log.d("View!!!!", "View Created")
@@ -74,19 +78,43 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
         // Sets peek height of sheet
-        bottomSheetBehavior.peekHeight = 600
+        bottomSheetBehavior.peekHeight = 250
+
+
+        totalSpeciesTextView = view.findViewById(R.id.tvNumOfSpecies)
 
         // Binding linearView
         val bottomSheetLayout = view.findViewById<LinearLayout>(R.id.linearViewHotspotInformation)
 
+        // Update heading text
+        arguments?.getString(ARG_HEADING_TEXT)?.let {
+            setBottomSheetHeadingText(it)
+        }
+
         // Display the sightings in the bottom sheet
         displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotSightings)
+
+
     }
 
     companion object {
         const val TAG = "BottomSheetHotspot"
+
+
+        private const val ARG_HEADING_TEXT = "arg_heading_text"
+        fun newInstance(headingText: String): BottomSheetHotspot {
+            val fragment = BottomSheetHotspot()
+            val args = Bundle()
+            args.putString(ARG_HEADING_TEXT, headingText)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
+    fun setBottomSheetHeadingText(newText: String) {
+        val textView =view?.findViewById<TextView>(R.id.tvBottomSheetHeading)
+        textView?.text = newText
+    }
     /*
     * Button click listener for button on sheet
     * */
@@ -102,11 +130,17 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         // Testing execution order for view created vs displaySightingsInBottomSheet
         Log.d("Display!!!!", "Display called")
         val inflater = LayoutInflater.from(bottomSheetView.context)
+        var counter = 0
 
-        for (sighting in sightings) {
+        // Set number of species text
+        totalSpeciesTextView.text = "${sightings.count()} species"
 
-            // Inflate the hotspot_sighting layout
+
+            for (sighting in sightings) {
+            counter++
             val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
+            // Inflate the hotspot_sighting layout
+            //val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
             // Set margins
             val layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -120,6 +154,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             val dateTextView = hotspotSightingView.findViewById<TextView>(R.id.tvDate)
 
             // Set the sighting information in the included layout
+
             commonNameTextView.text = "Common Name: ${sighting.commonName}"
             howManyTextView.text = "How Many: ${sighting.howMany}"
             dateTextView.text = "Date: ${sighting.date}"
