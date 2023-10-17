@@ -541,7 +541,7 @@ class Navigation : AppCompatActivity() {
         // Evaluating user selected unit type for their navigation
         val unitTypeToUse : UnitType
 
-        // setting var = to user selected unit type
+        // Setting var = to user selected unit type
         val unitType = ToolBox.users[ToolBox.userID].isUnitKM
 
         unitTypeToUse = if(unitType) {
@@ -551,16 +551,16 @@ class Navigation : AppCompatActivity() {
         }
 
 
-        // make sure to use the same DistanceFormatterOptions across different features
+        // Make sure to use the same DistanceFormatterOptions across different features
         val distanceFormatterOptions =
             DistanceFormatterOptions.Builder(this).unitType(unitTypeToUse).build()
 
-        // initialize maneuver api that feeds the data to the top banner maneuver view
+        // Initialize maneuver api that feeds the data to the top banner maneuver view
         maneuverApi = MapboxManeuverApi(
             MapboxDistanceFormatter(distanceFormatterOptions)
         )
 
-        // initialize bottom progress view
+        // Initialize bottom progress view
         tripProgressApi = MapboxTripProgressApi(
             TripProgressUpdateFormatter.Builder(this)
                 .distanceRemainingFormatter(
