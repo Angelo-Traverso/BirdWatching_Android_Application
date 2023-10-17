@@ -17,6 +17,7 @@
     <!--Sign up-->
     <string name="name">Name</string>
     <string name="repeatPassword">Repeat Password</string>
+    <string name="surname">Surname</string>
 
     <!--Settings-->
     <string name="logout">Logout</string>
