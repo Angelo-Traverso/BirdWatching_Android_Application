@@ -33,7 +33,7 @@ class UserSettings : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_user_settings, container, false)
 
-        //---SLIDER---
+        //----SLIDER----
         sliderDistance = view.findViewById(R.id.sliderDistance)
         tvSliderText = view.findViewById(R.id.tvMaxRadius)
 
