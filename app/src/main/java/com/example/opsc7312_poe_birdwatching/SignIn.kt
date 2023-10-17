@@ -57,7 +57,7 @@ class SignIn : Fragment() {
 
             if (email == "email@example.com" && pword == "Password123!") {
                 val newUser =
-                    UsersModel(ToolBox.users.count(), "user", "email@example.com", "", true, 5.0, 0)
+                    UsersModel(ToolBox.users.count(), "user", "Surname" ,"email@example.com", "", true, 5.0, 0)
                 ToolBox.users.add(newUser)
                 ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
                 val intent = Intent(activity, Hotpots::class.java)
