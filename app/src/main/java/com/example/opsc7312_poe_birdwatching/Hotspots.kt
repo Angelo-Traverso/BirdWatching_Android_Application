@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
@@ -33,8 +41,8 @@ import kotlin.concurrent.thread
 
 class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
-    private lateinit var locationName : String
     //map and location
+    private lateinit var locationName: String
     private var isPermissionGranted = false
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -60,6 +68,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private lateinit var fabAnticlock: Animation
     private var isOpen = false
 
+    //==============================================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotpots)
@@ -120,6 +129,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         initializeMap()
     }
 
+    //==============================================================================================
+    //check for location perms, if granted get location and move map, if not ask
     private fun initializeMap() {
         // Initialize the map if permission has been granted
         if (isPermissionGranted) {
@@ -142,6 +153,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    //==============================================================================================
     //when google maps is ready this code will execute
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -162,8 +174,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
         }
 
-
-
         // On Click for marker
         mMap.setOnMarkerClickListener { marker ->
 
@@ -179,6 +189,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //---markers
     //region
 
+    //==============================================================================================
     //show any user obs on the map in a different color
     private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
@@ -186,18 +197,17 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 mMap.addMarker(
                     MarkerOptions().position(
                         LatLng(
-                            location.Location.latitude,
-                            location.Location.longitude
+                            location.Location.latitude, location.Location.longitude
                         )
-                    )
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    ).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         .title("User Sighting: " + location.BirdName)
                 )
             }
         }
     }
 
-    //get all nearby hostpsot to the user, based on their chosen distance
+    //==============================================================================================
+    //get all nearby hotspot to the user, based on their chosen distance
     private fun getNearByHotspots() {
         //query eBird and get the nearby hotspots and the birds in the region
         var apiWorker = APIWorker()
@@ -212,6 +222,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    //==============================================================================================
     //puts markers on map
     private fun UpdateMarkers(locations: List<HotspotModel>) {
         try {
@@ -230,10 +241,12 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     //endregion
 
+    //==============================================================================================
     //---location
     //region
 
-    //method to handel the fusedLocationClient logic and if no lcoation is found use a hard coded location
+    //==============================================================================================
+    //method to handel the fusedLocationClient logic and if no location is found use a hard coded location
     //this is a callback as it needs to finish what it is working on before the rest of the map logic can continue
     private fun getCurrentLocation(callback: (Double, Double) -> Unit) {
         // Check for location permission
@@ -253,6 +266,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    //==============================================================================================
     //method to query eBird and get data for a hotspot
     private fun getLocationData(lat: Double, lng: Double, marker: Marker) {
 
@@ -276,6 +290,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    //==============================================================================================
     // This method is called when getLocationData has completed.
     //when the data has been saved then load the bottom fragment
     override fun onLocationDataReceived() {
@@ -295,6 +310,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    //==============================================================================================
     //requests location permission
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
@@ -312,9 +328,11 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     //endregion
 
+    //==============================================================================================
     //---nav popup
     //region
 
+    //==============================================================================================
     private fun open() {
         fabMenu.startAnimation(fabClock)
         fabMenu.isEnabled = true
@@ -338,6 +356,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     }
 
+    //==============================================================================================
     private fun isOpen(): Boolean {
         if (isOpen) {
             menuGame.startAnimation(fabClose)
@@ -359,6 +378,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    //==============================================================================================
     private fun close() {
         menuGame.startAnimation(fabClose)
         menuGame.isEnabled = false
@@ -379,19 +399,19 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         isOpen = false
     }
 
+    //==============================================================================================
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
 
 
         fabMenu.isEnabled = false
         // Replace the fragment
-        supportFragmentManager.beginTransaction()
-            .replace(android.R.id.content, challengesFragment)
-            .addToBackStack(null)
-            .commit()
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, challengesFragment)
+            .addToBackStack(null).commit()
     }
     //endregion
 
+    //==============================================================================================
     //---on...
     //region
     override fun onResume() {
@@ -421,13 +441,10 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //endregion
 }
 
+
 //interface to handel callbacks to allow the popup for markers to wait for the correct data to be loaded
 //this is needed as without the callback the fragment will be loaded before the data has been saved, resulting in an empty fragment appearing
 //now it only appears once the data has been loaded
 interface LocationDataCallback {
     fun onLocationDataReceived()
-}
-
-interface DataReadyCallback {
-    fun onDataReady(data: Boolean)
 }

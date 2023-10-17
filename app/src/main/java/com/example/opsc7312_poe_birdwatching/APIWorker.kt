@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.net.Uri
@@ -16,6 +24,7 @@ import kotlin.concurrent.thread
 
 class APIWorker {
 
+    //==============================================================================================
     //get nearby hotspots
     public fun getHotspots(lat: Double, lon: Double): List<HotspotModel> {
         var HotspotList: List<HotspotModel> = mutableListOf()
@@ -35,7 +44,29 @@ class APIWorker {
         return HotspotList
     }
 
-    //extract the hotspots from the json responce
+    //==============================================================================================
+    //query ebird to get hotspots near a geo point
+    private fun queryGetHotspots(lng: Double, lat: Double, dist: Double): URL? {
+        val EBIRD_URL =
+            "https://api.ebird.org/v2/ref/hotspot/geo?lat=${lat}&lng=${lng}&dist=${dist}"
+        val API_KEY = "ijiunrr4nqen"
+
+        val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
+            "key", API_KEY
+        ).build()
+        var url: URL? = null
+        try {
+            url = URL(buildUri.toString())
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+            println("========================================== queryGetHotspots" + e.toString())
+        }
+        // println("------------------ queryGetHotspots URL: $url")
+        return url
+    }
+
+    //==============================================================================================
+    //extract the hotspots from the json response
     private fun extractHotSpots(birdJSON: String?): List<HotspotModel> {
         var HotspotList: MutableList<HotspotModel> = mutableListOf()
 
@@ -81,31 +112,12 @@ class APIWorker {
         return (HotspotList);
     }
 
-    //query ebird to get hotspots near a geopoint
-    private fun queryGetHotspots(lng: Double, lat: Double, dist: Double): URL? {
-        val EBIRD_URL =
-            "https://api.ebird.org/v2/ref/hotspot/geo?lat=${lat}&lng=${lng}&dist=${dist}"
-        val API_KEY = "ijiunrr4nqen"
-
-        val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
-            "key", API_KEY
-        ).build()
-        var url: URL? = null
-        try {
-            url = URL(buildUri.toString())
-        } catch (e: MalformedURLException) {
-            e.printStackTrace()
-            println("========================================== queryGetHotspots" + e.toString())
-        }
-        // println("------------------ queryGetHotspots URL: $url")
-        return url
-    }
-
-
+    //==============================================================================================
+    //get regional birds
     public fun getBirds(): List<BirdModel> {
         var BirdList: List<BirdModel> = mutableListOf()
 
-        //get species in region
+        //get species in region, returns scintific names
         val birdSciNames = try {
             queryGetRegionalSciName(ToolBox.userRegion)?.readText() //takes region in, returns long json string
         } catch (e: Exception) {
@@ -113,6 +125,7 @@ class APIWorker {
             return BirdList
         }
 
+        //gets the full data of the birds in the region
         if (!birdSciNames.isNullOrEmpty()) {
             val birdNames = try {
                 queryGetFullBirdData(extractRegionalSciName(birdSciNames))?.readText()
@@ -121,6 +134,7 @@ class APIWorker {
                 return BirdList
             }
 
+            //extract the common bird names
             if (!birdNames.isNullOrEmpty()) {
                 BirdList = extractBirdNames(birdNames)
                 return BirdList
@@ -129,12 +143,16 @@ class APIWorker {
         return BirdList
     }
 
+    //==============================================================================================
+    //converts the json containing the birds sci names into a string that can be inserted into a query
     private fun extractRegionalSciName(json: String): String {
         val jsonArray = JsonParser.parseString(json) as JsonArray
         val names = jsonArray.map { it.asString }
         return names.joinToString(",")
     }
 
+    //==============================================================================================
+    //gets a json of all birds in a sub region (eg. ZA-WC)
     private fun queryGetRegionalSciName(region: String): URL? {
         val EBIRD_URL = "https://api.ebird.org/v2/product/spplist/${region}"
         val API_KEY = "ijiunrr4nqen"
@@ -153,6 +171,8 @@ class APIWorker {
         return url
     }
 
+    //==============================================================================================
+    //extract the common bird names from the long data response containing all bird data
     private fun extractBirdNames(birdJSON: String?): List<BirdModel> {
         val BirdList: MutableList<BirdModel> = mutableListOf()
 
@@ -203,6 +223,8 @@ class APIWorker {
         return BirdList
     }
 
+    //==============================================================================================
+    //gets the full information of all the birds in the region
     private fun queryGetFullBirdData(names: String): URL? {
         val EBIRD_URL = "https://api.ebird.org/v2/ref/taxonomy/ebird?species=${names}"
         val API_KEY = "ijiunrr4nqen"
@@ -221,6 +243,8 @@ class APIWorker {
         return url
     }
 
+    //==============================================================================================
+    //used to get the data for all sightings near the chosen hotspot
     public  fun getHotspotBirdData(lat: Double, lon: Double): List<SightingModel>
     {
         var SightingsList: List<SightingModel> = mutableListOf()
@@ -241,6 +265,29 @@ class APIWorker {
         return SightingsList
     }
 
+    //==============================================================================================
+    //gets the data of all sightings near a hotspot
+    private fun queryGetHotspotBirdData(lng: Double, lat: Double): URL?
+    {
+        val EBIRD_URL = "https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${lng}&sort=species&back=30&dist=1"
+        val API_KEY = "ijiunrr4nqen"
+
+        val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
+            "key", API_KEY
+        ).build()
+        var url: URL? = null
+        try {
+            url = URL(buildUri.toString())
+        } catch (e: MalformedURLException) {
+            println("========================================== queryGetHotspotBirdData" + e.toString())
+            e.printStackTrace()
+        }
+        println("------------------ queryGetHotspotBirdData URL: $url")
+        return url
+    }
+
+    //==============================================================================================
+    //extract the signings data into a usable object list
     private fun extractHotspotBirdData(birdJSON: String?): List<SightingModel>
     {
         val SightingsList: MutableList<SightingModel> = mutableListOf()
@@ -270,25 +317,8 @@ class APIWorker {
         return SightingsList
     }
 
-    private fun queryGetHotspotBirdData(lng: Double, lat: Double): URL?
-    {
-        val EBIRD_URL = "https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${lng}&sort=species&back=30&dist=1"
-        val API_KEY = "ijiunrr4nqen"
-
-        val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
-            "key", API_KEY
-        ).build()
-        var url: URL? = null
-        try {
-            url = URL(buildUri.toString())
-        } catch (e: MalformedURLException) {
-            println("========================================== queryGetHotspotBirdData" + e.toString())
-            e.printStackTrace()
-        }
-           println("------------------ queryGetHotspotBirdData URL: $url")
-        return url
-    }
-
+    //==============================================================================================
+    //gets the name of a location by coordinates
     fun CoordsToLocation(lat: Double, lng: Double): String {
         val apiURL =
             "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}"

@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
 class PagerAdapterSettings(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+    //==============================================================================================
     override fun getItem(position: Int): Fragment {
         return when (position) {
             1 -> MyObservations()
@@ -13,11 +15,13 @@ class PagerAdapterSettings(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAV
         }
     }
 
+    //==============================================================================================
     // Number of tabs
     override fun getCount(): Int {
         return 2
     }
 
+    //==============================================================================================
     override fun getPageTitle(position: Int): CharSequence? {
         return when (position) {
             0 -> "Settings"

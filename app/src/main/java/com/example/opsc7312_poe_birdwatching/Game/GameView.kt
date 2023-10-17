@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching.Game
 
 import android.annotation.SuppressLint
@@ -16,6 +24,7 @@ import com.example.opsc7312_poe_birdwatching.R
 import com.example.opsc7312_poe_birdwatching.ToolBox
 import java.util.*
 
+//the game, works like a timer in c# or pascal
 class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, attrs), Runnable {
     private val appContext: Context = context.applicationContext
 
@@ -37,7 +46,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     private var pistolRotationAngle = 0f
     private val maxTiltAngle = 10f
 
-
+    //==============================================================================================
     //method to setup the games visuals and initial ducks
     init {
         ducks.add(Duck(0F, 100F, 30, "R", true))
@@ -103,8 +112,9 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         hearts.add(Heart(200F, 1F))
     }
 
+    //==============================================================================================
     //main game logic
-    //whilst the user is playing repeat the code inside, resets background then loops through remaning ducks
+    //whilst the user is playing repeat the code inside, resets background then loops through remaining ducks
     //makes the ducks move, and checks of th educk has been pressed on or if its made it to the other side of the screen
     @SuppressLint("ClickableViewAccessibility")
     override fun run() {
@@ -158,7 +168,8 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         }
     }
 
-    //whever the user presses on the screen find what was pressed
+    //==============================================================================================
+    //whenever the user presses on the screen find what was pressed
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
@@ -176,6 +187,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         return true
     }
 
+    //==============================================================================================
     //find the duck the user pressed on
     private fun findTappedDuck(touchX: Float, touchY: Float): Duck? {
         for (duck in ducks) {
@@ -186,6 +198,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         return null
     }
 
+    //==============================================================================================
     //move to the next level, reset background, add new ducks ot the list
     private fun nextLevel(canvas: Canvas) {
 
@@ -213,6 +226,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
     }
 
+    //==============================================================================================
     //remove a heart or stop the game whever a bird makes it to the other side
     private fun looseLife() {
         lives--
@@ -238,6 +252,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         }
     }
 
+    //==============================================================================================
     //show a fragment allowing the user to restart or exit
     private fun showGameOverPopup() {
         val dialogView = View.inflate(context, R.layout.game_dialog_game_over, null)
@@ -263,6 +278,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         alertDialog.show()
     }
 
+    //==============================================================================================
     //show a fragment allowing the user to resume or exit
     private fun showPausePopup() {
         val dialogView = View.inflate(context, R.layout.game_dialog_pause, null)
@@ -289,7 +305,8 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         alertDialog.show()
     }
 
-    //reset the game values and restrart
+    //==============================================================================================
+    //reset the game values and restart
     private fun restartGame() {
         ducks.clear()
         hearts.clear()
@@ -302,6 +319,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         start()
     }
 
+    //==============================================================================================
     //draw the remaining hearts
     private fun drawHeart(canvas: Canvas, heart: Heart) {
         canvas.drawBitmap(
@@ -309,12 +327,14 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
+    //==============================================================================================
     //draw the duck on the front end, this method is called for each duck on each game tick
     private fun drawDuck(canvas: Canvas, duck: Duck) {
         if (duck.direction == "R") canvas.drawBitmap(duckImageR, duck.x, duck.y, null)
         else canvas.drawBitmap(duckImageL, duck.x, duck.y, null)
     }
 
+    //==============================================================================================
     //Sources: ChatGPT & https://stackoverflow.com/questions/9015372/how-to-rotate-a-bitmap-90-degrees
     //draw the pistol to the front end
     private fun drawPistol(canvas: Canvas) {
@@ -357,6 +377,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         }
     }
 
+    //==============================================================================================
     //draw the blood visual to the front end whenever a duck is pressed
     private fun drawBlood(canvas: Canvas, duck: Duck) {
         canvas.drawBitmap(
@@ -364,6 +385,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
+    //==============================================================================================
     //draw the gunshot visual to the front end whenever a duck is pressed
     private fun drawGunshot(canvas: Canvas) {
         canvas.drawBitmap(
@@ -374,7 +396,8 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
-    //draw the pasue button to the front end
+    //==============================================================================================
+    //draw the pause button to the front end
     private fun drawPauseButton(canvas: Canvas) {
         val paint = Paint()
         paint.color = Color.TRANSPARENT
@@ -397,6 +420,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
+    //==============================================================================================
     //draw the current level to the front end
     private fun drawLevelDisplay(canvas: Canvas) {
         val paint = Paint()
@@ -412,6 +436,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         )
     }
 
+    //==============================================================================================
     //resume/start the game
     fun start() {
         isPlaying = true
@@ -419,6 +444,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         thread?.start()
     }
 
+    //==============================================================================================
     //stop the game
     fun stop() {
         isPlaying = false

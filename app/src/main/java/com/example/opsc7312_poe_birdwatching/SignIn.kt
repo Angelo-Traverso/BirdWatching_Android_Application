@@ -1,21 +1,25 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 class SignIn : Fragment() {
 
@@ -24,10 +28,7 @@ class SignIn : Fragment() {
     private lateinit var btnSignIn: Button
     private lateinit var pbWaitToSignIn: ProgressBar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+    //==============================================================================================
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -35,6 +36,7 @@ class SignIn : Fragment() {
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
     }
 
+    //==============================================================================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,7 +56,8 @@ class SignIn : Fragment() {
             pbWaitToSignIn.visibility = View.VISIBLE
 
             if (email == "email@example.com" && pword == "Password123!") {
-                val newUser = UsersModel(ToolBox.users.count(), "user", "email@example.com", "", true, 5.0, 0)
+                val newUser =
+                    UsersModel(ToolBox.users.count(), "user", "email@example.com", "", true, 5.0, 0)
                 ToolBox.users.add(newUser)
                 ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
                 val intent = Intent(activity, Hotpots::class.java)
@@ -65,6 +68,8 @@ class SignIn : Fragment() {
         }
     }
 
+    //==============================================================================================
+    //attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
 
         var storedPassword = ""
@@ -97,6 +102,7 @@ class SignIn : Fragment() {
         }
     }
 
+    //==============================================================================================
     private fun verifyPassword(password: String, storedPassword: String): Boolean {
         return PasswordHandler.hashPassword(password.toString().trim()) == storedPassword
     }

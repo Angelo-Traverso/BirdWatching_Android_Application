@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
 
-
 class AddObservation : AppCompatActivity(){
 
     private lateinit var geocoder: Geocoder
@@ -45,6 +44,7 @@ class AddObservation : AppCompatActivity(){
     private lateinit var pbWaitToSignIn: ProgressBar
     private val handler = Handler(Looper.getMainLooper())
 
+    //==============================================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_observation)
@@ -78,7 +78,7 @@ class AddObservation : AppCompatActivity(){
         etNote = findViewById(R.id.etNote)
         pbWaitToSignIn = findViewById(R.id.pbWaitForData)
 
-        //start the handeler
+        //start the handler
         if(ToolBox.populated)
         {
             btnSave.isEnabled = true
@@ -99,6 +99,7 @@ class AddObservation : AppCompatActivity(){
 
     }
 
+    //==============================================================================================
     //Source: ChatGPT
     // Check for the populated value when the activity is created.
     private val checkPopulatedRunnable = object : Runnable {
@@ -122,6 +123,7 @@ class AddObservation : AppCompatActivity(){
         }
     }
 
+    //==============================================================================================
     //save the new obs to the list
     private fun addNewObs() {
         try {
@@ -165,6 +167,7 @@ class AddObservation : AppCompatActivity(){
         }
     }
 
+    //==============================================================================================
     //validate the form
     private fun validateForm(): Boolean {
         try {
@@ -208,6 +211,7 @@ class AddObservation : AppCompatActivity(){
         }
     }
 
+    //==============================================================================================
     //  Request users' current location
     private fun requestLocation() {
         Log.d("Location", "requestLocation called")
@@ -230,6 +234,7 @@ class AddObservation : AppCompatActivity(){
         }
     }
 
+    //==============================================================================================
     //  Gets current region code
     private fun getCountryCodeFromLocation(location: Location): String {
         val addresses: List<Address>? =
@@ -245,6 +250,7 @@ class AddObservation : AppCompatActivity(){
         }
     }
 
+    //==============================================================================================
     //Shows searchable list of all regional bird species
     private fun showSpeciesDialog(speciesList: List<BirdModel>) {
         val dialogView = layoutInflater.inflate(R.layout.species_dialog, null)
@@ -291,6 +297,7 @@ class AddObservation : AppCompatActivity(){
         dialog.show()
     }
 
+    //==============================================================================================
     //  Calender Dialog
     private fun showCalendarDialog() {
         val calendar = Calendar.getInstance()
@@ -314,6 +321,7 @@ class AddObservation : AppCompatActivity(){
         datePickerDialog.show()
     }
 
+    //==============================================================================================
     //Source: ChatGPT
     // Remove the runnable when the activity is destroyed to prevent memory leaks.
     override fun onDestroy() {

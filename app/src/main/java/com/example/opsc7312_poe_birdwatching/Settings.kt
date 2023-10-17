@@ -1,13 +1,18 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
-import PagerAdapter
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.google.android.material.tabs.TabLayout
 
 class Settings : AppCompatActivity() {
@@ -15,6 +20,7 @@ class Settings : AppCompatActivity() {
     private lateinit var Logout: TextView
     private lateinit var Back: TextView
 
+    //==============================================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -28,20 +34,19 @@ class Settings : AppCompatActivity() {
         viewPager.adapter = pagerAdapter
         tabLayout.setupWithViewPager(viewPager)
 
-        Logout.setOnClickListener()
-        {
+        Logout.setOnClickListener() {
             ToolBox.userID = -1
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
-        Back.setOnClickListener()
-        {
+        Back.setOnClickListener() {
             val intent = Intent(this, Hotpots::class.java)
             startActivity(intent)
         }
     }
 
+    //==============================================================================================
     override fun onBackPressed() {
         val intent = Intent(this, Hotpots::class.java)
         startActivity(intent)

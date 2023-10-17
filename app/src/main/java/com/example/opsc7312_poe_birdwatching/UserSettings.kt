@@ -1,12 +1,15 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
-import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +17,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import com.example.opsc7312_poe_birdwatching.Models.UsersModel
+import androidx.fragment.app.Fragment
 import com.google.android.material.slider.RangeSlider
 
 class UserSettings : Fragment() {
@@ -24,10 +27,7 @@ class UserSettings : Fragment() {
     private lateinit var tvSliderText: TextView
     private lateinit var sliderDistance: RangeSlider
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+    //==============================================================================================
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -55,7 +55,6 @@ class UserSettings : Fragment() {
         // Set the thumb color
         sliderDistance.thumbTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tab_indicator))
-
 
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
             var unit = "km"
@@ -91,6 +90,8 @@ class UserSettings : Fragment() {
         return view
     }
 
+    //==============================================================================================
+    //changes which button is highlighted, which text is on the slider, and the var in the user class
     private fun ToMetric() {
         val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
         val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
@@ -108,6 +109,8 @@ class UserSettings : Fragment() {
         tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
     }
 
+    //==============================================================================================
+    //changes which button is highlighted, which text is on the slider, and the var in the user class
     private fun ToImperial() {
         val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
         val selectedColorStateList = ColorStateList.valueOf(newSelectColor)

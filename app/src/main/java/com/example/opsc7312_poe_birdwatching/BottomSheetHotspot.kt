@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.annotation.SuppressLint
@@ -19,7 +27,6 @@ import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-
 class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     private lateinit var totalSpeciesTextView: TextView
@@ -34,9 +41,8 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     * */
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
-    /*
-    * View Created
-    * */
+    //==============================================================================================
+    //view created
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -54,9 +60,9 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         return view
     }
 
+    //==============================================================================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         // Testing execution order for view created vs displaySightingsInBottomSheet
         Log.d("View!!!!", "View Created")
@@ -103,9 +109,9 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     }
 
+    //==============================================================================================
     companion object {
         const val TAG = "BottomSheetHotspot"
-
 
         private const val ARG_HEADING_TEXT = "arg_heading_text"
         fun newInstance(headingText: String): BottomSheetHotspot {
@@ -117,21 +123,20 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         }
     }
 
+    //==============================================================================================
     fun setBottomSheetHeadingText(newText: String) {
         val textView = view?.findViewById<TextView>(R.id.tvBottomSheetHeading)
         textView?.text = newText
     }
 
-    /*
-    * Button click listener for button on sheet
-    * */
+    //==============================================================================================
+    //Button click listener for button on sheet
     fun setButtonClickListener(listener: () -> Unit) {
         this.buttonClickListener = listener
     }
 
-    /*
-    * Dynamically displays hotspot data
-    * */
+    //==============================================================================================
+    // Dynamically displays hotspot data
     @SuppressLint("InflateParams")
     fun displaySightingsInBottomSheet(
         bottomSheetView: LinearLayout,
@@ -169,10 +174,12 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             val italicCommonName = SpannableString(sighting.commonName)
             italicCommonName.setSpan(StyleSpan(Typeface.ITALIC), 0, italicCommonName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-// Combine "Common Name: " and italicized common name
+            // Combine "Common Name: " and italicized common name
             val spannableCombined = SpannableStringBuilder().append(commonNameText).append(italicCommonName)
             val spanString = SpannableString(sighting.commonName)
+
        /*     spanString.setSpan(StyleSpan(Typeface.ITALIC), 0, spanString.length, 0)*/
+
             // Set the sighting information in the included layout
             commonNameTextView.text =  spannableCombined
             howManyTextView.text = "How Many: ${sighting.howMany}"

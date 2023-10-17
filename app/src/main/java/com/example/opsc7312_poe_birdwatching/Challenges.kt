@@ -1,21 +1,27 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.Challenge_Object
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.w3c.dom.Text
 
 class Challenges : Fragment() {
     private var challengeList: List<Challenge_Object> = mutableListOf()
 
+    //==============================================================================================
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -43,14 +49,14 @@ class Challenges : Fragment() {
             val pointSToGet = challengeItemView.findViewById<TextView>(R.id.tvPointsToGet)
 
             // Binding Challenge description view
-            val tvChallengeDescription = challengeItemView.findViewById<TextView>(R.id.tvChallengeDescription)
+            val tvChallengeDescription =
+                challengeItemView.findViewById<TextView>(R.id.tvChallengeDescription)
 
             // Binding progress bar
             val progressBar = challengeItemView.findViewById<ProgressBar>(R.id.progressBar)
 
             // Binding progress view
             val tvProgress = challengeItemView.findViewById<TextView>(R.id.tvProgress)
-
 
             // Send user back
             val backTextView: TextView = view.findViewById(R.id.tvBack)
@@ -68,8 +74,7 @@ class Challenges : Fragment() {
 
             tvProgress.text = "${challenge.progress}/${challenge.required}"
 
-            if (challenge.progress == challenge.required)
-            {
+            if (challenge.progress == challenge.required) {
                 // Challenge completed
                 totalPoints += challenge.pointsToGet
             }
@@ -89,6 +94,8 @@ class Challenges : Fragment() {
         return view
     }
 
+    //==============================================================================================
+    //create the challenges and check the users progress
     private fun checkProgress(): List<Challenge_Object> {
         val challenges = mutableListOf<Challenge_Object>()
 
@@ -100,10 +107,12 @@ class Challenges : Fragment() {
         //travel to two hotspots
         challenges.add(Challenge_Object("Travel to two hotspots", ToolBox.tripsCompleted, 2, 2))
 
-        //duckhunt level
-        challenges.add(Challenge_Object("Reach the 7th round in duck hunt", ToolBox.topRoundInDuckHunt, 7, 10))
-
+        //duck hunt level
+        challenges.add(
+            Challenge_Object(
+                "Reach the 7th round in duck hunt", ToolBox.topRoundInDuckHunt, 7, 10
+            )
+        )
         return challenges
     }
-
 }
