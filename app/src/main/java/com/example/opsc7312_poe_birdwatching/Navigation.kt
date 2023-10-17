@@ -409,6 +409,8 @@ class Navigation : AppCompatActivity() {
         )
     }
 
+
+
     /**
     * Gets the Latitude and Longitude from hotspots activity using an extra
     */
