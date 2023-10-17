@@ -620,7 +620,7 @@ class Navigation : AppCompatActivity() {
         startNavigationLabel.visibility = View.VISIBLE
 
         // load map style
-        binding.mapView.getMapboxMap().loadStyleUri(NavigationStyles.NAVIGATION_DAY_STYLE) {
+        binding.mapView.getMapboxMap().loadStyleUri(NavigationStyles.NAVIGATION_NIGHT_STYLE) {
             // add long click listener that search for a route to the clicked destination
             binding.mapView.gestures.addOnMapClickListener { point ->
                 startNavigationLabel.visibility = View.GONE  // Hide the label

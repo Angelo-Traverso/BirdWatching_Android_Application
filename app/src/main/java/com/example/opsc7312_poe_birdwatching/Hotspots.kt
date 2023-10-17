@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
@@ -29,14 +30,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 import kotlin.concurrent.thread
 
 class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
@@ -152,12 +151,27 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             )
         }
     }
+    private fun loadMapStyle() {
+        try {
+            val success = mMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.grey_map
+                )
+            )
 
+            if (!success) {
+                println("Style parsing failed.")
+            }
+        } catch (e: IOException) {
+            println("Could not load style. Error: ${e.message}")
+        }
+    }
     //==============================================================================================
     //when google maps is ready this code will execute
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        loadMapStyle()
         //get the users current location
         getCurrentLocation { lat, lon ->
             this.lat = lat
