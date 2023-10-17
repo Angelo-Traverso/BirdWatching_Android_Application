@@ -44,6 +44,9 @@ class Settings : AppCompatActivity() {
             val intent = Intent(this, Hotpots::class.java)
             startActivity(intent)
         }
+
+        val desiredFragmentIndex = intent.getIntExtra("desiredFragmentIndex", 0)
+        viewPager.setCurrentItem(desiredFragmentIndex, false)
     }
 
     //==============================================================================================

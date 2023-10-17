@@ -17,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.Challenge_Object
+import java.util.*
 
 class Challenges : Fragment() {
     private var challengeList: List<Challenge_Object> = mutableListOf()
@@ -89,6 +90,8 @@ class Challenges : Fragment() {
             linearLayout.addView(challengeItemView) // Add the challenge item to the container
         }
 
+        clearListAtMidnight()
+
         // Setting total points earned
         tvPoints.text = totalPoints.toString()
         return view
@@ -114,5 +117,33 @@ class Challenges : Fragment() {
             )
         )
         return challenges
+    }
+
+    //==============================================================================================
+    //source: ChatGPT
+    //method to reset challenges every day at midnight
+    fun clearListAtMidnight() {
+        val timer = Timer()
+        val now = Calendar.getInstance()
+        val midnight = Calendar.getInstance()
+
+        // Set the time to midnight of the next day
+        midnight.time = now.time
+        midnight.add(Calendar.DAY_OF_YEAR, 1)
+        midnight.set(Calendar.HOUR_OF_DAY, 0)
+        midnight.set(Calendar.MINUTE, 0)
+        midnight.set(Calendar.SECOND, 0)
+        midnight.set(Calendar.MILLISECOND, 0)
+
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                ToolBox.topRoundInDuckHunt = 0
+                ToolBox.tripsCompleted = 0
+                for (challenge in challengeList) {
+                    challenge.progress = 0
+                }
+                println("List cleared at midnight.")
+            }
+        }, midnight.time, 24 * 60 * 60 * 1000) // Run every 24 hours
     }
 }

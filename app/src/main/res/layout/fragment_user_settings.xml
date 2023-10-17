@@ -167,11 +167,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/lineBelowAbout"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:gravity="start"
-        android:text="@string/TempText"
+        android:text="@string/abouttext"
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
     <ImageView
         android:id="@+id/imgLogo"

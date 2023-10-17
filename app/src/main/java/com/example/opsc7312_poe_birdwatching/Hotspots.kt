@@ -95,8 +95,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
         menuMyObs.setOnClickListener {
             val intent = Intent(this, Settings::class.java)
+            intent.putExtra("desiredFragmentIndex", 1)
             startActivity(intent)
-            close()
         }
         menuGame.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
@@ -110,8 +110,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
         menuSettings.setOnClickListener {
             val intent = Intent(this, Settings::class.java)
+            intent.putExtra("desiredFragmentIndex", 0)
             startActivity(intent)
-            close()
         }
         menuChallenges.setOnClickListener {
             close()

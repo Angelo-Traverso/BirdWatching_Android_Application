@@ -29,6 +29,7 @@ class SignUp : Fragment() {
     private lateinit var passwordInput: TextInputEditText
     private lateinit var confirmPasswordInput: TextInputEditText
     private lateinit var btnSignUp: Button
+    private lateinit var emailInput: TextInputEditText
 
     //==============================================================================================
     override fun onCreateView(
@@ -46,6 +47,7 @@ class SignUp : Fragment() {
         passwordInput = view.findViewById(R.id.txtUserPassword)
         confirmPasswordInput = view.findViewById(R.id.txtUserConfirmPassword)
         btnSignUp = view.findViewById(R.id.btnSignUp)
+        emailInput = view.findViewById(R.id.txtUserEmail)
 
         btnSignUp.setOnClickListener() {
             if (validateForm()) {
@@ -95,18 +97,25 @@ class SignUp : Fragment() {
         var valid = true
         try {
             val name: String = nameInput.text.toString().trim()
+            val email: String = emailInput.text.toString().trim()
             val password: String = passwordInput.text.toString().trim()
             val confirmPassword: String = confirmPasswordInput.text.toString().trim()
 
+            //validation constraints
             val minLength = 8
             val maxLength = 50
             val hasUpperCase = "[A-Z]".toRegex().containsMatchIn(password)
             val hasLowerCase = "[a-z]".toRegex().containsMatchIn(password)
             val hasDigit = "\\d".toRegex().containsMatchIn(password)
             val hasSpecialChar = "[^A-Za-z0-9]".toRegex().containsMatchIn(password)
+            val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
 
             if (TextUtils.isEmpty(name)) {
                 nameInput.error = "Name is required"
+                valid = false
+            }
+            if (TextUtils.isEmpty(email) || !emailRegex.matches(email)) {
+                emailInput.error = "Please enter a valid email"
                 valid = false
             }
             if (TextUtils.isEmpty(password)) {
@@ -125,7 +134,6 @@ class SignUp : Fragment() {
                 passwordInput.error = ("Password is not strong enough.")
                 valid = false
             }
-
 
             return valid
         } catch (ex: java.lang.Exception) {
