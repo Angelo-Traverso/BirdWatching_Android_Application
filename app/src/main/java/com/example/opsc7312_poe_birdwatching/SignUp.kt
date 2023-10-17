@@ -26,6 +26,7 @@ import com.google.android.material.textfield.TextInputEditText
 class SignUp : Fragment() {
 
     private lateinit var nameInput: TextInputEditText
+    private lateinit var surnameInput: TextInputEditText
     private lateinit var passwordInput: TextInputEditText
     private lateinit var confirmPasswordInput: TextInputEditText
     private lateinit var btnSignUp: Button
@@ -44,6 +45,7 @@ class SignUp : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         nameInput = view.findViewById(R.id.txtUserName)
+        surnameInput = view.findViewById(R.id.tvSurname)
         passwordInput = view.findViewById(R.id.txtUserPassword)
         confirmPasswordInput = view.findViewById(R.id.txtUserConfirmPassword)
         btnSignUp = view.findViewById(R.id.btnSignUp)
@@ -97,6 +99,7 @@ class SignUp : Fragment() {
         var valid = true
         try {
             val name: String = nameInput.text.toString().trim()
+            val surname: String = surnameInput.text.toString().trim()
             val email: String = emailInput.text.toString().trim()
             val password: String = passwordInput.text.toString().trim()
             val confirmPassword: String = confirmPasswordInput.text.toString().trim()
@@ -113,6 +116,9 @@ class SignUp : Fragment() {
             if (TextUtils.isEmpty(name)) {
                 nameInput.error = "Name is required"
                 valid = false
+            }
+            if(TextUtils.isEmpty(surname)){
+                surnameInput.error = "Surname is required"
             }
             if (TextUtils.isEmpty(email) || !emailRegex.matches(email)) {
                 emailInput.error = "Please enter a valid email"
