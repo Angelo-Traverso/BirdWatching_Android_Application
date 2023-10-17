@@ -352,15 +352,18 @@ class Navigation : AppCompatActivity() {
         }
     }
 
+    // Registering arrival observer
     override fun onStart() {
         super.onStart()
         mapboxNavigation.registerArrivalObserver(arrivalObserver)
     }
 
+    // Unregistering Arrival observer
     override fun onStop() {
         super.onStop()
         mapboxNavigation.unregisterArrivalObserver(arrivalObserver)
     }
+
     /**
      * Gets notified with progress along the currently active route.
      */
@@ -642,7 +645,9 @@ class Navigation : AppCompatActivity() {
         MapboxNavigationApp.setup(
             NavigationOptions.Builder(this)
                 .accessToken(getString(R.string.mapbox_access_token))
+
                 // comment out the location engine setting block to disable simulation
+                    // ------------------------ UNCOMMENT LINE BELOW TO DISABLE SIMULATION ------------------------ //
                 .locationEngine(replayLocationEngine)
                 .build()
         )
