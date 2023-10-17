@@ -33,6 +33,9 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     private val gunshot: Bitmap
     private val heartImage: Bitmap
     private val pauseButton: RectF = RectF(0F, 0F, 0F, 0F)
+    private var isRecoiling = false
+    private var pistolRotationAngle = 0f
+    private val maxTiltAngle = 10f
 
 
     //method to setup the games visuals and initial ducks
@@ -131,6 +134,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
                         ducksToRemove.add(duck)
                         looseLife()
                     } else if (!duck.isAlive) {
+                        isRecoiling = true
                         drawBlood(canvas, duck)
                         drawGunshot(canvas)
                         ducksToRemove.add(duck)
@@ -311,11 +315,46 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         else canvas.drawBitmap(duckImageL, duck.x, duck.y, null)
     }
 
+    //Sources: ChatGPT & https://stackoverflow.com/questions/9015372/how-to-rotate-a-bitmap-90-degrees
     //draw the pistol to the front end
     private fun drawPistol(canvas: Canvas) {
-        canvas.drawBitmap(
-            pistol, (canvas.width / 2).toFloat(), (canvas.height - pistol.height).toFloat(), null
-        )
+        val matrix = Matrix()
+
+        if (isRecoiling) {
+            // Gradually increase the tilt angle to simulate recoil
+            pistolRotationAngle += 5f
+            matrix.postRotate(10F)
+
+            val rotatedBitmap = Bitmap.createBitmap(
+                pistol,
+                0,
+                0,
+                pistol.width,
+                pistol.height,
+                matrix,
+                true
+            )
+            canvas.drawBitmap(
+                rotatedBitmap,
+                (canvas.width / 2).toFloat(),
+                (canvas.height - pistol.height).toFloat(),
+                null
+            )
+
+            if (pistolRotationAngle > maxTiltAngle) {
+                pistolRotationAngle = maxTiltAngle
+                isRecoiling = false
+            }
+        } else {
+            pistolRotationAngle = 0f
+
+            canvas.drawBitmap(
+                pistol,
+                (canvas.width / 2).toFloat(),
+                (canvas.height - pistol.height).toFloat(),
+                null
+            )
+        }
     }
 
     //draw the blood visual to the front end whenever a duck is pressed
