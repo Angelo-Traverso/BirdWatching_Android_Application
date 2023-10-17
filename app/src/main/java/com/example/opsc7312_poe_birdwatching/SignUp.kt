@@ -104,7 +104,7 @@ class SignUp : Fragment() {
             val password: String = passwordInput.text.toString().trim()
             val confirmPassword: String = confirmPasswordInput.text.toString().trim()
 
-            //validation constraints
+            // Validation constraints
             val minLength = 8
             val maxLength = 50
             val hasUpperCase = "[A-Z]".toRegex().containsMatchIn(password)
