@@ -17,7 +17,10 @@ import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -41,8 +44,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private var lon = 0.0
     private var destlat = 0.0
     private var destlon = 0.0
-    private var HotspotList = mutableListOf<HotspotModel>()
-    private val sightingsList: List<SightingModel> = mutableListOf()
 
     //nav buttons
     private lateinit var fabMenu: FloatingActionButton
@@ -232,7 +233,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //---location
     //region
 
-    //method to handel the fusedLocationClient logic and if no location is found use a hard coded location
+    //method to handel the fusedLocationClient logic and if no lcoation is found use a hard coded location
     //this is a callback as it needs to finish what it is working on before the rest of the map logic can continue
     private fun getCurrentLocation(callback: (Double, Double) -> Unit) {
         // Check for location permission
@@ -275,6 +276,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    // This method is called when getLocationData has completed.
     //when the data has been saved then load the bottom fragment
     override fun onLocationDataReceived() {
         // This method is called when getLocationData has completed.
@@ -300,11 +302,10 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, enable location on the map
                 isPermissionGranted = true
                 initializeMap()
             } else {
-                // Permission denied, handle it as needed
+                // Permission denied
             }
         }
     }
@@ -425,4 +426,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 //now it only appears once the data has been loaded
 interface LocationDataCallback {
     fun onLocationDataReceived()
+}
+
+interface DataReadyCallback {
+    fun onDataReady(data: Boolean)
 }

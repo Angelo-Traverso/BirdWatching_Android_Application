@@ -8,10 +8,13 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +32,7 @@ import java.util.*
 import kotlin.concurrent.thread
 
 
-class AddObservation : AppCompatActivity() {
+class AddObservation : AppCompatActivity(){
 
     private lateinit var geocoder: Geocoder
     private lateinit var userLocation: Location
@@ -39,6 +42,8 @@ class AddObservation : AppCompatActivity() {
     private lateinit var btnSave: Button
     private lateinit var etHowMany: EditText
     private lateinit var cancelTextView: TextView
+    private lateinit var pbWaitToSignIn: ProgressBar
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +76,50 @@ class AddObservation : AppCompatActivity() {
 
         etHowMany = findViewById(R.id.etHowMany)
         etNote = findViewById(R.id.etNote)
+        pbWaitToSignIn = findViewById(R.id.pbWaitForData)
+
+        //start the handeler
+        if(ToolBox.populated)
+        {
+            btnSave.isEnabled = true
+            etNote.isEnabled = true
+            etHowMany.isEnabled = true
+            etWhen.isEnabled = true
+            etSelectSpecies.isEnabled = true
+        }
+        else
+        {
+            btnSave.isEnabled = false
+            etNote.isEnabled = false
+            etHowMany.isEnabled = false
+            etWhen.isEnabled = false
+            etSelectSpecies.isEnabled = false
+            handler.post(checkPopulatedRunnable)
+        }
+
+    }
+
+    //Source: ChatGPT
+    // Check for the populated value when the activity is created.
+    private val checkPopulatedRunnable = object : Runnable {
+        override fun run() {
+            if (ToolBox.populated) {
+                btnSave.isEnabled = true
+                etNote.isEnabled = true
+                etHowMany.isEnabled = true
+                etWhen.isEnabled = true
+                etSelectSpecies.isEnabled = true
+                pbWaitToSignIn.visibility = View.GONE
+            } else {
+                btnSave.isEnabled = false
+                etNote.isEnabled = false
+                etHowMany.isEnabled = false
+                etWhen.isEnabled = false
+                etSelectSpecies.isEnabled = false
+                pbWaitToSignIn.visibility = View.VISIBLE
+                handler.postDelayed(this, 100)
+            }
+        }
     }
 
     //save the new obs to the list
@@ -97,8 +146,12 @@ class AddObservation : AppCompatActivity() {
 
                 thread {
                     scope.launch {
-                        val placeName = apiWorker.CoordsToLocation(userLocation.latitude, userLocation.longitude)
-                        var newObs = UserObservation(obsID, userID, sqlDate, birdName, howMany, location, note, placeName)
+                        val placeName = apiWorker.CoordsToLocation(
+                            userLocation.latitude, userLocation.longitude
+                        )
+                        var newObs = UserObservation(
+                            obsID, userID, sqlDate, birdName, howMany, location, note, placeName
+                        )
                         ToolBox.usersObservations.add(newObs)
                     }
                 }
@@ -162,22 +215,19 @@ class AddObservation : AppCompatActivity() {
             LocationServices.getFusedLocationProviderClient(this)
 
         if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                this, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    userLocation = location
-                    Log.d("Region Code", getCountryCodeFromLocation(userLocation))
-                }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null) {
+                userLocation = location
+                Log.d("Region Code", getCountryCodeFromLocation(userLocation))
             }
+        }
     }
 
     //  Gets current region code
@@ -202,8 +252,7 @@ class AddObservation : AppCompatActivity() {
         val listView = dialogView.findViewById<ListView>(android.R.id.list)
 
         val builder = AlertDialog.Builder(this)
-        builder.setView(dialogView)
-            .setTitle("Select a species")
+        builder.setView(dialogView).setTitle("Select a species")
             .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
 
         val dialog = builder.create()
@@ -250,8 +299,7 @@ class AddObservation : AppCompatActivity() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
-            this,
-            {_ , selectedYear, selectedMonth, selectedDay ->
+            this, { _, selectedYear, selectedMonth, selectedDay ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(selectedYear, selectedMonth, selectedDay)
 
@@ -259,13 +307,17 @@ class AddObservation : AppCompatActivity() {
                 val formattedDate = dateFormat.format(selectedDate.time)
 
                 etWhen.setText(formattedDate)
-            },
-            year,
-            month,
-            day
+            }, year, month, day
         )
 
         datePickerDialog.datePicker.maxDate = System.currentTimeMillis() + 1000
         datePickerDialog.show()
+    }
+
+    //Source: ChatGPT
+    // Remove the runnable when the activity is destroyed to prevent memory leaks.
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(checkPopulatedRunnable)
     }
 }
