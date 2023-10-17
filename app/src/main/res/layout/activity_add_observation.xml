@@ -111,4 +111,11 @@
         android:text="@string/Back"
         android:textColor="@color/white" />
 
+    <ProgressBar
+        android:id="@+id/pbWaitForData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etHowMany"
+        android:visibility="gone" />
+
 </RelativeLayout>

@@ -17,5 +17,6 @@ class ToolBox : Application() {
         var birds: List<BirdModel> = mutableListOf()
         var topRoundInDuckHunt = 0
         var tripsCompleted = 0
+        var populated = false
     }
 }

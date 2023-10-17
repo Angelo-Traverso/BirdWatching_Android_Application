@@ -5,29 +5,19 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
-import com.example.opsc7312_poe_birdwatching.Models.LocationDataClass
-import com.example.opsc7312_poe_birdwatching.Models.SightingModel
-import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -49,8 +39,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private var lon = 0.0
     private var destlat = 0.0
     private var destlon = 0.0
-    private var HotspotList = mutableListOf<HotspotModel>()
-    private val sightingsList: List<SightingModel> = mutableListOf()
 
     //nav buttons
     private lateinit var fabMenu: FloatingActionButton
@@ -208,6 +196,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 val hotspots = apiWorker.getHotspots(lat, lon)
                 UpdateMarkers(hotspots)
                 ToolBox.birds = apiWorker.getBirds()
+
+                ToolBox.populated = true
             }
         }
     }
@@ -274,9 +264,9 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    // This method is called when getLocationData has completed.
     //when the data has been saved then load the bottom fragment
     override fun onLocationDataReceived() {
-        // This method is called when getLocationData has completed.
         val intent = Intent(this, Navigation::class.java)
         intent.putExtra("LATITUDE", this.lat)
         intent.putExtra("LONGITUDE", this.lon)
@@ -298,11 +288,10 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, enable location on the map
                 isPermissionGranted = true
                 initializeMap()
             } else {
-                // Permission denied, handle it as needed
+                // Permission denied
             }
         }
     }
@@ -423,4 +412,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 //now it only appears once the data has been loaded
 interface LocationDataCallback {
     fun onLocationDataReceived()
+}
+
+interface DataReadyCallback {
+    fun onDataReady(data: Boolean)
 }
