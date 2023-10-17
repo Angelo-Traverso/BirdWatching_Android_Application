@@ -37,7 +37,13 @@ class Settings : AppCompatActivity() {
 
         Back.setOnClickListener()
         {
-            onBackPressed()
+            val intent = Intent(this, Hotpots::class.java)
+            startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, Hotpots::class.java)
+        startActivity(intent)
     }
 }
