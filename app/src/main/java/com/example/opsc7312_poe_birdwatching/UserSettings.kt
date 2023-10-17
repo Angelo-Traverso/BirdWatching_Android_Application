@@ -24,6 +24,8 @@ class UserSettings : Fragment() {
 
     private lateinit var btnMetric: Button
     private lateinit var btnImperial: Button
+    private lateinit var tvUserName: TextView
+    private lateinit var tvUserEmail: TextView
     private lateinit var tvSliderText: TextView
     private lateinit var sliderDistance: RangeSlider
 
@@ -32,6 +34,14 @@ class UserSettings : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_user_settings, container, false)
+
+
+        // TextViews
+        tvUserName = view.findViewById(R.id.tvUserName)
+        tvUserEmail = view.findViewById(R.id.tvUserEmail)
+
+        tvUserName.text = "${ToolBox.users[ToolBox.userID].Name} ${ToolBox.users[ToolBox.userID].Surname}"
+        tvUserEmail.text = "${ToolBox.users[ToolBox.userID].Email}"
 
         //----SLIDER----
         sliderDistance = view.findViewById(R.id.sliderDistance)
