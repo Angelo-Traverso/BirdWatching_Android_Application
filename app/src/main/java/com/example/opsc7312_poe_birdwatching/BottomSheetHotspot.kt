@@ -2,7 +2,12 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +15,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.marginTop
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
+
 class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     private lateinit var totalSpeciesTextView: TextView
+
     /*
     * Button click listener for sheet button
     * */
@@ -32,7 +38,8 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     * View Created
     * */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_hotspot, container, false)
 
         // Find the button and set a click listener
@@ -49,7 +56,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
 
         // Testing execution order for view created vs displaySightingsInBottomSheet
@@ -112,9 +118,10 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     }
 
     fun setBottomSheetHeadingText(newText: String) {
-        val textView =view?.findViewById<TextView>(R.id.tvBottomSheetHeading)
+        val textView = view?.findViewById<TextView>(R.id.tvBottomSheetHeading)
         textView?.text = newText
     }
+
     /*
     * Button click listener for button on sheet
     * */
@@ -126,7 +133,10 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     * Dynamically displays hotspot data
     * */
     @SuppressLint("InflateParams")
-    fun displaySightingsInBottomSheet(bottomSheetView: LinearLayout, sightings: List<SightingModel>) {
+    fun displaySightingsInBottomSheet(
+        bottomSheetView: LinearLayout,
+        sightings: List<SightingModel>
+    ) {
         // Testing execution order for view created vs displaySightingsInBottomSheet
         Log.d("Display!!!!", "Display called")
         val inflater = LayoutInflater.from(bottomSheetView.context)
@@ -136,9 +146,10 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         totalSpeciesTextView.text = "${sightings.count()} species"
 
 
-            for (sighting in sightings) {
+        for (sighting in sightings) {
             counter++
             val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
+
             // Inflate the hotspot_sighting layout
             //val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
             // Set margins
@@ -153,9 +164,17 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             val howManyTextView = hotspotSightingView.findViewById<TextView>(R.id.tvHowMany)
             val dateTextView = hotspotSightingView.findViewById<TextView>(R.id.tvDate)
 
-            // Set the sighting information in the included layout
 
-            commonNameTextView.text = "Common Name: ${sighting.commonName}"
+            val commonNameText = "Common Name: "
+            val italicCommonName = SpannableString(sighting.commonName)
+            italicCommonName.setSpan(StyleSpan(Typeface.ITALIC), 0, italicCommonName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+// Combine "Common Name: " and italicized common name
+            val spannableCombined = SpannableStringBuilder().append(commonNameText).append(italicCommonName)
+            val spanString = SpannableString(sighting.commonName)
+       /*     spanString.setSpan(StyleSpan(Typeface.ITALIC), 0, spanString.length, 0)*/
+            // Set the sighting information in the included layout
+            commonNameTextView.text =  spannableCombined
             howManyTextView.text = "How Many: ${sighting.howMany}"
             dateTextView.text = "Date: ${sighting.date}"
 
