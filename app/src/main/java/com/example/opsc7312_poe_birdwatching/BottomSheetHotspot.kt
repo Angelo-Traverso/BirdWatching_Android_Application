@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
@@ -48,7 +49,16 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_hotspot, container, false)
 
-        // Find the button and set a click listener
+        // start navigation small button
+        val startNavigationSmallButton = view.findViewById<ImageButton>(R.id.btnNavigationSmall)
+
+        startNavigationSmallButton.setOnClickListener{
+
+            // Notify the listener when the button is clicked
+            buttonClickListener?.invoke()
+        }
+
+        // start navigation button
         val startNavigationButton = view.findViewById<Button>(R.id.btnStartNavigation)
 
         startNavigationButton.setOnClickListener {

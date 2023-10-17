@@ -7,7 +7,7 @@
     android:id="@+id/relMain"
     tools:context=".Hotpots">
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:id="@+id/linearAppBar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -28,7 +28,7 @@
             android:textColor="@color/white"
             android:textSize="26sp" />
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
     <!--Map display-->
     <com.google.android.gms.maps.MapView

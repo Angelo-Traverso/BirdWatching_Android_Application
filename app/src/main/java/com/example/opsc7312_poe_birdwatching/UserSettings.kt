@@ -59,7 +59,7 @@ class UserSettings : Fragment() {
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
             var unit = "km"
 
-            if (!ToolBox.users[ToolBox.userID].MeasurementUnitsIsKM)
+            if (!ToolBox.users[ToolBox.userID].isUnitKM)
             {
                 unit = "mile"
             }
@@ -73,7 +73,7 @@ class UserSettings : Fragment() {
         btnMetric = view.findViewById<Button>(R.id.btnMetric)
         btnImperial = view.findViewById<Button>(R.id.btnImperial)
 
-        if (ToolBox.users[ToolBox.userID].MeasurementUnitsIsKM == true) {
+        if (ToolBox.users[ToolBox.userID].isUnitKM == true) {
             ToMetric()
         } else {
             ToImperial()
@@ -101,7 +101,7 @@ class UserSettings : Fragment() {
         val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
         ViewCompat.setBackgroundTintList(btnImperial, unselectedColorStateList)
 
-        ToolBox.users[ToolBox.userID].MeasurementUnitsIsKM = true
+        ToolBox.users[ToolBox.userID].isUnitKM = true
 
         var value = ToolBox.users[ToolBox.userID].MaxDistance.toFloat()
         var unit = "km"
@@ -120,7 +120,7 @@ class UserSettings : Fragment() {
         val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
         ViewCompat.setBackgroundTintList(btnMetric, unselectedColorStateList)
 
-        ToolBox.users[ToolBox.userID].MeasurementUnitsIsKM = false
+        ToolBox.users[ToolBox.userID].isUnitKM = false
 
         var value = ToolBox.users[ToolBox.userID].MaxDistance.toFloat()
         var unit = "mile"

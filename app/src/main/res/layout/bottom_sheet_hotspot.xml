@@ -38,7 +38,7 @@
             android:layout_weight="1" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btnNavigationSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -79,7 +79,7 @@
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Information"
+        android:text="Specie Information"
         android:textColor="@color/black"
         android:textSize="18sp" />
 

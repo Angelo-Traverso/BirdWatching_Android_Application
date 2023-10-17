@@ -538,9 +538,22 @@ class Navigation : AppCompatActivity() {
             viewportDataSource.followingPadding = followingPadding
         }
 
+        // Evaluating user selected unit type for their navigation
+        val unitTypeToUse : UnitType
+
+        // setting var = to user selected unit type
+        val unitType = ToolBox.users[ToolBox.userID].isUnitKM
+
+        unitTypeToUse = if(unitType) {
+            UnitType.METRIC
+        }else {
+            UnitType.IMPERIAL
+        }
+
+
         // make sure to use the same DistanceFormatterOptions across different features
         val distanceFormatterOptions =
-            DistanceFormatterOptions.Builder(this).unitType(UnitType.METRIC).build()
+            DistanceFormatterOptions.Builder(this).unitType(unitTypeToUse).build()
 
         // initialize maneuver api that feeds the data to the top banner maneuver view
         maneuverApi = MapboxManeuverApi(
@@ -564,7 +577,6 @@ class Navigation : AppCompatActivity() {
                 )
                 .build()
         )
-
 
         // Change speech to metric here
         speechApi = MapboxSpeechApi(
