@@ -54,6 +54,7 @@ import com.mapbox.navigation.core.trip.session.RouteProgressObserver
 import com.mapbox.navigation.core.trip.session.VoiceInstructionsObserver
 import com.example.opsc7312_poe_birdwatching.databinding.ActivityNavigationBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.navigation.base.formatter.UnitType
 import com.mapbox.navigation.base.trip.model.RouteLegProgress
 import com.mapbox.navigation.base.trip.model.RouteProgress
@@ -122,6 +123,7 @@ class Navigation : AppCompatActivity() {
         private const val BUTTON_ANIMATION_DURATION = 1500L
     }
 
+    private lateinit var unitTypeString : String
     /**
     * Stores whether the user's progress is completed or not
     */
@@ -546,10 +548,12 @@ class Navigation : AppCompatActivity() {
         // Setting var = to user selected unit type
         val unitType = ToolBox.users[ToolBox.userID].isUnitKM
 
-        unitTypeToUse = if(unitType) {
-            UnitType.METRIC
+         if(unitType) {
+             unitTypeToUse = UnitType.METRIC
+            unitTypeString = "metric"
         }else {
-            UnitType.IMPERIAL
+             unitTypeToUse = UnitType.IMPERIAL
+            unitTypeString = "imperial"
         }
 
 
@@ -721,6 +725,7 @@ class Navigation : AppCompatActivity() {
             RouteOptions.builder()
                 .applyDefaultNavigationOptions()
                 .applyLanguageAndVoiceUnitOptions(this)
+                .voiceUnits(unitTypeString)
                 .coordinatesList(listOf(originPoint, destinationPoint))
                 // provide the bearing for the origin of the request to ensure
                 // that the returned route faces in the direction of the current user movement
