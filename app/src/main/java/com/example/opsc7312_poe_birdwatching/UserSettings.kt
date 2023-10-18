@@ -42,7 +42,8 @@ class UserSettings : Fragment() {
         tvUserName = view.findViewById(R.id.tvUserName)
         tvUserEmail = view.findViewById(R.id.tvUserEmail)
 
-        tvUserName.text = "${ToolBox.users[ToolBox.userID].Name} ${ToolBox.users[ToolBox.userID].Surname}"
+        tvUserName.text =
+            "${ToolBox.users[ToolBox.userID].Name} ${ToolBox.users[ToolBox.userID].Surname}"
         tvUserEmail.text = "${ToolBox.users[ToolBox.userID].Email}"
 
         //----SLIDER----
@@ -58,7 +59,7 @@ class UserSettings : Fragment() {
 
         // Set tick color
         sliderDistance.tickTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
 
         // Set the track color
         sliderDistance.trackActiveTintList =
@@ -71,8 +72,7 @@ class UserSettings : Fragment() {
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
             var unit = "km"
 
-            if (!ToolBox.users[ToolBox.userID].isUnitKM)
-            {
+            if (!ToolBox.users[ToolBox.userID].isUnitKM) {
                 unit = "mile"
             }
 
@@ -85,28 +85,18 @@ class UserSettings : Fragment() {
         btnDark = view.findViewById(R.id.btnDark)
         btnLight = view.findViewById(R.id.btnLight)
 
-        btnDark.setOnClickListener{
-            val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
-            val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
-            ViewCompat.setBackgroundTintList(btnDark, selectedColorStateList)
-
-            val newUnselectedColor = ContextCompat.getColor(requireContext(), R.color.app_background)
-            val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
-            ViewCompat.setBackgroundTintList(btnLight, unselectedColorStateList)
-
-            ToolBox.users[ToolBox.userID].mapStyleIsDark = true
+        if (ToolBox.users[ToolBox.userID].mapStyleIsDark) {
+            toDark()
+        } else {
+            toLight()
         }
 
-        btnLight.setOnClickListener{
-            val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
-            val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
-            ViewCompat.setBackgroundTintList(btnLight, selectedColorStateList)
+        btnDark.setOnClickListener {
+            toDark()
+        }
 
-            val newUnselectedColor = ContextCompat.getColor(requireContext(), R.color.app_background)
-            val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
-            ViewCompat.setBackgroundTintList(btnDark, unselectedColorStateList)
-
-            ToolBox.users[ToolBox.userID].mapStyleIsDark = false
+        btnLight.setOnClickListener {
+            toLight()
         }
 
         //---MEASUREMENT UNITS---
@@ -167,4 +157,29 @@ class UserSettings : Fragment() {
         val displayValue = "$value $unit"
         tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
     }
+
+    private fun toDark() {
+        val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
+        val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
+        ViewCompat.setBackgroundTintList(btnDark, selectedColorStateList)
+
+        val newUnselectedColor = ContextCompat.getColor(requireContext(), R.color.app_background)
+        val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
+        ViewCompat.setBackgroundTintList(btnLight, unselectedColorStateList)
+
+        ToolBox.users[ToolBox.userID].mapStyleIsDark = true
+    }
+
+    private fun toLight() {
+        val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
+        val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
+        ViewCompat.setBackgroundTintList(btnLight, selectedColorStateList)
+
+        val newUnselectedColor = ContextCompat.getColor(requireContext(), R.color.app_background)
+        val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
+        ViewCompat.setBackgroundTintList(btnDark, unselectedColorStateList)
+
+        ToolBox.users[ToolBox.userID].mapStyleIsDark = false
+    }
+
 }
