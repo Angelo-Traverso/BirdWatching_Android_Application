@@ -84,7 +84,8 @@ class SignIn : Fragment() {
         if (!(storedPassword.isNullOrEmpty()) && verifyPassword(password, storedPassword)) {
 
             // Authentication successful
-            ToolBox.userID = ToolBox.users.count()
+            ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
+            println(ToolBox.userID)
             val intent = Intent(activity, Hotpots::class.java)
             startActivity(intent)
 
