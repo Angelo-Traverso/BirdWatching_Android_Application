@@ -139,10 +139,61 @@
         android:background="@color/white" />
 
     <TextView
-        android:id="@+id/tvAbout"
+        android:id="@+id/tvMapStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lineBelowRadius"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:gravity="start"
+        android:text="Map Style"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/linMapStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lineBelowRadius"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toEndOf="@+id/tvMapStyle"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/clickedMetric"
+            android:text="Dark"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/app_background"
+            android:text="Light"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+    <View
+        android:id="@+id/lineBelowMapStyle"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tvMapStyle"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.3"
+        android:background="@color/white" />
+    <TextView
+        android:id="@+id/tvAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lineBelowMapStyle"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
         android:gravity="start"

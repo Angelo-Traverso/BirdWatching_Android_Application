@@ -9,5 +9,6 @@ data class UsersModel(
     var Hash: String = "",
     var isUnitKM: Boolean = true,
     var MaxDistance: Double = 5.0,
-    var ChallengePoints: Int = 0
+    var ChallengePoints: Int = 0,
+    var mapStyleIsDark: Boolean = false
 )
