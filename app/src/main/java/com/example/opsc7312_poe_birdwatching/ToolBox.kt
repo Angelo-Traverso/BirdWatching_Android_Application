@@ -27,21 +27,21 @@ class ToolBox : Application() {
                 UserID = 0,
                 Name = "Benjamin",
                 Surname = "Franklin",
-                Email = "bb@gmail.com",
+                Email = "Benjamin@gmail.com",
                 Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
             ),
             UsersModel(
                 UserID = 1,
                 Name = "Renold",
                 Surname = "Jackson",
-                Email = "rj@gmail.com",
+                Email = "Renold@gmail.com",
                 Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
             ),
             UsersModel(
                 UserID = 2,
                 Name = "Tiril",
                 Surname = "Rampo",
-                Email = "@gmail.com",
+                Email = "Tiril@gmail.com",
                 Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
             )
         )

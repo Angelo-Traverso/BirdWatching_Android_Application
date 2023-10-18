@@ -13,17 +13,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
-import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -37,6 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import kotlin.concurrent.thread
+
 
 class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
@@ -152,13 +151,14 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             )
         }
     }
+
     private fun loadMapStyle() {
 
-        if (ToolBox.users[ToolBox.userID].mapStyleIsDark)
-        {
+        if (ToolBox.users[ToolBox.userID].mapStyleIsDark) {
             mapStyleChosen = R.raw.dark
-        }else
-        {mapStyleChosen = R.raw.light}
+        } else {
+            mapStyleChosen = R.raw.light
+        }
 
         try {
             val success = mMap.setMapStyle(
@@ -174,6 +174,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             println("Could not load style. Error: ${e.message}")
         }
     }
+
     //==============================================================================================
     // When google maps is ready this code will execute
     override fun onMapReady(googleMap: GoogleMap) {
@@ -199,10 +200,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
         // On Click for marker
         mMap.setOnMarkerClickListener { marker ->
-
             // Setting location name
             locationName = marker.title.toString()
-
             // Getting location data to load in bottom sheet
             getLocationData(marker.position.latitude, marker.position.longitude, marker)
             true
@@ -217,7 +216,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
 
-            val filteredObservations = ToolBox.usersObservations.filter { it.UserID == ToolBox.userID }
+            val filteredObservations =
+                ToolBox.usersObservations.filter { it.UserID == ToolBox.userID }
 
             for (location in filteredObservations) {
                 mMap.addMarker(
