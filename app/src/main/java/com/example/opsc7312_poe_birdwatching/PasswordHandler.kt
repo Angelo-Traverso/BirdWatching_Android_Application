@@ -36,5 +36,4 @@ class PasswordHandler {
             return hexString.toString()
         }
     }
-
 }

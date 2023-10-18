@@ -10,6 +10,7 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -66,6 +67,8 @@ class SignUp : Fragment() {
 
             val newUser = UsersModel(
                 Name = nameInput.text.toString().trim(),
+                Surname = surnameInput.text.toString().trim(),
+                Email = emailInput.text.toString().trim(),
                 Hash = PasswordHandler.hashPassword(passwordInput.text.toString().trim())
             )
 

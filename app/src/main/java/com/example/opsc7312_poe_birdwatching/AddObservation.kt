@@ -86,6 +86,7 @@ class AddObservation : AppCompatActivity(){
             etHowMany.isEnabled = true
             etWhen.isEnabled = true
             etSelectSpecies.isEnabled = true
+            println("data exists")
         }
         else
         {
@@ -95,6 +96,7 @@ class AddObservation : AppCompatActivity(){
             etWhen.isEnabled = false
             etSelectSpecies.isEnabled = false
             handler.post(checkPopulatedRunnable)
+            println("handeler started")
         }
 
     }
@@ -130,7 +132,7 @@ class AddObservation : AppCompatActivity(){
 
             if (validateForm()) {
                 val obsID = ""
-                val userID = ToolBox.userID.toString()
+                val userID = ToolBox.userID
 
                 val dateText = etWhen.text.toString()
                 val dateFormat = SimpleDateFormat("dd-MM-yyyy")
@@ -154,6 +156,7 @@ class AddObservation : AppCompatActivity(){
                         var newObs = UserObservation(
                             obsID, userID, sqlDate, birdName, howMany, location, note, placeName
                         )
+
                         ToolBox.usersObservations.add(newObs)
                     }
                 }

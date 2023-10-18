@@ -60,6 +60,7 @@ class SignIn : Fragment() {
                     UsersModel(ToolBox.users.count(), "Angelo", "Traverso" ,"atraverso@example.com", "", true, 5.0, 0)
                 ToolBox.users.add(newUser)
                 ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
+                println(ToolBox.userID)
                 val intent = Intent(activity, Hotpots::class.java)
                 startActivity(intent)
             } else {

@@ -207,7 +207,10 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //show any user obs on the map in a different color
     private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
-            for (location in ToolBox.usersObservations) {
+
+            val filteredObservations = ToolBox.usersObservations.filter { it.UserID == ToolBox.userID }
+
+            for (location in filteredObservations) {
                 mMap.addMarker(
                     MarkerOptions().position(
                         LatLng(
@@ -231,7 +234,10 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             scope.launch {
                 val hotspots = apiWorker.getHotspots(lat, lon)
                 UpdateMarkers(hotspots)
+                println("getting birds")
                 ToolBox.birds = apiWorker.getBirds()
+                ToolBox.populated = true
+                println("birds saved")
             }
         }
     }
