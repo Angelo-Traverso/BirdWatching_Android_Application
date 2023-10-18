@@ -59,6 +59,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private lateinit var menuAddObservation: FloatingActionButton
     private lateinit var menuMyObs: FloatingActionButton
     private lateinit var menuChallenges: FloatingActionButton
+    private var mapStyleChosen = 0
 
     //menu movement
     private lateinit var fabClose: Animation
@@ -152,10 +153,17 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
     private fun loadMapStyle() {
+
+        if (ToolBox.users[ToolBox.userID].mapStyleIsDark)
+        {
+            mapStyleChosen = R.raw.dark
+        }else
+        {mapStyleChosen = R.raw.light}
+
         try {
             val success = mMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.dark
+                    this, mapStyleChosen
                 )
             )
 

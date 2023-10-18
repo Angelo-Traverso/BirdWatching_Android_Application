@@ -24,6 +24,8 @@ class UserSettings : Fragment() {
 
     private lateinit var btnMetric: Button
     private lateinit var btnImperial: Button
+    private lateinit var btnDark: Button
+    private lateinit var btnLight: Button
     private lateinit var tvUserName: TextView
     private lateinit var tvUserEmail: TextView
     private lateinit var tvSliderText: TextView
@@ -77,6 +79,34 @@ class UserSettings : Fragment() {
             val displayValue = "$value $unit"
             tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
             ToolBox.users[ToolBox.userID].MaxDistance = value.toDouble()
+        }
+
+        //---Hotspot Map Style---
+        btnDark = view.findViewById(R.id.btnDark)
+        btnLight = view.findViewById(R.id.btnLight)
+
+        btnDark.setOnClickListener{
+            val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
+            val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
+            ViewCompat.setBackgroundTintList(btnDark, selectedColorStateList)
+
+            val newUnselectedColor = ContextCompat.getColor(requireContext(), R.color.app_background)
+            val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
+            ViewCompat.setBackgroundTintList(btnLight, unselectedColorStateList)
+
+            ToolBox.users[ToolBox.userID].mapStyleIsDark = true
+        }
+
+        btnLight.setOnClickListener{
+            val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
+            val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
+            ViewCompat.setBackgroundTintList(btnLight, selectedColorStateList)
+
+            val newUnselectedColor = ContextCompat.getColor(requireContext(), R.color.app_background)
+            val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
+            ViewCompat.setBackgroundTintList(btnDark, unselectedColorStateList)
+
+            ToolBox.users[ToolBox.userID].mapStyleIsDark = false
         }
 
         //---MEASUREMENT UNITS---
