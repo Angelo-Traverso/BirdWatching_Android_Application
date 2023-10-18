@@ -206,8 +206,13 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             getLocationData(marker.position.latitude, marker.position.longitude, marker)
             true
         }
-    }
 
+        // Hide menu items when map is clicked
+        mMap.setOnMapClickListener {
+            // Hide the FAB menu if it's open
+            if (isOpen()) close()
+        }
+    }
     //---markers
     //region
 
