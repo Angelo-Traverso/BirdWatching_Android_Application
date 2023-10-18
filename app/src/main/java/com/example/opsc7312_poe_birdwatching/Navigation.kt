@@ -345,7 +345,7 @@ class Navigation : AppCompatActivity() {
         }
     }
 
-    val arrivalObserver = object : ArrivalObserver {
+    private val arrivalObserver = object : ArrivalObserver {
 
         override fun onWaypointArrival(routeProgress: RouteProgress) {
             // do something when the user arrives at a waypoint

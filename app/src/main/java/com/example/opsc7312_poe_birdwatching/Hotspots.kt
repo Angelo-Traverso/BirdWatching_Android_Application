@@ -155,7 +155,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         try {
             val success = mMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.grey_map
+                    this, R.raw.dark
                 )
             )
 
@@ -167,12 +167,13 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
     //==============================================================================================
-    //when google maps is ready this code will execute
+    // When google maps is ready this code will execute
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
         loadMapStyle()
-        //get the users current location
+
+        // Get the users current location
         getCurrentLocation { lat, lon ->
             this.lat = lat
             this.lon = lon
@@ -204,7 +205,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //region
 
     //==============================================================================================
-    //show any user obs on the map in a different color
+    // Show any user obs on the map in a different color
     private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
             for (location in ToolBox.usersObservations) {
@@ -325,7 +326,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
-    //requests location permission
+    // Requests location permission
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
