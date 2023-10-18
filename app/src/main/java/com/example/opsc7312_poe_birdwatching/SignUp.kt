@@ -72,6 +72,8 @@ class SignUp : Fragment() {
                 Hash = PasswordHandler.hashPassword(passwordInput.text.toString().trim())
             )
 
+            println(newUser.Hash)
+
             // Add user to database
             ToolBox.users.add(newUser)
 

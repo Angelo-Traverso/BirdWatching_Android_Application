@@ -22,7 +22,29 @@ class ToolBox : Application() {
     companion object {
         var userRegion = ""
         var userID = -1
-        var users = arrayListOf<UsersModel>()
+        var users = arrayListOf<UsersModel>(
+            UsersModel(
+                UserID = 0,
+                Name = "Benjamin",
+                Surname = "Franklin",
+                Email = "bb@gmail.com",
+                Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
+            ),
+            UsersModel(
+                UserID = 1,
+                Name = "Renold",
+                Surname = "Jackson",
+                Email = "rj@gmail.com",
+                Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
+            ),
+            UsersModel(
+                UserID = 2,
+                Name = "Tiril",
+                Surname = "Rampo",
+                Email = "@gmail.com",
+                Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
+            )
+        )
         var usersObservations = arrayListOf<UserObservation>(
             UserObservation(
                 "0",
@@ -107,7 +129,7 @@ class ToolBox : Application() {
                 2,
                 Date(2023 - 10 - 18),
                 "Speckled Pigeon",
-                "1",
+                "2",
                 Location = Location("gps").apply {
                     latitude = -33.971619
                     longitude = 18.411377
@@ -120,7 +142,7 @@ class ToolBox : Application() {
                 2,
                 Date(2023 - 10 - 18),
                 "Rock Pigeon",
-                "1",
+                "2",
                 Location = Location("gps").apply {
                     latitude = -33.958743
                     longitude = 18.459167
