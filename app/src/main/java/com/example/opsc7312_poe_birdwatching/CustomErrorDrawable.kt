@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import androidx.core.content.ContextCompat
 
+//Sources: (ChatGPT, n.d.; Al-Fanatsah, 2017)
 class CustomErrorDrawable(context: Context) : Drawable() {
     private val drawable: Drawable
 
