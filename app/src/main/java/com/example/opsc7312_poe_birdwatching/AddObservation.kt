@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
@@ -30,6 +38,7 @@ import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
+
 
 class AddObservation : AppCompatActivity(){
 
@@ -161,6 +170,13 @@ class AddObservation : AppCompatActivity(){
                     }
                 }
 
+                // Clear all input fields
+                clearFields(etSelectSpecies, etHowMany, etWhen, etNote);
+
+                // Ensure user their entry has been saved
+                val myToast = Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG)
+                myToast.show()
+
 
             }
 
@@ -170,6 +186,16 @@ class AddObservation : AppCompatActivity(){
         }
     }
 
+    //==============================================================================================
+    // Method to clear all input fields
+    private fun clearFields(species:EditText, howMany: EditText, date: EditText, note: EditText)
+    {
+        species.text.clear()
+        howMany.text.clear()
+        date.text.clear()
+        note.text.clear()
+
+    }
     //==============================================================================================
     //validate the form
     private fun validateForm(): Boolean {
