@@ -96,7 +96,7 @@ class SignIn : Fragment() {
             pbWaitToSignIn.visibility = View.GONE
 
             val errToast = Toast.makeText(
-                requireContext(), "Incorrect username or password", Toast.LENGTH_LONG
+                requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
             )
 
             errToast.setGravity(Gravity.BOTTOM, 0, 25)
