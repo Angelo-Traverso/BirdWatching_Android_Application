@@ -55,17 +55,8 @@ class SignIn : Fragment() {
             // Setting progress bar to visible when user attempts to sign in
             pbWaitToSignIn.visibility = View.VISIBLE
 
-            if (email == "atraverso@example.com" && pword == "Password123!") {
-                val newUser =
-                    UsersModel(ToolBox.users.count(), "Angelo", "Traverso" ,"atraverso@example.com", "", true, 5.0, 0)
-                ToolBox.users.add(newUser)
-                ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
-                println(ToolBox.userID)
-                val intent = Intent(activity, Hotpots::class.java)
-                startActivity(intent)
-            } else {
-                authenticateUser(email, pword)
-            }
+            authenticateUser(email, pword)
+
         }
     }
 
