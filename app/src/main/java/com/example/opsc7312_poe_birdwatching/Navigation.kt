@@ -6,6 +6,8 @@
 //Jonathan Polakow, ST10081881
 //Angelo Traverso, ST10081927
 
+// (Mapbox, 2023)
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.annotation.SuppressLint
