@@ -17,7 +17,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.Challenge_Object
+import java.time.LocalDate
 import java.util.*
+import java.text.SimpleDateFormat
 
 class Challenges : Fragment() {
     private var challengeList: List<Challenge_Object> = mutableListOf()
@@ -103,8 +105,16 @@ class Challenges : Fragment() {
         val challenges = mutableListOf<Challenge_Object>()
 
         //spot 3 birds
-        val uniqueBirdNames = ToolBox.usersObservations.distinctBy { it.BirdName }
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val currentDate = Date()
+
+        val filteredObservations = ToolBox.usersObservations.filter {
+            it.UserID == ToolBox.userID && sdf.format(it.Date) == sdf.format(currentDate)
+        }
+
+        val uniqueBirdNames = filteredObservations.distinctBy { it.BirdName }
         val uniqueBirdCount = uniqueBirdNames.size
+
         challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 15))
 
         //travel to two hotspots

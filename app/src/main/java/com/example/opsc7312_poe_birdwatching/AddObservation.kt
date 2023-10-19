@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -232,24 +231,7 @@ class AddObservation : AppCompatActivity(){
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
                 userLocation = location
-                Log.d("Region Code", getCountryCodeFromLocation(userLocation))
             }
-        }
-    }
-
-    //==============================================================================================
-    //  Gets current region code
-    private fun getCountryCodeFromLocation(location: Location): String {
-        val addresses: List<Address>? =
-            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        if (!addresses.isNullOrEmpty()) {
-            val countryCode = addresses[0].countryCode
-            // Do something with the country code (e.g., display it)
-            Log.d("CountryCode", "Country Code: $countryCode")
-
-            return countryCode
-        } else {
-            return "Not found"
         }
     }
 
