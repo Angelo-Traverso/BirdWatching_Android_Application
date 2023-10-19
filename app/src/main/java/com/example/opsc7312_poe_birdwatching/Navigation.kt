@@ -91,31 +91,6 @@ import com.mapbox.navigation.ui.voice.model.SpeechVolume
 import java.util.Date
 import java.util.Locale
 
-/**
- * This example demonstrates a basic turn-by-turn navigation experience by putting together some UI elements to showcase
- * navigation camera transitions, guidance instructions banners and playback, and progress along the route.
- *
- * Before running the example make sure you have put your access_token in the correct place
- * inside [app/src/main/res/values/mapbox_access_token.xml]. If not present then add this file
- * at the location mentioned above and add the following content to it
- *
- * <?xml version="1.0" encoding="utf-8"?>
- * <resources xmlns:tools="http://schemas.android.com/tools">
- *     <string name="mapbox_access_token"><PUT_YOUR_ACCESS_TOKEN_HERE></string>
- * </resources>
- *
- * The example assumes that you have granted location permissions and does not enforce it. However,
- * the permission is essential for proper functioning of this example. The example also uses replay
- * location engine to facilitate navigation without actually physically moving.
- *
- * How to use this example:
- * - You can long-click the map to select a destination.
- * - The guidance will start to the selected destination while simulating location updates.
- * You can disable simulation by commenting out the [replayLocationEngine] setter in [NavigationOptions].
- * Then, the device's real location will be used.
- * - At any point in time you can finish guidance or select a new destination.
- * - You can use buttons to mute/unMute voice instructions, recenter the camera, or show the route overview.
- */
 @OptIn(ExperimentalPreviewMapboxNavigationAPI::class)
 class Navigation : AppCompatActivity() {
 
@@ -123,11 +98,10 @@ class Navigation : AppCompatActivity() {
         private const val BUTTON_ANIMATION_DURATION = 1500L
     }
 
-    private lateinit var unitTypeString : String
     /**
-    * Stores whether the user's progress is completed or not
-    */
-    private var isNavigationInProgress = false
+     * Stores the unit type used for speech API
+     */
+    private lateinit var unitTypeString : String
 
     /**
      * Debug tool used to play, pause and seek route progress events that can be used to produce mocked location updates along the route.
@@ -252,15 +226,6 @@ class Navigation : AppCompatActivity() {
      */
     private lateinit var speechApi: MapboxSpeechApi
 
-    /**
-     * Plays the synthesized audio files with upcoming maneuver instructions
-     * or uses an on-device Text-To-Speech engine to communicate the message to the driver.
-     * NOTE: do not use lazy initialization for this class since it takes some time to initialize
-     * the system services required for on-device speech synthesis. With lazy initialization
-     * there is a high risk that said services will not be available when the first instruction
-     * has to be played. [MapboxVoiceInstructionsPlayer] should be instantiated in
-     * `Activity#onCreate`.
-     */
     private lateinit var voiceInstructionsPlayer: MapboxVoiceInstructionsPlayer
 
     /**
@@ -347,6 +312,9 @@ class Navigation : AppCompatActivity() {
         }
     }
 
+
+    // Arrival Observer implemented to validate when a user has reached their destination in order to
+    // add respective progress to challenges
     private val arrivalObserver = object : ArrivalObserver {
 
         override fun onWaypointArrival(routeProgress: RouteProgress) {
@@ -421,14 +389,7 @@ class Navigation : AppCompatActivity() {
     private var destLat: Double = 0.0
     private var destLng: Double = 0.0
 
-    /**
-     * Gets notified whenever the tracked routes change.
-     *
-     * A change can mean:
-     * - routes get changed with [MapboxNavigation.setRoutes]
-     * - routes annotations get refreshed (for example, congestion annotation that indicate the live traffic along the route)
-     * - driver got off route and a reroute was executed
-     */
+    // Gets notified whenever the tracked routes change.
     private val routesObserver = RoutesObserver { routeUpdateResult ->
         if (routeUpdateResult.navigationRoutes.isNotEmpty()) {
             // generate route geometries asynchronously and render them
@@ -556,7 +517,6 @@ class Navigation : AppCompatActivity() {
             unitTypeString = "imperial"
         }
 
-
         // Make sure to use the same DistanceFormatterOptions across different features
         val distanceFormatterOptions =
             DistanceFormatterOptions.Builder(this).unitType(unitTypeToUse).build()
@@ -596,10 +556,6 @@ class Navigation : AppCompatActivity() {
             Locale.US.language
         )
 
-        // initialize route line, the withRouteLineBelowLayerId is specified to place
-        // the route line below road labels layer on the map
-        // the value of this option will depend on the style that you are using
-        // and under which layer the route line should be placed on the map layers stack
         val mapboxRouteLineOptions = MapboxRouteLineOptions.Builder(this)
             .withRouteLineBelowLayerId("road-label-navigation")
             .build()
@@ -672,7 +628,6 @@ class Navigation : AppCompatActivity() {
             NavigationOptions.Builder(this)
                 .accessToken(getString(R.string.mapbox_access_token))
 
-                // comment out the location engine setting block to disable simulation
                     // ------------------------ UNCOMMENT LINE BELOW TO DISABLE SIMULATION ------------------------ //
                 .locationEngine(replayLocationEngine)
                 .build()
@@ -716,19 +671,13 @@ class Navigation : AppCompatActivity() {
         val destinationPoint = Point.fromLngLat(markerLongitude, markerLatitude)
 
 
-        // execute a route request
-        // it's recommended to use the
-        // applyDefaultNavigationOptions and applyLanguageAndVoiceUnitOptions
-        // that make sure the route request is optimized
-        // to allow for support of all of the Navigation SDK features
         mapboxNavigation.requestRoutes(
             RouteOptions.builder()
                 .applyDefaultNavigationOptions()
                 .applyLanguageAndVoiceUnitOptions(this)
                 .voiceUnits(unitTypeString)
                 .coordinatesList(listOf(originPoint, destinationPoint))
-                // provide the bearing for the origin of the request to ensure
-                // that the returned route faces in the direction of the current user movement
+
                 .bearingsList(
                     listOf(
                         Bearing.builder()
@@ -760,8 +709,6 @@ class Navigation : AppCompatActivity() {
     }
 
     private fun setRouteAndStartNavigation(routes: List<NavigationRoute>) {
-        // set routes, where the first route in the list is the primary route that
-        // will be used for active guidance
         mapboxNavigation.setNavigationRoutes(routes)
 
         // show UI elements
@@ -785,14 +732,5 @@ class Navigation : AppCompatActivity() {
         binding.maneuverView.visibility = View.INVISIBLE
         binding.routeOverview.visibility = View.INVISIBLE
         binding.tripProgressCard.visibility = View.INVISIBLE
-    }
-
-    /**
-    * When user reaches destination
-    */
-    fun onTripCompleted() {
-
-        ToolBox.tripsCompleted += 1
-
     }
 }
