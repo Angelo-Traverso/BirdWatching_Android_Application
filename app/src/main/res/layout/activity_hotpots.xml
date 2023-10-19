@@ -1,69 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:mapbox="http://schemas.android.com/apk/res-android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/relMain"
     tools:context=".Hotpots">
 
-    <RelativeLayout
-        android:id="@+id/linearAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/app_background"
-        android:orientation="horizontal"
-        android:weightSum="4">
-
-        <TextView
-            android:id="@+id/tvHotspots"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_centerVertical="true"
-            android:text="@string/hotspots"
-            android:textColor="@color/white"
-            android:textSize="22sp" />
-
-        <View
-            android:id="@+id/lineAppBar"
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@+id/tvHotspots"
-            android:alpha="0.1"
-            android:foreground="@color/white" />
-
-        <TextView
-            android:id="@+id/tvCurrentLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_toEndOf="@+id/lineAppBar"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:text="Location"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:drawablePadding="6dp"
-            app:drawableStartCompat="@drawable/location_small"
-            app:drawableTint="@color/white" />
-
-    </RelativeLayout>
-
     <!--Map display-->
-    <FrameLayout
-        android:id="@+id/mainContainer"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_below="@+id/linearAppBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:ignore="SpeakableTextPresentCheck"
+        app:layout_constraintVertical_bias="0.5"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_1"
+        android:id="@+id/menu_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -78,12 +32,10 @@
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/controller"
         app:tint="@color/white">
-
-
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_2"
+        android:id="@+id/menu_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -103,7 +55,7 @@
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_3"
+        android:id="@+id/menu_addObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -117,12 +69,10 @@
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/edit_square"
         app:tint="@color/white">
-
-
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_4"
+        android:id="@+id/menu_viewObservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -140,7 +90,7 @@
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/menu_item_5"
+        android:id="@+id/menu_challenges"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -167,9 +117,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="46dp"
         android:contentDescription="s"
-        app:elevation="6dp"
+        app:elevation="10dp"
         app:backgroundTint="@color/app_background"
         app:srcCompat="@drawable/widgets"
         app:tint="@color/white"/>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

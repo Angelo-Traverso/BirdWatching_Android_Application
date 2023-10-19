@@ -1,20 +1,25 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 class SignIn : Fragment() {
 
@@ -23,10 +28,7 @@ class SignIn : Fragment() {
     private lateinit var btnSignIn: Button
     private lateinit var pbWaitToSignIn: ProgressBar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+    //==============================================================================================
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -34,6 +36,7 @@ class SignIn : Fragment() {
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
     }
 
+    //==============================================================================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,32 +49,34 @@ class SignIn : Fragment() {
         // Set an OnClickListener to the button
         btnSignIn.setOnClickListener {
 
-//            var email = emailInput.text.toString().trim()
-//            var pword = passwordInput.text.toString().trim()
-//
-//            // Setting progress bar to visible when user attempts to sign in
-//            pbWaitToSignIn.visibility = View.VISIBLE
-//
-//            authenticateUser(email, pword)
+            var email = emailInput.text.toString().trim()
+            var pword = passwordInput.text.toString().trim()
 
-            val intent = Intent(activity, Hotpots::class.java)
-            startActivity(intent)
+            // Setting progress bar to visible when user attempts to sign in
+            pbWaitToSignIn.visibility = View.VISIBLE
+
+            authenticateUser(email, pword)
+
         }
     }
 
+    //==============================================================================================
+    //attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
 
         var storedPassword = ""
+        val index = ToolBox.users.indexOfFirst { it.Email == email }
 
-        if (!ToolBox.users.isEmpty()) {
-            storedPassword = ToolBox.users[0].Hash
+        if (index != -1) {
+            storedPassword = ToolBox.users[index].Hash
         }
 
         // Compare the stored hashed password with the provided password
         if (!(storedPassword.isNullOrEmpty()) && verifyPassword(password, storedPassword)) {
 
             // Authentication successful
-            ToolBox.user = ToolBox.users[0]
+            ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
+            println(ToolBox.userID)
             val intent = Intent(activity, Hotpots::class.java)
             startActivity(intent)
 
@@ -82,7 +87,7 @@ class SignIn : Fragment() {
             pbWaitToSignIn.visibility = View.GONE
 
             val errToast = Toast.makeText(
-                requireContext(), "Incorrect username or password", Toast.LENGTH_LONG
+                requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
             )
 
             errToast.setGravity(Gravity.BOTTOM, 0, 25)
@@ -90,6 +95,7 @@ class SignIn : Fragment() {
         }
     }
 
+    //==============================================================================================
     private fun verifyPassword(password: String, storedPassword: String): Boolean {
         return PasswordHandler.hashPassword(password.toString().trim()) == storedPassword
     }

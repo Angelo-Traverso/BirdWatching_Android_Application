@@ -13,7 +13,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/tvPoints"
+            android:id="@+id/tvPointsToGet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"

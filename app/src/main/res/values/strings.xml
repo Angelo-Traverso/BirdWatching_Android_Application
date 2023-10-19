@@ -7,6 +7,9 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--Add Observation-->
+    <string name="Cancel">Cancel</string>
+
     <!--Sign in-->
     <string name="emailHint">Email</string>
     <string name="passwordHint">Password</string>
@@ -14,11 +17,16 @@
     <!--Sign up-->
     <string name="name">Name</string>
     <string name="repeatPassword">Repeat Password</string>
+    <string name="surname">Surname</string>
 
+    <!--Settings-->
+    <string name="logout">Logout</string>
 
     <!--Sign up-->
     <string name="hotspots">Hotspots</string>
 
+    <!--Hotspots-->
+    <string name="Location">Location</string>
 
     <!--Content Descriptions-->
     <string name="Logo">Logo</string>
@@ -27,6 +35,7 @@
     <string name="HowMany">How many did you see?</string>
     <string name="When">When did you see it?</string>
     <string name="Where">Where did you see it?</string>
+    <string name="AddNote"><i>Add a note to your entry</i></string>
 
     <!--Challenges-->
     <string name="Challenges">CHALLENGES</string>
@@ -41,8 +50,7 @@
     <string name="Units">Units</string>
     <string name="MaxRadius">Max Radius</string>
     <string name="About">About</string>
-    <string name="TempText">Proin id lobortis justo. Cras ornare egestas nibh ut blandit. Nunc euismod sollicitudin neque, nec blandit diam commodo vel. Suspendisse et ex sit amet ipsum vulputate semper non et urna.
-Quisque nec ex in lectus tincidunt pretium. Quisque dapibus mattis elit, non ullamcorper mi tempor eu. Vivamus elementum convallis bibendum. Sed cursus sodales lorem, at sagittis tortor aliquam ut. </string>
+    <string name="abouttext">Introducing Feather-Find: Your Ultimate Birdwatching Companion! Feather-Find is designed to take your birdwatching experience to new heights. Our app not only helps you discover local birdwatching hotspots effortlessly but also guides you there with step-by-step directions. With real-time GPS tracking, you\'ll never miss a sighting. Keep a stunning visual record of your bird encounters with an interactive map, and watch your avian discoveries come to life!</string>
 
     <string name="Metric">Metric</string>
     <string name="Imperial">Imperial</string>
@@ -53,5 +61,6 @@ Quisque nec ex in lectus tincidunt pretium. Quisque dapibus mattis elit, non ull
 
     <string name="SelectSpecies">Select a species</string>
     <string name="SaveObservation">Save Observation</string>
+    <string name="title_activity_navigation">Navigation</string>
 
 </resources>

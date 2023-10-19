@@ -7,7 +7,7 @@
     tools:context=".Challenges">
 
     <TextView
-        android:id="@+id/lblBack"
+        android:id="@+id/tvBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/sedansc_regular"
-        android:layout_below="@+id/lblBack"
+        android:layout_below="@+id/tvBack"
         android:gravity="center"
         android:textSize="35sp"
         android:textColor="@color/white"

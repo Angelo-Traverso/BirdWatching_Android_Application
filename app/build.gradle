@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -15,6 +16,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -34,11 +39,15 @@ android {
 
 dependencies {
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
-    implementation "com.google.android.gms:play-services-location:20.0.0"
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-core:5.0.0'
-
+    implementation "com.google.android.gms:play-services-location:21.0.1"
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    // Mapbox
+    implementation 'com.mapbox.maps:android:10.16.1'
+    implementation "com.mapbox.navigation:android:2.10.1"
+    implementation "com.mapbox.navigation:ui-dropin:2.15.3"
+
+    implementation 'com.google.code.gson:gson:2.8.8'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

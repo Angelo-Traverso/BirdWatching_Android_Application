@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import PagerAdapter
@@ -7,6 +15,8 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
+
+    //==============================================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -18,5 +28,4 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = pagerAdapter
         tabLayout.setupWithViewPager(viewPager)
     }
-
 }

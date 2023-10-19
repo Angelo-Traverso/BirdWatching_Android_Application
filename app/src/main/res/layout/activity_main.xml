@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appName"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/app_name"
         android:paddingBottom="6dp"
@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/tabLayout"
         android:contentDescription="sd"
-        android:layout_marginTop="48dp" />
+        android:layout_marginTop="18dp" />
 
 
 

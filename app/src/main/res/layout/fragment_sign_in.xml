@@ -15,7 +15,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:hint="@string/name"
+        android:hint="@string/emailHint"
         app:startIconDrawable="@drawable/baseline_mail_outline_24"
         app:startIconTint="@color/white">
 
@@ -23,6 +23,8 @@
             android:id="@+id/txtUserSignInEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/white"
             android:background="@android:color/transparent" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -46,6 +48,8 @@
             android:id="@+id/txtUserSignInPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/white"
             android:background="@android:color/transparent"
             android:inputType="textPassword" />
 

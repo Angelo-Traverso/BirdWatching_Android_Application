@@ -23,6 +23,29 @@
             android:id="@+id/txtUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="@android:color/transparent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/userSurname"
+        style="@style/MyTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_below="@+id/userName"
+        android:hint="@string/surname"
+        app:startIconDrawable="@drawable/person"
+        app:startIconTint="@color/white">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tvSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:background="@android:color/transparent" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -32,7 +55,7 @@
         style="@style/MyTextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userName"
+        android:layout_below="@+id/userSurname"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
@@ -45,9 +68,11 @@
             android:id="@+id/txtUserEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:background="@android:color/transparent" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/userPassword"
@@ -68,6 +93,7 @@
             android:id="@+id/txtUserPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:background="@android:color/transparent"
             android:inputType="textPassword" />
 
@@ -92,6 +118,7 @@
             android:id="@+id/txtUserConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:background="@android:color/transparent"
             android:inputType="textPassword" />
 
@@ -113,14 +140,15 @@
     <ImageView
         android:id="@+id/ivBottomLogo"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/btnSignIn"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSignUp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="@string/Logo"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
