@@ -12,6 +12,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,6 +21,7 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -205,12 +207,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             // Getting location data to load in bottom sheet
             getLocationData(marker.position.latitude, marker.position.longitude, marker)
             true
-        }
-
-        // Hide menu items when map is clicked
-        mMap.setOnMapClickListener {
-            // Hide the FAB menu if it's open
-            if (isOpen()) close()
         }
     }
     //---markers

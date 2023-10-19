@@ -27,6 +27,7 @@
         android:gravity="start"
         android:text=""
         android:textColor="@color/white"
+        android:drawablePadding="8dp"
         app:drawableStartCompat="@drawable/location_small"
         app:drawableTint="@color/white" />
 
@@ -38,6 +39,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:gravity="start"
+        android:drawablePadding="8dp"
+
         android:text=""
         android:textColor="@color/white"
         app:drawableStartCompat="@drawable/calender_small"
@@ -50,6 +53,8 @@
         android:layout_below="@+id/tvDateSpotted"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:drawablePadding="8dp"
+
         android:gravity="start"
         android:text=""
         android:textColor="@color/white"
