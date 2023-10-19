@@ -24,7 +24,7 @@
         android:layout_marginBottom="340dp"
         android:background="#80000000"
         android:padding="16dp"
-        android:text="Click anywhere to start navigation"
+        android:text="Click anywhere to start the game"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
