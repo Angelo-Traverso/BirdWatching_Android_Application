@@ -75,11 +75,12 @@ class Challenges : Fragment() {
 
             progressBar.progress = challenge.progress
 
-            tvProgress.text = "${challenge.progress}/${challenge.required}"
-
-            if (challenge.progress == challenge.required) {
+            if (challenge.progress > challenge.required) {
                 // Challenge completed
                 totalPoints += challenge.pointsToGet
+                tvProgress.text = "${challenge.required}/${challenge.required}"
+            } else {
+                tvProgress.text = "${challenge.progress}/${challenge.required}"
             }
 
             // Set top margin

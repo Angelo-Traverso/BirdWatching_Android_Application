@@ -80,7 +80,7 @@ class ToolBox : Application() {
             UserObservation(
                 "2",
                 0,
-                Date(2023 - 1900, 10 - 1, 17),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Blue Petrel",
                 "2",
                 Location = Location("gps").apply {
@@ -93,7 +93,7 @@ class ToolBox : Application() {
             UserObservation(
                 "3",
                 0,
-                Date(2023 - 1900, 10 - 1, 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Marsh Owl",
                 "3",
                 Location = Location("gps").apply {
