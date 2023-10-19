@@ -103,6 +103,10 @@ class SignUp : Fragment() {
     private fun validateForm(): Boolean {
         var valid = true
         try {
+
+            // a custom error message to prevent it from overlapping with the view password eye icon
+            val customError = CustomErrorDrawable(requireContext())
+
             val name: String = nameInput.text.toString().trim()
             val surname: String = surnameInput.text.toString().trim()
             val email: String = emailInput.text.toString().trim()
@@ -119,30 +123,30 @@ class SignUp : Fragment() {
             val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
 
             if (TextUtils.isEmpty(name)) {
-                nameInput.error = "Name is required"
+                nameInput.setError("Name is required", customError)
                 valid = false
             }
             if(TextUtils.isEmpty(surname)){
-                surnameInput.error = "Surname is required"
+                surnameInput.setError("Surname is required", customError)
             }
             if (TextUtils.isEmpty(email) || !emailRegex.matches(email)) {
-                emailInput.error = "Please enter a valid email"
+                emailInput.setError("Please enter a valid email", customError)
                 valid = false
             }
             if (TextUtils.isEmpty(password)) {
-                passwordInput.error = ("Password is required")
+                passwordInput.setError("Password is required", customError)
                 valid = false
             }
             if (TextUtils.isEmpty(confirmPassword)) {
-                confirmPasswordInput.error = ("Confirm password is required")
+                confirmPasswordInput.setError("Confirm password is required", customError)
                 valid = false
             }
             if (!TextUtils.equals(password, confirmPassword)) {
-                confirmPasswordInput.error = ("Passwords must match")
+                confirmPasswordInput.setError("Passwords must match", customError)
                 valid = false
             }
             if (!(password.length in minLength..maxLength && hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar)) {
-                passwordInput.error = ("Password is not strong enough.")
+                passwordInput.setError("Password is not strong enough", customError)
                 valid = false
             }
 

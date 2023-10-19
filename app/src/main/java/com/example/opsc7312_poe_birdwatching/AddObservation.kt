@@ -110,7 +110,7 @@ class AddObservation : AppCompatActivity(){
     }
 
     //==============================================================================================
-    //Source: ChatGPT
+    //Source: (ChatGPT, n.d.)
     // Check for the populated value when the activity is created.
     private val checkPopulatedRunnable = object : Runnable {
         override fun run() {
@@ -333,7 +333,7 @@ class AddObservation : AppCompatActivity(){
     }
 
     //==============================================================================================
-    //Source: ChatGPT
+    //Source: (ChatGPT, n.d.)
     // Remove the runnable when the activity is destroyed to prevent memory leaks.
     override fun onDestroy() {
         super.onDestroy()

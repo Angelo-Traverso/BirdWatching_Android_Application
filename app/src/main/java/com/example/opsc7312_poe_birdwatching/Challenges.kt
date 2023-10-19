@@ -130,7 +130,7 @@ class Challenges : Fragment() {
     }
 
     //==============================================================================================
-    //source: ChatGPT
+    //source: (ChatGPT, n.d.)
     //method to reset challenges every day at midnight
     fun clearListAtMidnight() {
         val timer = Timer()
