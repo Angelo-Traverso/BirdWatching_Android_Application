@@ -14,45 +14,52 @@ class ChallengeModel {
         var newTripsCompleted = 0
 
         var topRoundInDuckHunt = 0
-        var topRoundInDuckHuntBool = false
         var tripsCompleted = 0
+
         var tripsCompletedBool = false
+        var topRoundInDuckHuntBool = false
+        var userObservationsBool = false
 
         fun getChallenges() {
-            val db = FirebaseFirestore.getInstance()
+            try {
+                val db = FirebaseFirestore.getInstance()
 
-            val currentUserUID =
-                ToolBox.users[0].UserID
+                val currentUserUID =
+                    ToolBox.users[0].UserID
 
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-            val currentDate = dateFormat.format(Date())
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                val currentDate = dateFormat.format(Date())
 
-            val usersCollection = db.collection("users")
+                val usersCollection = db.collection("users")
 
-            val userProgressCollection =
-                usersCollection.document(currentUserUID).collection("progress")
+                val userProgressCollection =
+                    usersCollection.document(currentUserUID).collection("progress")
 
-            val query = userProgressCollection.whereEqualTo("date", currentDate)
+                val query = userProgressCollection.whereEqualTo("date", currentDate)
 
-            // Execute the query
-            query.get()
-                .addOnSuccessListener { querySnapshot ->
-                    for (document in querySnapshot) {
-                        val challengeData = document.data
-                        val newTopScore = challengeData["newTopScore"] as Number
-                        topRoundInDuckHunt = newTopScore.toInt()
-                        val newTripsCompleted = challengeData["newTripsCompleted"] as Number
-                        tripsCompleted = newTripsCompleted.toInt()
-                        tripsCompleted = 3
-                        val pointsTopRound = challengeData["pointsTopRound"] as Boolean
-                        topRoundInDuckHuntBool = pointsTopRound
-                        val pointsTrips = challengeData["pointsTrips"] as Boolean
-                        tripsCompletedBool = pointsTrips
+                // Execute the query
+                query.get()
+                    .addOnSuccessListener { querySnapshot ->
+                        for (document in querySnapshot) {
+                            val challengeData = document.data
+                            val newTopScore = challengeData["newTopScore"] as Number
+                            topRoundInDuckHunt = newTopScore.toInt()
+                            val newTripsCompleted = challengeData["newTripsCompleted"] as Number
+                            tripsCompleted = newTripsCompleted.toInt()
+                            val pointsTopRound = challengeData["pointsTopRound"] as Boolean
+                            topRoundInDuckHuntBool = pointsTopRound
+                            val pointsTrips = challengeData["pointsTrips"] as Boolean
+                            tripsCompletedBool = pointsTrips
+                            val obsBool = challengeData["obsBool"] as Boolean
+                            userObservationsBool = obsBool
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
-                    var a = e.message
-                }
+                    .addOnFailureListener { e ->
+                        var a = e.message
+                    }
+            } catch (e: java.lang.Exception) {
+                var a = 0
+            }
         }
 
         fun saveChallenge() {
@@ -88,6 +95,7 @@ class ChallengeModel {
                 "pointsTopRound" to topRoundInDuckHuntBool,
                 "newTripsCompleted" to tripsCompleted,
                 "pointsTrips" to tripsCompletedBool,
+                "obsBool" to userObservationsBool,
             )
 
             // Add the progress data to the user's "progress" collection for the current day

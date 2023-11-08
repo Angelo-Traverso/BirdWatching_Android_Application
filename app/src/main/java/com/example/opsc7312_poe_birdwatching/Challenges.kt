@@ -105,13 +105,19 @@ class Challenges : Fragment() {
         val currentDate = Date()
 
         val filteredObservations = ToolBox.usersObservations.filter {
-            it.UserID == ToolBox.users[0].UserID && sdf.format(it.Date) == sdf.format(currentDate)
+            it.UserID == ToolBox.users[0].UserID && (it.Date) == sdf.format(currentDate)
         }
 
         val uniqueBirdNames = filteredObservations.distinctBy { it.BirdName }
         val uniqueBirdCount = uniqueBirdNames.size
 
-        challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 15, 0))
+        //travel to two hotspots
+        if (!ChallengeModel.userObservationsBool && uniqueBirdCount >= 3) {
+            pointsToGet = 15
+            ChallengeModel.userObservationsBool = true
+        }
+
+        challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 15, pointsToGet))
         pointsToGet = 0
 
         //travel to two hotspots
@@ -156,6 +162,7 @@ class Challenges : Fragment() {
             ChallengeModel.updatePoints(pointsAwarded)
         }
 
+        ToolBox.users[0].ChallengePoints = pointsAwarded
         ChallengeModel.saveChallenge()
 
         return challenges
