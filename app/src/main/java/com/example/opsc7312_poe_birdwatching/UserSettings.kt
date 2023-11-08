@@ -235,6 +235,4 @@ class UserSettings : Fragment() {
             ex.printStackTrace()
         }
     }
-
-
 }
