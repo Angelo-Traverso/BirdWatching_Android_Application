@@ -22,6 +22,8 @@ class ToolBox : Application() {
     companion object {
         var userRegion = ""
         var userID = -1
+
+        //all users
         var users = arrayListOf<UsersModel>(
             UsersModel(
                 UserID = 0,
@@ -45,6 +47,7 @@ class ToolBox : Application() {
                 Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
             )
         )
+        //stores all entries of users observations
         var usersObservations = arrayListOf<UserObservation>(
             UserObservation(
                 "0",
@@ -151,10 +154,17 @@ class ToolBox : Application() {
                 ""
             )
         )
-        var hotspotSightings: List<SightingModel> = mutableListOf()
-        var birds: List<BirdModel> = mutableListOf()
+
+        //used to store the sightings for a specific observation, changed for every hotpost pressed
+        var hotspotsSightings: List<SightingModel> = mutableListOf()
+        //used to store the birds found in a region, session based
+        var birdsInTheRegion: List<BirdModel> = mutableListOf()
+
+        //challenges vars
         var topRoundInDuckHunt = 0
         var tripsCompleted = 0
+
+        //var for observers
         var populated = false
     }
 }

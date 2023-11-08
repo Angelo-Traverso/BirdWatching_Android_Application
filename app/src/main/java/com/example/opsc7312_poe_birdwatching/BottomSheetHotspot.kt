@@ -114,7 +114,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         }
 
         // Display the sightings in the bottom sheet
-        displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotSightings)
+        displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotsSightings)
 
 
     }
