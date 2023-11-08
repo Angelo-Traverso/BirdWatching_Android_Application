@@ -30,6 +30,7 @@ import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -156,25 +157,33 @@ class AddObservation : AppCompatActivity(){
                 var apiWorker = APIWorker()
                 val scope = CoroutineScope(Dispatchers.Default)
 
-                thread {
-                    scope.launch {
-                        val placeName = apiWorker.CoordsToLocation(
-                            userLocation.latitude, userLocation.longitude
-                        )
-                        var newObs = UserObservation(
-                            obsID, userID, sqlDate, birdName, howMany, location, note, placeName
-                        )
+                val observation = UserObservation(
+                    "",
+                    ToolBox.users[0].UserID,
+                    sqlDate,
+                    birdName,
+                    howMany,
+                    userLocation,
+                    note,
+                    ""
+                )
+                val db = FirebaseFirestore.getInstance()
+                val observationsCollection = db.collection("observations")
 
-                        ToolBox.usersObservations.add(newObs)
+                observationsCollection
+                    .add(observation)
+                    .addOnSuccessListener { documentReference ->
+                        // Observation added to Firestore successfully
+                        Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG).show()
+
+                        // Clear all input fields
+                        clearFields(etSelectSpecies, etHowMany, etWhen, etNote)
                     }
-                }
-
-                // Clear all input fields
-                clearFields(etSelectSpecies, etHowMany, etWhen, etNote);
-
-                // Ensure user their entry has been saved
-                val myToast = Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG)
-                myToast.show()
+                    .addOnFailureListener { e ->
+                        // Handle the error if adding the observation to Firestore fails
+                        Toast.makeText(this, "Failed to save bird observation: ${e.message}", Toast.LENGTH_SHORT).show()
+                        print(e.message)
+                    }
 
 
             }
