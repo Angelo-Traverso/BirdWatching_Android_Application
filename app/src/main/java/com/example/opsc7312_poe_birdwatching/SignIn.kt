@@ -55,17 +55,8 @@ class SignIn : Fragment() {
             // Setting progress bar to visible when user attempts to sign in
             pbWaitToSignIn.visibility = View.VISIBLE
 
-            if (email == "atraverso@example.com" && pword == "Password123!") {
-                val newUser =
-                    UsersModel(ToolBox.users.count(), "Angelo", "Traverso" ,"atraverso@example.com", "", true, 5.0, 0)
-                ToolBox.users.add(newUser)
-                ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
-                println(ToolBox.userID)
-                val intent = Intent(activity, Hotpots::class.java)
-                startActivity(intent)
-            } else {
-                authenticateUser(email, pword)
-            }
+            authenticateUser(email, pword)
+
         }
     }
 
@@ -96,7 +87,7 @@ class SignIn : Fragment() {
             pbWaitToSignIn.visibility = View.GONE
 
             val errToast = Toast.makeText(
-                requireContext(), "Incorrect username or password", Toast.LENGTH_LONG
+                requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
             )
 
             errToast.setGravity(Gravity.BOTTOM, 0, 25)

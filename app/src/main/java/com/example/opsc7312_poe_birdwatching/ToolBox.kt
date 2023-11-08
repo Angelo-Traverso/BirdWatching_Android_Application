@@ -16,10 +16,15 @@ import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import java.sql.Date
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 
 class ToolBox : Application() {
 
     companion object {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val testDate = dateFormat.parse("2023-10-19")
+
         var userRegion = ""
         var userID = -1
 
@@ -29,21 +34,21 @@ class ToolBox : Application() {
                 UserID = 0,
                 Name = "Benjamin",
                 Surname = "Franklin",
-                Email = "bb@gmail.com",
+                Email = "Benjamin@gmail.com",
                 Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
             ),
             UsersModel(
                 UserID = 1,
                 Name = "Renold",
                 Surname = "Jackson",
-                Email = "rj@gmail.com",
+                Email = "Renold@gmail.com",
                 Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
             ),
             UsersModel(
                 UserID = 2,
                 Name = "Tiril",
                 Surname = "Rampo",
-                Email = "@gmail.com",
+                Email = "Tiril@gmail.com",
                 Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
             )
         )
@@ -52,7 +57,7 @@ class ToolBox : Application() {
             UserObservation(
                 "0",
                 0,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Red-chested Cuckoo",
                 "2",
                 Location = Location("gps").apply {
@@ -65,7 +70,7 @@ class ToolBox : Application() {
             UserObservation(
                 "1",
                 0,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Quailfinch",
                 "10",
                 Location = Location("gps").apply {
@@ -78,7 +83,7 @@ class ToolBox : Application() {
             UserObservation(
                 "2",
                 0,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Blue Petrel",
                 "2",
                 Location = Location("gps").apply {
@@ -91,7 +96,7 @@ class ToolBox : Application() {
             UserObservation(
                 "3",
                 0,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Marsh Owl",
                 "3",
                 Location = Location("gps").apply {
@@ -104,7 +109,7 @@ class ToolBox : Application() {
             UserObservation(
                 "4",
                 1,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Grey Wagtail",
                 "1",
                 Location = Location("gps").apply {
@@ -117,7 +122,7 @@ class ToolBox : Application() {
             UserObservation(
                 "5",
                 1,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Emu",
                 "1",
                 Location = Location("gps").apply {
@@ -130,7 +135,7 @@ class ToolBox : Application() {
             UserObservation(
                 "6",
                 2,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Speckled Pigeon",
                 "2",
                 Location = Location("gps").apply {
@@ -143,7 +148,7 @@ class ToolBox : Application() {
             UserObservation(
                 "7",
                 2,
-                Date(2023 - 10 - 18),
+                Date(2023 - 1900, 10 - 1, 19),
                 "Rock Pigeon",
                 "2",
                 Location = Location("gps").apply {

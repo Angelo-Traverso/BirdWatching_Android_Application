@@ -166,7 +166,7 @@
             android:id="@+id/btnDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/clickedMetric"
+            android:backgroundTint="@color/app_background"
             android:text="Dark"
             android:textColor="@color/white" />
 
@@ -174,7 +174,7 @@
             android:id="@+id/btnLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/app_background"
+            android:backgroundTint="@color/clickedMetric"
             android:text="Light"
             android:textColor="@color/white" />
 

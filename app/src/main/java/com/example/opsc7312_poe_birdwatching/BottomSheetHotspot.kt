@@ -11,6 +11,7 @@ package com.example.opsc7312_poe_birdwatching
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Typeface
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -24,13 +25,16 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.mapbox.bindgen.None
 
 class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     private lateinit var totalSpeciesTextView: TextView
+    private lateinit var informationText :TextView
 
     /*
     * Button click listener for sheet button
@@ -102,7 +106,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         // Sets peek height of sheet
         bottomSheetBehavior.peekHeight = 250
 
-
+        informationText = view.findViewById(R.id.tvHotspotInformation)
         totalSpeciesTextView = view.findViewById(R.id.tvNumOfSpecies)
 
         // Binding linearView
@@ -157,8 +161,16 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         val inflater = LayoutInflater.from(bottomSheetView.context)
         var counter = 0
 
-        // Set number of species text
-        totalSpeciesTextView.text = "${sightings.count()} species"
+        if(sightings.isEmpty())
+        {
+            totalSpeciesTextView.text = "No Species were found here"
+            informationText.isVisible = false
+        }else
+        {
+            // Set number of species text
+            totalSpeciesTextView.text = "${sightings.count()} species"
+        }
+
 
 
         for (sighting in sightings) {

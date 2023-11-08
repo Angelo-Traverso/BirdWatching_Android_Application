@@ -1,10 +1,17 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -30,6 +37,7 @@ import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
+
 
 class AddObservation : AppCompatActivity(){
 
@@ -102,7 +110,7 @@ class AddObservation : AppCompatActivity(){
     }
 
     //==============================================================================================
-    //Source: ChatGPT
+    //Source: (ChatGPT, n.d.)
     // Check for the populated value when the activity is created.
     private val checkPopulatedRunnable = object : Runnable {
         override fun run() {
@@ -161,6 +169,13 @@ class AddObservation : AppCompatActivity(){
                     }
                 }
 
+                // Clear all input fields
+                clearFields(etSelectSpecies, etHowMany, etWhen, etNote);
+
+                // Ensure user their entry has been saved
+                val myToast = Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG)
+                myToast.show()
+
 
             }
 
@@ -170,6 +185,16 @@ class AddObservation : AppCompatActivity(){
         }
     }
 
+    //==============================================================================================
+    // Method to clear all input fields
+    private fun clearFields(species:EditText, howMany: EditText, date: EditText, note: EditText)
+    {
+        species.text.clear()
+        howMany.text.clear()
+        date.text.clear()
+        note.text.clear()
+
+    }
     //==============================================================================================
     //validate the form
     private fun validateForm(): Boolean {
@@ -232,24 +257,7 @@ class AddObservation : AppCompatActivity(){
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
                 userLocation = location
-                Log.d("Region Code", getCountryCodeFromLocation(userLocation))
             }
-        }
-    }
-
-    //==============================================================================================
-    //  Gets current region code
-    private fun getCountryCodeFromLocation(location: Location): String {
-        val addresses: List<Address>? =
-            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        if (!addresses.isNullOrEmpty()) {
-            val countryCode = addresses[0].countryCode
-            // Do something with the country code (e.g., display it)
-            Log.d("CountryCode", "Country Code: $countryCode")
-
-            return countryCode
-        } else {
-            return "Not found"
         }
     }
 
@@ -325,7 +333,7 @@ class AddObservation : AppCompatActivity(){
     }
 
     //==============================================================================================
-    //Source: ChatGPT
+    //Source: (ChatGPT, n.d.)
     // Remove the runnable when the activity is destroyed to prevent memory leaks.
     override fun onDestroy() {
         super.onDestroy()

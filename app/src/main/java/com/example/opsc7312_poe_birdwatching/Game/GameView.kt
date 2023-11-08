@@ -335,7 +335,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     }
 
     //==============================================================================================
-    //Sources: ChatGPT & https://stackoverflow.com/questions/9015372/how-to-rotate-a-bitmap-90-degrees
+    //Sources: (ChatGPT, n.d.; murli, 2012)
     //draw the pistol to the front end
     private fun drawPistol(canvas: Canvas) {
         val matrix = Matrix()
