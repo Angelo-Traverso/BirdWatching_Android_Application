@@ -245,7 +245,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 val hotspots = apiWorker.getHotspots(lat, lon)
                 UpdateMarkers(hotspots)
                 println("getting birds")
-                ToolBox.birds = apiWorker.getBirds()
+                ToolBox.birdsInTheRegion = apiWorker.getBirds()
                 ToolBox.populated = true
                 println("birds saved")
             }
@@ -308,7 +308,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         //using threading to query external resources
         thread {
             scope.launch {
-                ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lng)
+                ToolBox.hotspotsSightings = apiWorker.getHotspotBirdData(lat, lng)
 
                 destlat = lat
                 destlon = lng
