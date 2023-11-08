@@ -213,11 +213,9 @@ class UserSettings : Fragment() {
                     .update(
                         "isUnitKM", user.isUnitKM,
                         "mapStyleIsDark", user.mapStyleIsDark,
-                        "MaxDistance", user.MaxDistance
+                        "maxDistance", user.MaxDistance
                     )
                     .addOnSuccessListener {
-                        // Settings updated in Firestore successfully
-                        // You can show a toast message or handle success as needed
                         Toast.makeText(
                             requireContext(),
                             "User settings updated in Firestore",
@@ -225,7 +223,6 @@ class UserSettings : Fragment() {
                         ).show()
                     }
                     .addOnFailureListener { e ->
-                        // Handle the error if updating data in Firestore fails
                         Toast.makeText(
                             requireContext(),
                             "Failed to update user settings in Firestore: ${e.message}",
