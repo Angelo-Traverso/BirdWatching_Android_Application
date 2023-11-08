@@ -10,15 +10,20 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.slider.RangeSlider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 class UserSettings : Fragment() {
 
@@ -80,6 +85,8 @@ class UserSettings : Fragment() {
             val displayValue = "$value $unit"
             tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
             ToolBox.users[0].MaxDistance = value.toDouble()
+
+            updateUserSettings()
         }
 
         //---Hotspot Map Style---
@@ -101,8 +108,8 @@ class UserSettings : Fragment() {
         }
 
         //---MEASUREMENT UNITS---
-        btnMetric = view.findViewById<Button>(R.id.btnMetric)
-        btnImperial = view.findViewById<Button>(R.id.btnImperial)
+        btnMetric = view.findViewById(R.id.btnMetric)
+        btnImperial = view.findViewById(R.id.btnImperial)
 
         if (ToolBox.users[0].isUnitKM == true) {
             ToMetric()
@@ -138,6 +145,8 @@ class UserSettings : Fragment() {
         var unit = "km"
         val displayValue = "$value $unit"
         tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
+
+        updateUserSettings()
     }
 
     //==============================================================================================
@@ -157,6 +166,9 @@ class UserSettings : Fragment() {
         var unit = "mile"
         val displayValue = "$value $unit"
         tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
+
+        updateUserSettings()
+
     }
 
     private fun toDark() {
@@ -169,6 +181,8 @@ class UserSettings : Fragment() {
         ViewCompat.setBackgroundTintList(btnLight, unselectedColorStateList)
 
         ToolBox.users[0].mapStyleIsDark = true
+
+        updateUserSettings()
     }
 
     private fun toLight() {
@@ -181,6 +195,46 @@ class UserSettings : Fragment() {
         ViewCompat.setBackgroundTintList(btnDark, unselectedColorStateList)
 
         ToolBox.users[0].mapStyleIsDark = false
+
+        updateUserSettings()
     }
+
+    private fun updateUserSettings() {
+        try {
+            val db = FirebaseFirestore.getInstance()
+            val usersCollection = db.collection("users")
+
+            val user = ToolBox.users[0]
+
+            val fbUser = Firebase.auth.currentUser
+
+            if(fbUser != null) {
+                usersCollection.document(fbUser.uid)
+                    .update(
+                        "isUnitKM", user.isUnitKM,
+                        "mapStyleIsDark", user.mapStyleIsDark,
+                        "maxDistance", user.MaxDistance
+                    )
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            requireContext(),
+                            "User settings updated in Firestore",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to update user settings in Firestore: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }
+        } catch (ex: Exception) {
+            Log.e("log", "Error updating user settings in Firestore: ${ex.message}")
+            ex.printStackTrace()
+        }
+    }
+
 
 }
