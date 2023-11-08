@@ -42,16 +42,17 @@ class UserSettings : Fragment() {
         tvUserName = view.findViewById(R.id.tvUserName)
         tvUserEmail = view.findViewById(R.id.tvUserEmail)
 
-        tvUserName.text =
-            "${ToolBox.users[ToolBox.userID].Name} ${ToolBox.users[ToolBox.userID].Surname}"
-        tvUserEmail.text = "${ToolBox.users[ToolBox.userID].Email}"
+       tvUserName.text =
+          "${ToolBox.users[0].Name} ${ToolBox.users[0].Surname}"
+
+        //tvUserEmail.text = "${ToolBox.users[ToolBox.userID].Email}"
 
         //----SLIDER----
         sliderDistance = view.findViewById(R.id.sliderDistance)
         tvSliderText = view.findViewById(R.id.tvMaxRadius)
 
         //set slider to users preference
-        sliderDistance.setValues(ToolBox.users[ToolBox.userID].MaxDistance.toFloat())
+        sliderDistance.setValues(ToolBox.users[0].MaxDistance.toFloat())
 
         // Set the track color
         sliderDistance.trackActiveTintList =
@@ -72,20 +73,20 @@ class UserSettings : Fragment() {
         sliderDistance.addOnChangeListener { slider, value, fromUser ->
             var unit = "km"
 
-            if (!ToolBox.users[ToolBox.userID].isUnitKM) {
+            if (!ToolBox.users[0].isUnitKM) {
                 unit = "mile"
             }
 
             val displayValue = "$value $unit"
             tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
-            ToolBox.users[ToolBox.userID].MaxDistance = value.toDouble()
+            ToolBox.users[0].MaxDistance = value.toDouble()
         }
 
         //---Hotspot Map Style---
         btnDark = view.findViewById(R.id.btnDark)
         btnLight = view.findViewById(R.id.btnLight)
 
-        if (ToolBox.users[ToolBox.userID].mapStyleIsDark) {
+        if (ToolBox.users[0].mapStyleIsDark) {
             toDark()
         } else {
             toLight()
@@ -103,7 +104,7 @@ class UserSettings : Fragment() {
         btnMetric = view.findViewById<Button>(R.id.btnMetric)
         btnImperial = view.findViewById<Button>(R.id.btnImperial)
 
-        if (ToolBox.users[ToolBox.userID].isUnitKM == true) {
+        if (ToolBox.users[0].isUnitKM == true) {
             ToMetric()
         } else {
             ToImperial()
@@ -131,9 +132,9 @@ class UserSettings : Fragment() {
         val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
         ViewCompat.setBackgroundTintList(btnImperial, unselectedColorStateList)
 
-        ToolBox.users[ToolBox.userID].isUnitKM = true
+        ToolBox.users[0].isUnitKM = true
 
-        var value = ToolBox.users[ToolBox.userID].MaxDistance.toFloat()
+        var value = ToolBox.users[0].MaxDistance.toFloat()
         var unit = "km"
         val displayValue = "$value $unit"
         tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
@@ -150,9 +151,9 @@ class UserSettings : Fragment() {
         val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
         ViewCompat.setBackgroundTintList(btnMetric, unselectedColorStateList)
 
-        ToolBox.users[ToolBox.userID].isUnitKM = false
+        ToolBox.users[0].isUnitKM = false
 
-        var value = ToolBox.users[ToolBox.userID].MaxDistance.toFloat()
+        var value = ToolBox.users[0].MaxDistance.toFloat()
         var unit = "mile"
         val displayValue = "$value $unit"
         tvSliderText.text = getString(R.string.MaxRadius) + "(" + displayValue + ")"
@@ -167,7 +168,7 @@ class UserSettings : Fragment() {
         val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
         ViewCompat.setBackgroundTintList(btnLight, unselectedColorStateList)
 
-        ToolBox.users[ToolBox.userID].mapStyleIsDark = true
+        ToolBox.users[0].mapStyleIsDark = true
     }
 
     private fun toLight() {
@@ -179,7 +180,7 @@ class UserSettings : Fragment() {
         val unselectedColorStateList = ColorStateList.valueOf(newUnselectedColor)
         ViewCompat.setBackgroundTintList(btnDark, unselectedColorStateList)
 
-        ToolBox.users[ToolBox.userID].mapStyleIsDark = false
+        ToolBox.users[0].mapStyleIsDark = false
     }
 
 }

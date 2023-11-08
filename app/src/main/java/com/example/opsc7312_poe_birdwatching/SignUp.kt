@@ -8,6 +8,7 @@
 
 package com.example.opsc7312_poe_birdwatching
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Email
@@ -25,7 +26,10 @@ import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class SignUp : Fragment() {
 
@@ -57,72 +61,132 @@ class SignUp : Fragment() {
         btnSignUp.setOnClickListener {
             if (validateForm()) {
                 val auth = FirebaseAuth.getInstance()
-                auth.createUserWithEmailAndPassword(emailInput.text.toString(), passwordInput.text.toString())
+                auth.createUserWithEmailAndPassword(
+                    emailInput.text.toString(),
+                    passwordInput.text.toString()
+                )
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            // User registration was successful
-                            // Now you can store user data in Firestore
                             storeUserDataInFireStore()
                             intentToSignIn()
                         } else {
                             // Registration failed, handle the error
-                            Toast.makeText(requireContext(), "Registration failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Registration failed: ${task.exception?.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
             }
         }
     }
+
+    //==============================================================================================
     private fun storeUserDataInFireStore() {
-        try {
-            val db = FirebaseFirestore.getInstance()
-            val usersCollection = db.collection("users") // Change "users" to your desired Firestore collection name
+        // Check if the user is authenticated
+        val currentUser = Firebase.auth.currentUser
+        if (currentUser != null) {
+            try {
+                val db = FirebaseFirestore.getInstance()
+                val usersCollection = db.collection("users")
 
-            val newUser = UsersModel(
-                Name = nameInput.text.toString().trim(),
-                Surname = surnameInput.text.toString().trim(),
-                Email = emailInput.text.toString().trim(),
-                Hash = PasswordHandler.hashPassword(passwordInput.text.toString()).trim()
-            )
+                val newUser = UsersModel(
+                    UserID = currentUser.uid,
+                    Name = nameInput.text.toString().trim(),
+                    Surname = surnameInput.text.toString().trim(),
+                    isUnitKM = true,
+                    MaxDistance = 5.0,
+                    ChallengePoints = 0,
+                    mapStyleIsDark = false
+                )
 
-            usersCollection
-                .add(newUser)
-                .addOnSuccessListener { documentReference ->
-                    // User data added to Firestore successfully
-                    Toast.makeText(requireContext(), "User data stored in Firestore", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e ->
-                    // Handle the error if adding data to Firestore fails
-                    Toast.makeText(requireContext(), "Failed to store user data in Firestore: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        } catch (ex: Exception) {
-            Log.e("log", "Error storing user data in Firestore: ${ex.message}")
-            ex.printStackTrace()
+                // Use the UID of the currently authenticated user for the document ID
+                usersCollection.document(currentUser.uid)
+                    .set(newUser)
+                    .addOnSuccessListener { documentReference ->
+                        // User data added to Firestore successfully
+                        Toast.makeText(
+                            requireContext(),
+                            "User data stored in Firestore",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle the error if adding data to Firestore fails
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to store user data in Firestore: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            } catch (ex: Exception) {
+                Log.e("log", "Error storing user data in Firestore: ${ex.message}")
+                ex.printStackTrace()
+            }
+        } else {
+            // Handle the case where the user is not authenticated
+            Toast.makeText(
+                requireContext(),
+                "User is not authenticated. Please sign in or register.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
+
     //==============================================================================================
     // Take user inputs and create new user instance
-    private fun RegisterUser() {
-        try {
-
-            val newUser = UsersModel(
-                Name = nameInput.text.toString().trim(),
-                Surname = surnameInput.text.toString().trim(),
-                Email = emailInput.text.toString().trim(),
-                Hash = PasswordHandler.hashPassword(passwordInput.text.toString().trim())
-            )
-
-            println(newUser.Hash)
-
-            // Add user to database
-            ToolBox.users.add(newUser)
-
-            val toast = Toast.makeText(requireContext(), "Account created", Toast.LENGTH_SHORT)
-            toast.show()
-        } catch (ex: java.lang.Exception) {
-            Log.w("log", ex.toString())
-            ex.printStackTrace()
-        }
-    }
+//    private fun RegisterUser() {
+//        try {
+//
+//            val newUser = UsersModel(
+//                Name = nameInput.text.toString().trim(),
+//                Surname = surnameInput.text.toString().trim(),
+//                Email = emailInput.text.toString().trim(),
+//                Hash = passwordInput.text.toString().trim()
+//            )
+//
+//            println(newUser.Hash)
+//
+//            // Add user to database
+//            ToolBox.users.add(newUser)
+//
+//            val toast = Toast.makeText(requireContext(), "Account created", Toast.LENGTH_SHORT)
+//            toast.show()
+//        } catch (ex: java.lang.Exception) {
+//            Log.w("log", ex.toString())
+//            ex.printStackTrace()
+//        }
+//
+////        val db = Firebase.firestore
+////        try {
+////
+////            // Hash map to store user data
+////            val user = hashMapOf(
+////                "name" to nameInput.text.toString().trim(),
+////                "surname" to surnameInput.text.toString().trim(),
+////                "username" to usernameInput.text.toString().trim(),
+////                "password" to PasswordHandler.hashPassword(passwordInput.text.toString().trim())
+////            )
+////
+////            // Add user to database
+////            db.collection("users")
+////                .add(user)
+////                .addOnSuccessListener { documentReference ->
+////                    Log.d(ContentValues.TAG, "Entry added with ID: ${documentReference.id}")
+////                }
+////                .addOnFailureListener { e ->
+////                    Log.w(ContentValues.TAG, "Error adding document", e)
+////                }
+////
+////            val toast = Toast.makeText(this, "Account created", Toast.LENGTH_SHORT)
+////            toast.show()
+////        } catch (ex: java.lang.Exception) {
+////            Log.w("log", ex.toString())
+////            ex.printStackTrace()
+////        }
+//    }
 
     //==============================================================================================
     // Method to start intent activity to sign in
@@ -165,7 +229,7 @@ class SignUp : Fragment() {
                 nameInput.setError("Name is required", customError)
                 valid = false
             }
-            if(TextUtils.isEmpty(surname)){
+            if (TextUtils.isEmpty(surname)) {
                 surnameInput.setError("Surname is required", customError)
             }
             if (TextUtils.isEmpty(email) || !emailRegex.matches(email)) {

@@ -110,7 +110,7 @@ class Challenges : Fragment() {
         val currentDate = Date()
 
         val filteredObservations = ToolBox.usersObservations.filter {
-            it.UserID == ToolBox.userID && sdf.format(it.Date) == sdf.format(currentDate)
+            it.UserID == ToolBox.users[0].UserID && sdf.format(it.Date) == sdf.format(currentDate)
         }
 
         val uniqueBirdNames = filteredObservations.distinctBy { it.BirdName }

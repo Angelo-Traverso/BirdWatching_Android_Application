@@ -156,7 +156,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     private fun loadMapStyle() {
 
-        if (ToolBox.users[ToolBox.userID].mapStyleIsDark) {
+        if (ToolBox.users[0].mapStyleIsDark) {
             mapStyleChosen = R.raw.dark
         } else {
             mapStyleChosen = R.raw.light
@@ -218,7 +218,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         if (ToolBox.usersObservations.isNotEmpty()) {
 
             val filteredObservations =
-                ToolBox.usersObservations.filter { it.UserID == ToolBox.userID }
+                ToolBox.usersObservations.filter { it.UserID == ToolBox.users[0].UserID }
 
             for (location in filteredObservations) {
                 mMap.addMarker(

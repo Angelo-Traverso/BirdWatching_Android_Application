@@ -35,7 +35,7 @@ class Settings : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
         Logout.setOnClickListener() {
-            ToolBox.userID = -1
+            ToolBox.users.clear()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

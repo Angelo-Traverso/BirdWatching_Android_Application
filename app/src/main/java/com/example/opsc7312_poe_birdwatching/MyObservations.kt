@@ -30,7 +30,7 @@ class MyObservations : Fragment() {
 
         llObservationContainer = view.findViewById(R.id.myObservationContainer)
 
-        val filteredObservations = ToolBox.usersObservations.filter { it.UserID == ToolBox.userID }
+        val filteredObservations = ToolBox.usersObservations.filter { it.UserID == ToolBox.users[0].UserID }
         // Add a view for every element
         for (observation in filteredObservations) {
             addObservationViewToContainer(observation)

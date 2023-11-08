@@ -509,7 +509,7 @@ class Navigation : AppCompatActivity() {
         val unitTypeToUse : UnitType
 
         // Setting var = to user selected unit type
-        val unitType = ToolBox.users[ToolBox.userID].isUnitKM
+        val unitType = ToolBox.users[0].isUnitKM
 
          if(unitType) {
              unitTypeToUse = UnitType.METRIC

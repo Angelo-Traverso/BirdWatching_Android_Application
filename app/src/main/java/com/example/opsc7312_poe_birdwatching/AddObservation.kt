@@ -140,7 +140,7 @@ class AddObservation : AppCompatActivity(){
 
             if (validateForm()) {
                 val obsID = ""
-                val userID = ToolBox.userID
+                val userID = ToolBox.users[0].UserID
 
                 val dateText = etWhen.text.toString()
                 val dateFormat = SimpleDateFormat("dd-MM-yyyy")
