@@ -7,7 +7,7 @@ import java.sql.Date
 data class UserObservation(
     val ObservationID: String,
     val UserID: String,
-    val Date: Date = Date(0),
+    val Date: String,
     val BirdName: String,
     val Amount: String,
     val Location: Location,

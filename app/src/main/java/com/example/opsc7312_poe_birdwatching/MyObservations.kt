@@ -72,7 +72,7 @@ class MyObservations : Fragment() {
                         val observation = UserObservation(
                             ObservationID = data["observationID"] as? String ?: "",
                             UserID = data["userID"] as? String ?: "",
-                            Date = date,
+                            Date = data["date"] as String ?: "",
                             BirdName = data["birdName"] as? String ?: "",
                             Amount = data["amount"] as? String ?: "",
                             Location = location,
@@ -86,8 +86,6 @@ class MyObservations : Fragment() {
                     populateObservationViews()
                 }
                 .addOnFailureListener { exception ->
-                    // Handle the error if the data couldn't be fetched
-                    // You can log or display an error message here
                     Log.e("MyObservations", "Error fetching observations: $exception")
                 }
         }
@@ -124,11 +122,8 @@ class MyObservations : Fragment() {
             }
 
             // Other UI population code here
-
             llObservationContainer.addView(observationView)
             llObservationContainer.addView(line)
         }
     }
-
-
 }
