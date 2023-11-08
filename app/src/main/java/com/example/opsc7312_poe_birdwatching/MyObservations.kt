@@ -25,9 +25,6 @@ import java.sql.Date
 
 class MyObservations : Fragment() {
     private lateinit var llObservationContainer: LinearLayout
-    private val observationsList = mutableListOf<UserObservation>()
-    val userObservationList = mutableListOf<UserObservation>()
-    //private lateinit var llObservationContainer: LinearLayout
 
     //==============================================================================================
     override fun onCreateView(
@@ -52,7 +49,7 @@ class MyObservations : Fragment() {
             val db = FirebaseFirestore.getInstance()
             val userObservationsCollection = db.collection("observations")
 
-            userObservationList.clear()
+            ToolBox.usersObservations.clear()
 
             userObservationsCollection
                 .whereEqualTo("userID", userId)
@@ -83,13 +80,9 @@ class MyObservations : Fragment() {
                             PlaceName = data["placeName"] as? String ?: ""
                         )
 
-                        userObservationList.add(observation)
+                        ToolBox.usersObservations.add(observation)
                     }
 
-                    Log.d(
-                        "MyObservations",
-                        "ObservationList Size: ${userObservationList.count()} found"
-                    )
                     populateObservationViews()
                 }
                 .addOnFailureListener { exception ->
@@ -106,7 +99,7 @@ class MyObservations : Fragment() {
         llObservationContainer.removeAllViews()
         val inflater = LayoutInflater.from(requireContext())
 
-        for (userObservation in userObservationList) {
+        for (userObservation in ToolBox.usersObservations) {
             val observationView = inflater.inflate(R.layout.my_observations_display_layout, null)
             val line = inflater.inflate(R.layout.line, null)
 
