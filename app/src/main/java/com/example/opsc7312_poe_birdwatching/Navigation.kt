@@ -328,7 +328,7 @@ class Navigation : AppCompatActivity() {
         }
 
         override fun onFinalDestinationArrival(routeProgress: RouteProgress) {
-            ToolBox.tripsCompleted += 1
+            ChallengeModel.newTripsCompleted += 1
         }
     }
 

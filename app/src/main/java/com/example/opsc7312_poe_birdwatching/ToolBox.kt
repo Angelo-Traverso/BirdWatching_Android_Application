@@ -15,7 +15,10 @@ import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
-import java.sql.Date
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+
+import java.util.Date
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 
@@ -35,10 +38,6 @@ class ToolBox : Application() {
 
         //used to store the birds found in a region, session based
         var birdsInTheRegion: List<BirdModel> = mutableListOf()
-
-        //challenges vars
-        var topRoundInDuckHunt = 0
-        var tripsCompleted = 0
 
         //var for observers
         var populated = false

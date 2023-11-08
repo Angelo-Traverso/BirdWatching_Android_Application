@@ -97,6 +97,9 @@ class SignIn : Fragment() {
                                         // Authentication successful
                                         ToolBox.users.clear()
                                         ToolBox.users.add(userData)
+
+                                        ChallengeModel.getChallenges()
+
                                         val intent = Intent(activity, Hotpots::class.java)
                                         startActivity(intent)
 

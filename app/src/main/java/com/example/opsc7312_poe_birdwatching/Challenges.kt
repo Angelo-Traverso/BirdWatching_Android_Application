@@ -39,7 +39,7 @@ class Challenges : Fragment() {
 
         val tvPoints = view.findViewById<TextView>(R.id.tvPoints)
 
-        var totalPoints = 0;
+        var totalPoints = ToolBox.users[0].ChallengePoints;
 
         // Loop through the challenges and dynamically add them to the container
         for ((i, challenge) in challengeList.withIndex()) {
@@ -93,7 +93,10 @@ class Challenges : Fragment() {
             linearLayout.addView(challengeItemView) // Add the challenge item to the container
         }
 
-        clearListAtMidnight()
+        if (totalPoints != ToolBox.users[0].ChallengePoints)
+        {
+            ChallengeModel.updatePoints(totalPoints)
+        }
 
         // Setting total points earned
         tvPoints.text = totalPoints.toString()
@@ -119,42 +122,14 @@ class Challenges : Fragment() {
         challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 15))
 
         //travel to two hotspots
-        challenges.add(Challenge_Object("Travel to two hotspots", ToolBox.tripsCompleted, 2, 2))
+        challenges.add(Challenge_Object("Travel to two hotspots", ChallengeModel.tripsCompleted, 2, 2))
 
         //duck hunt level
         challenges.add(
             Challenge_Object(
-                "Reach the 7th round in duck hunt", ToolBox.topRoundInDuckHunt, 7, 10
+                "Reach the 7th round in duck hunt", ChallengeModel.topRoundInDuckHunt, 7, 10
             )
         )
         return challenges
-    }
-
-    //==============================================================================================
-    //source: (ChatGPT, n.d.)
-    //method to reset challenges every day at midnight
-    fun clearListAtMidnight() {
-        val timer = Timer()
-        val now = Calendar.getInstance()
-        val midnight = Calendar.getInstance()
-
-        // Set the time to midnight of the next day
-        midnight.time = now.time
-        midnight.add(Calendar.DAY_OF_YEAR, 1)
-        midnight.set(Calendar.HOUR_OF_DAY, 0)
-        midnight.set(Calendar.MINUTE, 0)
-        midnight.set(Calendar.SECOND, 0)
-        midnight.set(Calendar.MILLISECOND, 0)
-
-        timer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                ToolBox.topRoundInDuckHunt = 0
-                ToolBox.tripsCompleted = 0
-                for (challenge in challengeList) {
-                    challenge.progress = 0
-                }
-                println("List cleared at midnight.")
-            }
-        }, midnight.time, 24 * 60 * 60 * 1000) // Run every 24 hours
     }
 }
