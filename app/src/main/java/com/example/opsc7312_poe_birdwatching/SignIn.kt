@@ -20,6 +20,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 
 class SignIn : Fragment() {
 
@@ -32,7 +34,7 @@ class SignIn : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
     }
 
@@ -55,8 +57,30 @@ class SignIn : Fragment() {
             // Setting progress bar to visible when user attempts to sign in
             pbWaitToSignIn.visibility = View.VISIBLE
 
-            authenticateUser(email, pword)
+            //authenticateUser(email, pword)
+            val auth = FirebaseAuth.getInstance()
+            auth.signInWithEmailAndPassword(email, pword)
+                .addOnCompleteListener(requireActivity()) { task ->
+                    if (task.isSuccessful) {
 
+                        val errToast = Toast.makeText(
+                            requireContext(), "Signed IN!", Toast.LENGTH_LONG
+                        )
+
+                        errToast.setGravity(Gravity.BOTTOM, 0, 25)
+                        errToast.show()
+
+                    } else {
+                        pbWaitToSignIn.visibility = View.GONE
+
+                        val errToast = Toast.makeText(
+                            requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
+                        )
+
+                        errToast.setGravity(Gravity.BOTTOM, 0, 25)
+                        errToast.show()
+                    }
+                }
         }
     }
 
@@ -81,6 +105,8 @@ class SignIn : Fragment() {
             startActivity(intent)
 
             pbWaitToSignIn.visibility = View.GONE
+
+
 
         } else {
             // Authentication failed

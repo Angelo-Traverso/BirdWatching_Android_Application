@@ -23,6 +23,9 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUp : Fragment() {
 
@@ -37,7 +40,6 @@ class SignUp : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 
@@ -52,14 +54,51 @@ class SignUp : Fragment() {
         btnSignUp = view.findViewById(R.id.btnSignUp)
         emailInput = view.findViewById(R.id.txtUserEmail)
 
-        btnSignUp.setOnClickListener() {
+        btnSignUp.setOnClickListener {
             if (validateForm()) {
-                RegisterUser()
-                intentToSignIn()
+                val auth = FirebaseAuth.getInstance()
+                auth.createUserWithEmailAndPassword(emailInput.text.toString(), passwordInput.text.toString())
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // User registration was successful
+                            // Now you can store user data in Firestore
+                            storeUserDataInFireStore()
+                            intentToSignIn()
+                        } else {
+                            // Registration failed, handle the error
+                            Toast.makeText(requireContext(), "Registration failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
         }
     }
+    private fun storeUserDataInFireStore() {
+        try {
+            val db = FirebaseFirestore.getInstance()
+            val usersCollection = db.collection("users") // Change "users" to your desired Firestore collection name
 
+            val newUser = UsersModel(
+                Name = nameInput.text.toString().trim(),
+                Surname = surnameInput.text.toString().trim(),
+                Email = emailInput.text.toString().trim(),
+                Hash = PasswordHandler.hashPassword(passwordInput.text.toString()).trim()
+            )
+
+            usersCollection
+                .add(newUser)
+                .addOnSuccessListener { documentReference ->
+                    // User data added to Firestore successfully
+                    Toast.makeText(requireContext(), "User data stored in Firestore", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    // Handle the error if adding data to Firestore fails
+                    Toast.makeText(requireContext(), "Failed to store user data in Firestore: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        } catch (ex: Exception) {
+            Log.e("log", "Error storing user data in Firestore: ${ex.message}")
+            ex.printStackTrace()
+        }
+    }
     //==============================================================================================
     // Take user inputs and create new user instance
     private fun RegisterUser() {
