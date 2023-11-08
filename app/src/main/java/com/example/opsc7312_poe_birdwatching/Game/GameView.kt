@@ -19,6 +19,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import android.widget.Button
+import com.example.opsc7312_poe_birdwatching.ChallengeModel
 import com.example.opsc7312_poe_birdwatching.Hotpots
 import com.example.opsc7312_poe_birdwatching.R
 import com.example.opsc7312_poe_birdwatching.ToolBox
@@ -124,7 +125,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
                 if (ducks.isEmpty()) {
                     isPlaying = false
-                    ToolBox.topRoundInDuckHunt++
+                    ChallengeModel.newTopRoundInDuckHunt++
                     nextLevel(canvas)
                 }
 
@@ -270,6 +271,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
         val exitButton = dialogView.findViewById<Button>(R.id.btnExitGameOver)
         exitButton.setOnClickListener {
+            ChallengeModel.saveChallenge()
             val intent = Intent(appContext, Hotpots::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             appContext.startActivity(intent)
@@ -297,6 +299,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
         val exitButton = dialogView.findViewById<Button>(R.id.btnExit)
         exitButton.setOnClickListener {
+            ChallengeModel.saveChallenge()
             val intent = Intent(appContext, Hotpots::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             appContext.startActivity(intent)

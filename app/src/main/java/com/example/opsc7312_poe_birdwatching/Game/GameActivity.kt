@@ -13,8 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.example.opsc7312_poe_birdwatching.ChallengeModel
 import com.example.opsc7312_poe_birdwatching.Hotpots
 import com.example.opsc7312_poe_birdwatching.R
+import com.example.opsc7312_poe_birdwatching.ToolBox
 import com.example.opsc7312_poe_birdwatching.databinding.ActivityGameBinding
 
 //this is the main activity used to host the duck hunt game
@@ -50,6 +52,7 @@ class GameActivity : AppCompatActivity() {
     //==============================================================================================
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        ChallengeModel.saveChallenge()
         gameView.stop()
         val intent = Intent(this, Hotpots::class.java)
         startActivity(intent)
