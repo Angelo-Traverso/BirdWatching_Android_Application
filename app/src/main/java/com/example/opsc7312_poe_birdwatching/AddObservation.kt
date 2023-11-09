@@ -164,7 +164,7 @@ class AddObservation : AppCompatActivity(){
                         ToolBox.users[0].UserID,
                         formattedDate, // Use the formatted date
                         birdName,
-                        howMany,
+                        howMany.toInt(),
                         location,
                         note,
                         "",
