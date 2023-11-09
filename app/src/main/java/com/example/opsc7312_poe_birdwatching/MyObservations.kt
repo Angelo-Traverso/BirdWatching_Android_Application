@@ -8,6 +8,8 @@
 
 package com.example.opsc7312_poe_birdwatching
 
+import android.content.Intent
+import android.content.Intent.getIntent
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +27,9 @@ import java.sql.Date
 
 class MyObservations : Fragment() {
     private lateinit var llObservationContainer: LinearLayout
+    var lat = 0.0
+    var lng = 0.0
+
 
     //==============================================================================================
     override fun onCreateView(
@@ -34,62 +39,14 @@ class MyObservations : Fragment() {
 
         llObservationContainer = view.findViewById(R.id.myObservationContainer)
 
+        this.lat = ToolBox.lat
+        this.lng = ToolBox.lng
+
         // Fetch user observations and populate the list
         //fetchUserObservations()
         populateObservationViews()
         return view
     }
-
-    //==============================================================================================
-    //  Function fetches user observations from their profile
-/*    private fun fetchUserObservations() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-
-        if (userId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val userObservationsCollection = db.collection("observations")
-
-            ToolBox.usersObservations.clear()
-
-            userObservationsCollection
-                .whereEqualTo("userID", userId)
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    for (document in querySnapshot) {
-                        val data = document.data
-
-                        val timestamp = data["date"] as? com.google.firebase.Timestamp
-                        val date = timestamp?.toDate()?.time?.let { Date(it) } ?: Date(0)
-
-                        val locationData = data["location"] as? Map<String, Any>
-                        val latitude = locationData?.get("latitude") as? Double ?: 0.0
-                        val longitude = locationData?.get("longitude") as? Double ?: 0.0
-
-                        val location = Location("fused")
-                        location.latitude = latitude
-                        location.longitude = longitude
-
-                        val observation = UserObservation(
-                            ObservationID = data["observationID"] as? String ?: "",
-                            UserID = data["userID"] as? String ?: "",
-                            Date = data["date"] as String ?: "",
-                            BirdName = data["birdName"] as? String ?: "",
-                            Amount = data["amount"] as? String ?: "",
-                            Location = location,
-                            Note = data["note"] as? String ?: "",
-                            PlaceName = data["placeName"] as? String ?: ""
-                        )
-
-                        ToolBox.usersObservations.add(observation)
-                    }
-
-                    populateObservationViews()
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("MyObservations", "Error fetching observations: $exception")
-                }
-        }
-    }*/
 
     //==============================================================================================
     //  Function Populates observation view dynamically
@@ -119,6 +76,16 @@ class MyObservations : Fragment() {
                     userObservation.Note
             } else {
                 observationView.findViewById<TextView>(R.id.tvViewObsNote).isVisible = false
+            }
+
+            observationView.setOnClickListener(){
+                val intent = Intent(requireContext(), Navigation::class.java)
+                intent.putExtra("LATITUDE", this.lat)
+                intent.putExtra("LONGITUDE", this.lng)
+                intent.putExtra("DEST_LAT", userObservation.Location.latitude)
+                intent.putExtra("DEST_LNG", userObservation.Location.longitude)
+
+                startActivity(intent)
             }
 
             // Other UI population code here

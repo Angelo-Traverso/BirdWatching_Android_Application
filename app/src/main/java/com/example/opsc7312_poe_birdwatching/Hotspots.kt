@@ -12,6 +12,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
@@ -155,6 +156,9 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         }
+
+        ToolBox.lat = this.lat
+        ToolBox.lng = this.lon
     }
 
     private fun loadMapStyle() {
@@ -195,14 +199,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         getCurrentLocation { lat, lon ->
             this.lat = lat
             this.lon = lon
-
-          /*  //get the nearby hotspots
-            getNearByHotspots()
-
-
-
-            //add users Obs
-            addUserObs()*/
 
             //move camera
             val userLocation = LatLng(lat, lon)
@@ -349,11 +345,18 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         intent.putExtra("DEST_LAT", destlat)
         intent.putExtra("DEST_LNG", destlon)
 
+        ToolBox.lat = destlat
+        ToolBox.lng = destlon
+
         // Instance of bottomSheetFragment + setting location name
         val bottomSheetFragment = BottomSheetHotspot.newInstance(locationName)
         bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
 
         bottomSheetFragment.setButtonClickListener {
+            val where = (Location(LocationManager.GPS_PROVIDER).apply {
+                latitude = destlat
+                longitude = destlon
+            })
             startActivity(intent)
         }
     }

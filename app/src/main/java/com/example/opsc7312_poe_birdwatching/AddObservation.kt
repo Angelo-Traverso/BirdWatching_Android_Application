@@ -14,6 +14,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -145,6 +146,18 @@ class AddObservation : AppCompatActivity(){
 
                 val date = dateFormat.parse(dateInput)
 
+                var a = ToolBox.lat
+
+                var location = userLocation
+                if (ToolBox.newObsOnHotspot)
+                {
+                    location = (Location(LocationManager.GPS_PROVIDER).apply {
+                        latitude = ToolBox.lat
+                        longitude = ToolBox.lng
+                    })
+                }
+                ToolBox.newObsOnHotspot = false
+
                 if (date != null) {
                     val formattedDate = SimpleDateFormat("yyyy-MM-dd").format(date)
                     val observation = UserObservation(
@@ -153,7 +166,7 @@ class AddObservation : AppCompatActivity(){
                         formattedDate, // Use the formatted date
                         birdName,
                         howMany,
-                        userLocation,
+                        location,
                         note,
                         ""
                     )
@@ -170,7 +183,10 @@ class AddObservation : AppCompatActivity(){
                             ToolBox.usersObservations.add(observation)
 
                             // Clear all input fields
-                            clearFields(etSelectSpecies, etHowMany, etWhen, etNote)
+                            //clearFields(etSelectSpecies, etHowMany, etWhen, etNote)
+
+                            val intent = Intent(this, Hotpots::class.java)
+                            startActivity(intent)
                         }
                         .addOnFailureListener { e ->
                             // Handle the error if adding the observation to Firestore fails

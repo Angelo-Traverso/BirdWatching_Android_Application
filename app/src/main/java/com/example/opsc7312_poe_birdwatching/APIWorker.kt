@@ -302,8 +302,10 @@ class APIWorker {
                     val commonName = jsonObject.getString("comName")
                     val howMany = jsonObject.getInt("howMany")
                     val obsDate = jsonObject.getString("obsDt")
+                    val lat = jsonObject.getDouble("lat")
+                    val lng = jsonObject.getDouble("lng")
 
-                    val newSighting = SightingModel(commonName, howMany, obsDate)
+                    val newSighting = SightingModel(commonName, howMany, obsDate, lat, lng)
                     //Log.d("MODEL!!!!!!!!!!!",newSighting.howMany.toString())
                     SightingsList.add(newSighting)
                     println(newSighting)

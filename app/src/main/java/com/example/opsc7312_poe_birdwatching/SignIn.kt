@@ -79,7 +79,7 @@ class SignIn : Fragment() {
                     val uid = user?.uid
 
                     val errToast = Toast.makeText(
-                        requireContext(), "Signed In! UID: $uid", Toast.LENGTH_LONG
+                        requireContext(), "Signed In!", Toast.LENGTH_LONG
                     )
 
                     errToast.setGravity(Gravity.BOTTOM, 0, 25)

@@ -72,6 +72,18 @@
         android:text="Start Navigation"
         android:textColor="@color/white" />
 
+    <Button
+        android:id="@+id/btnAddObs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/tab_indicator"
+        android:drawableEnd="@drawable/navigate_24px"
+        android:drawableTint="@color/white"
+        android:text="Add Sighting"
+        android:textColor="@color/white" />
+
     <TextView
         android:id="@+id/tvHotspotInformation"
         android:layout_width="wrap_content"

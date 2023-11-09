@@ -9,8 +9,11 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.location.Location
+import android.location.LocationManager
 import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Spannable
@@ -29,12 +32,13 @@ import androidx.core.view.isVisible
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 import com.mapbox.bindgen.None
 
 class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     private lateinit var totalSpeciesTextView: TextView
-    private lateinit var informationText :TextView
+    private lateinit var informationText: TextView
 
     /*
     * Button click listener for sheet button
@@ -55,20 +59,24 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
         // start navigation small button
         val startNavigationSmallButton = view.findViewById<ImageButton>(R.id.btnNavigationSmall)
-
-        startNavigationSmallButton.setOnClickListener{
-
+        startNavigationSmallButton.setOnClickListener {
             // Notify the listener when the button is clicked
             buttonClickListener?.invoke()
         }
 
         // start navigation button
         val startNavigationButton = view.findViewById<Button>(R.id.btnStartNavigation)
-
         startNavigationButton.setOnClickListener {
-
             // Notify the listener when the button is clicked
             buttonClickListener?.invoke()
+        }
+
+        //add signing button
+        val addSightingButton = view.findViewById<MaterialButton>(R.id.btnAddObs)
+        addSightingButton.setOnClickListener {
+            ToolBox.newObsOnHotspot = true;
+            val intent = Intent(requireContext(), AddObservation::class.java)
+            startActivity(intent)
         }
 
         return view
@@ -161,64 +169,78 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         val inflater = LayoutInflater.from(bottomSheetView.context)
         var counter = 0
 
-        if(sightings.isEmpty())
-        {
+        if (sightings.isEmpty()) {
             totalSpeciesTextView.text = "No Species were found here"
             informationText.isVisible = false
-        }else
-        {
+        } else {
             // Set number of species text
             totalSpeciesTextView.text = "${sightings.count()} species"
-        }
 
+            //for every sighting
+            for (sighting in sightings) {
+                counter++
+                val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
 
+                // Inflate the hotspot_sighting layout
+                //val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
+                // Set margins
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                layoutParams.setMargins(0, 16, 0, 0)
+                hotspotSightingView.layoutParams = layoutParams
 
-        for (sighting in sightings) {
-            counter++
-            val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
+                // TextViews
+                val commonNameTextView =
+                    hotspotSightingView.findViewById<TextView>(R.id.tvCommonName)
+                val howManyTextView = hotspotSightingView.findViewById<TextView>(R.id.tvHowMany)
+                val dateTextView = hotspotSightingView.findViewById<TextView>(R.id.tvDate)
 
-            // Inflate the hotspot_sighting layout
-            //val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
-            // Set margins
-            val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            layoutParams.setMargins(0, 16, 0, 0)
-            hotspotSightingView.layoutParams = layoutParams
-            // TextViews
-            val commonNameTextView = hotspotSightingView.findViewById<TextView>(R.id.tvCommonName)
-            val howManyTextView = hotspotSightingView.findViewById<TextView>(R.id.tvHowMany)
-            val dateTextView = hotspotSightingView.findViewById<TextView>(R.id.tvDate)
+                val commonNameText = "Common Name: "
+                val italicCommonName = SpannableString(sighting.commonName)
+                italicCommonName.setSpan(
+                    StyleSpan(Typeface.ITALIC),
+                    0,
+                    italicCommonName.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
 
+                // Combine "Common Name: " and italicized common name
+                val spannableCombined =
+                    SpannableStringBuilder().append(commonNameText).append(italicCommonName)
+                val spanString = SpannableString(sighting.commonName)
 
-            val commonNameText = "Common Name: "
-            val italicCommonName = SpannableString(sighting.commonName)
-            italicCommonName.setSpan(StyleSpan(Typeface.ITALIC), 0, italicCommonName.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // Set the sighting information in the included layout
+                commonNameTextView.text = spannableCombined
+                howManyTextView.text = "How Many: ${sighting.howMany}"
+                dateTextView.text = "Date: ${sighting.date}"
 
-            // Combine "Common Name: " and italicized common name
-            val spannableCombined = SpannableStringBuilder().append(commonNameText).append(italicCommonName)
-            val spanString = SpannableString(sighting.commonName)
+                hotspotSightingView.setOnClickListener() {
+                    val intent = Intent(requireContext(), Navigation::class.java)
+                    intent.putExtra("LATITUDE", ToolBox.lat)
+                    intent.putExtra("LONGITUDE", ToolBox.lng)
+                    intent.putExtra("DEST_LAT", sighting.lat)
+                    intent.putExtra("DEST_LNG", sighting.lng)
 
-       /*     spanString.setSpan(StyleSpan(Typeface.ITALIC), 0, spanString.length, 0)*/
+                    startActivity(intent)
 
-            // Set the sighting information in the included layout
-            commonNameTextView.text =  spannableCombined
-            howManyTextView.text = "How Many: ${sighting.howMany}"
-            dateTextView.text = "Date: ${sighting.date}"
+                    buttonClickListener?.invoke()
+                }
 
-            // Add the included layout to the bottom sheet
-            bottomSheetView.addView(hotspotSightingView)
+                // Add the included layout to the bottom sheet
+                bottomSheetView.addView(hotspotSightingView)
 
-            // Add a line separator between sightings
-            val line = View(bottomSheetView.context)
-            line.layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                2
-            )
-            line.alpha = 0.5f
-            line.setBackgroundColor(Color.BLACK)
-            bottomSheetView.addView(line)
+                // Add a line separator between sightings
+                val line = View(bottomSheetView.context)
+                line.layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    2
+                )
+                line.alpha = 0.7f
+                line.setBackgroundColor(Color.BLACK)
+                bottomSheetView.addView(line)
+            }
         }
     }
 }

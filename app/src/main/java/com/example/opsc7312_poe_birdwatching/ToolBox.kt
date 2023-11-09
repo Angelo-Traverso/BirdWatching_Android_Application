@@ -44,6 +44,11 @@ class ToolBox : Application() {
         //var for observers
         var populated = false
 
+        //var for hotpsot location when adding new obs to it
+        var lat = 0.0
+        var lng = 0.0
+        var newObsOnHotspot = false;
+
         //==============================================================================================
         //  Function fetches user observations from their profile
         fun fetchUserObservations() {
