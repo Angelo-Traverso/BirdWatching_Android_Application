@@ -1,7 +1,6 @@
-// ------------------------------------ Final To Do List ------------------------------------ //
-
-# On Click or my observations so users can navigate from there
-
-# Show users previous observations when a nearby is clicked (Maybe highlight it)
-
-# Let users navigate to a specific bird in a nearby hotspot
+-make signings in hotpsot info clickable
+-allow users to add a signing at a hotspot
+-alternative routes in nav
+-show users obs at a hotspot
+-show all blue markers inside one
+-group user obs by 1km radius
