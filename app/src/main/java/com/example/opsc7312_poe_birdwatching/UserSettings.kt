@@ -171,6 +171,8 @@ class UserSettings : Fragment() {
 
     }
 
+    //==============================================================================================
+    // Updates user map style to dark theme
     private fun toDark() {
         val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
         val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
@@ -185,6 +187,8 @@ class UserSettings : Fragment() {
         updateUserSettings()
     }
 
+    //==============================================================================================
+    // Updates user map style to light theme
     private fun toLight() {
         val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
         val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
@@ -199,6 +203,8 @@ class UserSettings : Fragment() {
         updateUserSettings()
     }
 
+    //==============================================================================================
+    // Updates user settings in FireStore based on their preferences
     private fun updateUserSettings() {
         try {
             val db = FirebaseFirestore.getInstance()
@@ -216,18 +222,12 @@ class UserSettings : Fragment() {
                         "maxDistance", user.MaxDistance
                     )
                     .addOnSuccessListener {
-                        Toast.makeText(
-                            requireContext(),
-                            "User settings updated in Firestore",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // We can show successful messages here if we want to
+                        // It executes after successfully updating data in firestore
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(
-                            requireContext(),
-                            "Failed to update user settings in Firestore: ${e.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // We can show failure messages here if we want to
+                        // It executes after failing to update settings in firestore
                     }
             }
         } catch (ex: Exception) {
