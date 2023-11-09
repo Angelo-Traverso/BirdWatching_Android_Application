@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 
 class Settings : AppCompatActivity() {
 
@@ -35,9 +36,7 @@ class Settings : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
         Logout.setOnClickListener() {
-            ToolBox.users.clear()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            logout()
         }
 
         Back.setOnClickListener() {
@@ -53,5 +52,17 @@ class Settings : AppCompatActivity() {
     override fun onBackPressed() {
         val intent = Intent(this, Hotpots::class.java)
         startActivity(intent)
+    }
+
+    //==============================================================================================
+    // Signs user out of their account using firebase authentication
+    private fun logout()
+    {
+        ToolBox.users.clear()
+        // Signing user out of firebase using FireBaseAuth
+        FirebaseAuth.getInstance().signOut();
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+
     }
 }
