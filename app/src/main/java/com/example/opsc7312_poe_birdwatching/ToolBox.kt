@@ -50,57 +50,49 @@ class ToolBox : Application() {
         var newObsOnHotspot = false;
 
         //==============================================================================================
-        //  Function fetches user observations from their profile
+        //  Function fetches all user observations
         fun fetchUserObservations() {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            val db = FirebaseFirestore.getInstance()
+            val userObservationsCollection = db.collection("observations")
 
-            if (userId != null) {
-                val db = FirebaseFirestore.getInstance()
-                val userObservationsCollection = db.collection("observations")
+            usersObservations.clear()
 
-                usersObservations.clear()
+            userObservationsCollection
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        val data = document.data
 
-                userObservationsCollection
-                    .whereEqualTo("userID", userId)
-                    .get()
-                    .addOnSuccessListener { querySnapshot ->
-                        for (document in querySnapshot) {
-                            val data = document.data
+                        val locationData = data["location"] as? Map<String, Any>
+                        val latitude = locationData?.get("latitude") as? Double ?: 0.0
+                        val longitude = locationData?.get("longitude") as? Double ?: 0.0
 
-                            val timestamp = data["date"] as? com.google.firebase.Timestamp
-                            val date = timestamp?.toDate()?.time?.let { java.sql.Date(it) } ?: java.sql.Date(
-                                0
-                            )
+                        val location = Location("fused")
+                        location.latitude = latitude
+                        location.longitude = longitude
 
-                            val locationData = data["location"] as? Map<String, Any>
-                            val latitude = locationData?.get("latitude") as? Double ?: 0.0
-                            val longitude = locationData?.get("longitude") as? Double ?: 0.0
+                        val observation = UserObservation(
+                            ObservationID = data["observationID"] as? String ?: "",
+                            UserID = data["userID"] as? String ?: "",
+                            Date = data["date"] as String ?: "",
+                            BirdName = data["birdName"] as? String ?: "",
+                            Amount = data["amount"] as? Int ?: 0,
+                            Location = location,
+                            Note = data["note"] as? String ?: "",
+                            PlaceName = data["placeName"] as? String ?: "",
+                            IsAtHotspot = data["isAtHotspot"] as? Boolean ?: false
+                        )
 
-                            val location = Location("fused")
-                            location.latitude = latitude
-                            location.longitude = longitude
-
-                            val observation = UserObservation(
-                                ObservationID = data["observationID"] as? String ?: "",
-                                UserID = data["userID"] as? String ?: "",
-                                Date = data["date"] as String ?: "",
-                                BirdName = data["birdName"] as? String ?: "",
-                                Amount = data["amount"] as? String ?: "",
-                                Location = location,
-                                Note = data["note"] as? String ?: "",
-                                PlaceName = data["placeName"] as? String ?: "",
-                                IsAtHotspot = data["isAtHotspot"] as? Boolean ?: false,
-                            )
-
-                            usersObservations.add(observation)
-                        }
-
+                        usersObservations.add(observation)
                     }
-                    .addOnFailureListener { exception ->
-                        Log.e("MyObservations", "Error fetching observations: $exception")
-                    }
-            }
+
+                    // Notify your UI or perform any other actions after fetching all observations
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("AllObservations", "Error fetching all observations: $exception")
+                }
         }
+
 
 
     }

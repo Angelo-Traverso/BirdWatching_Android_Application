@@ -9,7 +9,7 @@ data class UserObservation(
     val UserID: String,
     val Date: String,
     val BirdName: String,
-    val Amount: String,
+    val Amount: Int,
     val Location: Location,
     val Note: String,
     val PlaceName: String,
