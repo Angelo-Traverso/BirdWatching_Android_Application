@@ -9,7 +9,9 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +20,13 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.sql.Date
 
 class SignIn : Fragment() {
 
@@ -100,6 +104,8 @@ class SignIn : Fragment() {
 
                                         ChallengeModel.getChallenges()
 
+                                        ToolBox.fetchUserObservations()
+
                                         val intent = Intent(activity, Hotpots::class.java)
                                         startActivity(intent)
 
@@ -131,5 +137,7 @@ class SignIn : Fragment() {
                 }
             }
     }
+
+
 
 }

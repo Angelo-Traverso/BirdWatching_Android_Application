@@ -167,6 +167,8 @@ class AddObservation : AppCompatActivity(){
                             // Observation added to Firestore successfully
                             Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG).show()
 
+                            ToolBox.usersObservations.add(observation)
+
                             // Clear all input fields
                             clearFields(etSelectSpecies, etHowMany, etWhen, etNote)
                         }

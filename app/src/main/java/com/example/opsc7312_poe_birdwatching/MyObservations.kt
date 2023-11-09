@@ -35,14 +35,14 @@ class MyObservations : Fragment() {
         llObservationContainer = view.findViewById(R.id.myObservationContainer)
 
         // Fetch user observations and populate the list
-        fetchUserObservations()
-
+        //fetchUserObservations()
+        populateObservationViews()
         return view
     }
 
     //==============================================================================================
     //  Function fetches user observations from their profile
-    private fun fetchUserObservations() {
+/*    private fun fetchUserObservations() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (userId != null) {
@@ -89,7 +89,7 @@ class MyObservations : Fragment() {
                     Log.e("MyObservations", "Error fetching observations: $exception")
                 }
         }
-    }
+    }*/
 
     //==============================================================================================
     //  Function Populates observation view dynamically

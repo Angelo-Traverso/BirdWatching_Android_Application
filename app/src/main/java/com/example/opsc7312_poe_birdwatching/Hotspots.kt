@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -32,8 +33,10 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.annotations.concurrent.UiThread
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.IOException
 import kotlin.concurrent.thread
@@ -184,16 +187,22 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
         loadMapStyle()
 
+        lifecycleScope.launch {
+            doWork()
+        }
+
         // Get the users current location
         getCurrentLocation { lat, lon ->
             this.lat = lat
             this.lon = lon
 
-            //get the nearby hotspots
+          /*  //get the nearby hotspots
             getNearByHotspots()
 
+
+
             //add users Obs
-            addUserObs()
+            addUserObs()*/
 
             //move camera
             val userLocation = LatLng(lat, lon)
@@ -212,6 +221,15 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //---markers
     //region
 
+    // Coroutine scope for getting nearby hotspots and user observations
+    suspend fun doWork() = coroutineScope {
+        launch{
+            getNearByHotspots()
+        }
+        launch{
+            addUserObs()
+        }
+    }
     //==============================================================================================
     // Show any user obs on the map in a different color
     private fun addUserObs() {
