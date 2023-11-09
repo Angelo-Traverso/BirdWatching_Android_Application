@@ -156,7 +156,6 @@ class AddObservation : AppCompatActivity(){
                         longitude = ToolBox.lng
                     })
                 }
-                ToolBox.newObsOnHotspot = false
 
                 if (date != null) {
                     val formattedDate = SimpleDateFormat("yyyy-MM-dd").format(date)
@@ -168,9 +167,11 @@ class AddObservation : AppCompatActivity(){
                         howMany,
                         location,
                         note,
-                        ""
+                        "",
+                        ToolBox.newObsOnHotspot
                     )
 
+                    ToolBox.newObsOnHotspot = false
                     val db = FirebaseFirestore.getInstance()
                     val observationsCollection = db.collection("observations")
 

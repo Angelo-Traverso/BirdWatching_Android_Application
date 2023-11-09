@@ -51,6 +51,20 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     //==============================================================================================
+    companion object {
+        const val TAG = "BottomSheetHotspot"
+
+        private const val ARG_HEADING_TEXT = "arg_heading_text"
+        fun newInstance(headingText: String): BottomSheetHotspot {
+            val fragment = BottomSheetHotspot()
+            val args = Bundle()
+            args.putString(ARG_HEADING_TEXT, headingText)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    //==============================================================================================
     //view created
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -127,34 +141,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
         // Display the sightings in the bottom sheet
         displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotsSightings)
-
-
-    }
-
-    //==============================================================================================
-    companion object {
-        const val TAG = "BottomSheetHotspot"
-
-        private const val ARG_HEADING_TEXT = "arg_heading_text"
-        fun newInstance(headingText: String): BottomSheetHotspot {
-            val fragment = BottomSheetHotspot()
-            val args = Bundle()
-            args.putString(ARG_HEADING_TEXT, headingText)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
-    //==============================================================================================
-    fun setBottomSheetHeadingText(newText: String) {
-        val textView = view?.findViewById<TextView>(R.id.tvBottomSheetHeading)
-        textView?.text = newText
-    }
-
-    //==============================================================================================
-    //Button click listener for button on sheet
-    fun setButtonClickListener(listener: () -> Unit) {
-        this.buttonClickListener = listener
     }
 
     //==============================================================================================
@@ -242,5 +228,17 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
                 bottomSheetView.addView(line)
             }
         }
+    }
+
+    //==============================================================================================
+    fun setBottomSheetHeadingText(newText: String) {
+        val textView = view?.findViewById<TextView>(R.id.tvBottomSheetHeading)
+        textView?.text = newText
+    }
+
+    //==============================================================================================
+    //Button click listener for button on sheet
+    fun setButtonClickListener(listener: () -> Unit) {
+        this.buttonClickListener = listener
     }
 }

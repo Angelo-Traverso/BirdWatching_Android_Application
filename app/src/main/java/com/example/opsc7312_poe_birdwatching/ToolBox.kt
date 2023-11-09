@@ -88,7 +88,8 @@ class ToolBox : Application() {
                                 Amount = data["amount"] as? String ?: "",
                                 Location = location,
                                 Note = data["note"] as? String ?: "",
-                                PlaceName = data["placeName"] as? String ?: ""
+                                PlaceName = data["placeName"] as? String ?: "",
+                                IsAtHotspot = data["isAtHotspot"] as? Boolean ?: false,
                             )
 
                             usersObservations.add(observation)

@@ -12,5 +12,6 @@ data class UserObservation(
     val Amount: String,
     val Location: Location,
     val Note: String,
-    val PlaceName: String
+    val PlaceName: String,
+    var IsAtHotspot: Boolean
 )

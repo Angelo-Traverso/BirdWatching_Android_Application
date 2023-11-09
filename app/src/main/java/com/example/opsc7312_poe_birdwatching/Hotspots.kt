@@ -230,9 +230,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     // Show any user obs on the map in a different color
     private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
-
             val filteredObservations =
-                ToolBox.usersObservations.filter { it.UserID == ToolBox.users[0].UserID }
+                ToolBox.usersObservations.filter { it.IsAtHotspot == false }
 
             for (location in filteredObservations) {
                 mMap.addMarker(
