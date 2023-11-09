@@ -9,7 +9,9 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +20,13 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.sql.Date
 
 class SignIn : Fragment() {
 
@@ -32,7 +39,7 @@ class SignIn : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
     }
 
@@ -56,47 +63,81 @@ class SignIn : Fragment() {
             pbWaitToSignIn.visibility = View.VISIBLE
 
             authenticateUser(email, pword)
-
         }
     }
 
     //==============================================================================================
     //attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
+        val auth = FirebaseAuth.getInstance()
+        val db = FirebaseFirestore.getInstance()
 
-        var storedPassword = ""
-        val index = ToolBox.users.indexOfFirst { it.Email == email }
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    val uid = user?.uid
 
-        if (index != -1) {
-            storedPassword = ToolBox.users[index].Hash
-        }
+                    val errToast = Toast.makeText(
+                        requireContext(), "Signed In! UID: $uid", Toast.LENGTH_LONG
+                    )
 
-        // Compare the stored hashed password with the provided password
-        if (!(storedPassword.isNullOrEmpty()) && verifyPassword(password, storedPassword)) {
+                    errToast.setGravity(Gravity.BOTTOM, 0, 25)
+                    errToast.show()
 
-            // Authentication successful
-            ToolBox.userID = ToolBox.users.indexOfFirst { it.Email == email }
-            println(ToolBox.userID)
-            val intent = Intent(activity, Hotpots::class.java)
-            startActivity(intent)
+                    if (uid != null) {
+                        // Retrieve user data from Firestore
+                        val usersCollection = db.collection("users")
 
-            pbWaitToSignIn.visibility = View.GONE
+                        usersCollection.document(uid)
+                            .get()
+                            .addOnSuccessListener { documentSnapshot ->
+                                if (documentSnapshot.exists()) {
+                                    // Document exists, so you can access its data
+                                    val userData = documentSnapshot.toObject(UsersModel::class.java)
 
-        } else {
-            // Authentication failed
-            pbWaitToSignIn.visibility = View.GONE
+                                    if (userData != null) {
 
-            val errToast = Toast.makeText(
-                requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
-            )
+                                        // Authentication successful
+                                        ToolBox.users.clear()
+                                        ToolBox.users.add(userData)
 
-            errToast.setGravity(Gravity.BOTTOM, 0, 25)
-            errToast.show()
-        }
+                                        ChallengeModel.getChallenges()
+
+                                        ToolBox.fetchUserObservations()
+
+                                        val intent = Intent(activity, Hotpots::class.java)
+                                        startActivity(intent)
+
+                                    } else {
+                                        // Handle the case where the data couldn't be converted to UsersModel
+                                    }
+                                } else {
+                                    // Handle the case where the document doesn't exist (user data not found)
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                // Handle the error if retrieving data from Firestore fails
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Failed to retrieve user data from Firestore: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    } else {
+                        // Handle the case where UID is null
+                    }
+                } else {
+                    val errToast = Toast.makeText(
+                        requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
+                    )
+
+                    errToast.setGravity(Gravity.BOTTOM, 0, 25)
+                    errToast.show()
+                }
+            }
     }
 
-    //==============================================================================================
-    private fun verifyPassword(password: String, storedPassword: String): Boolean {
-        return PasswordHandler.hashPassword(password.toString().trim()) == storedPassword
-    }
+
+
 }

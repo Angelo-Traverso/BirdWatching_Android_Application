@@ -30,13 +30,12 @@ import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.thread
 
 
 class AddObservation : AppCompatActivity(){
@@ -69,7 +68,7 @@ class AddObservation : AppCompatActivity(){
 
         etSelectSpecies = findViewById(R.id.etSelectSpecies)
         etSelectSpecies.setOnClickListener {
-            showSpeciesDialog(ToolBox.birds)
+            showSpeciesDialog(ToolBox.birdsInTheRegion)
         }
 
         etWhen = findViewById(R.id.etWhen)
@@ -137,48 +136,49 @@ class AddObservation : AppCompatActivity(){
     //save the new obs to the list
     private fun addNewObs() {
         try {
-
             if (validateForm()) {
-                val obsID = ""
-                val userID = ToolBox.userID
-
-                val dateText = etWhen.text.toString()
-                val dateFormat = SimpleDateFormat("dd-MM-yyyy")
-                val utilDate = dateFormat.parse(dateText)
-                val sqlDate = Date(utilDate.time)
-
+                val dateFormat = SimpleDateFormat("dd-MM-yyyy") // Use the correct format
+                val dateInput = etWhen.text.toString().trim()
                 val birdName = etSelectSpecies.text.toString().trim()
-                val location = userLocation
                 val howMany = etHowMany.text.toString().trim()
                 val note = etNote.text.toString().trim()
 
+                val date = dateFormat.parse(dateInput)
 
-                var apiWorker = APIWorker()
-                val scope = CoroutineScope(Dispatchers.Default)
+                if (date != null) {
+                    val formattedDate = SimpleDateFormat("yyyy-MM-dd").format(date)
+                    val observation = UserObservation(
+                        "",
+                        ToolBox.users[0].UserID,
+                        formattedDate, // Use the formatted date
+                        birdName,
+                        howMany,
+                        userLocation,
+                        note,
+                        ""
+                    )
 
-                thread {
-                    scope.launch {
-                        val placeName = apiWorker.CoordsToLocation(
-                            userLocation.latitude, userLocation.longitude
-                        )
-                        var newObs = UserObservation(
-                            obsID, userID, sqlDate, birdName, howMany, location, note, placeName
-                        )
+                    val db = FirebaseFirestore.getInstance()
+                    val observationsCollection = db.collection("observations")
 
-                        ToolBox.usersObservations.add(newObs)
-                    }
+                    observationsCollection
+                        .add(observation)
+                        .addOnSuccessListener { documentReference ->
+                            // Observation added to Firestore successfully
+                            Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG).show()
+
+                            ToolBox.usersObservations.add(observation)
+
+                            // Clear all input fields
+                            clearFields(etSelectSpecies, etHowMany, etWhen, etNote)
+                        }
+                        .addOnFailureListener { e ->
+                            // Handle the error if adding the observation to Firestore fails
+                            Toast.makeText(this, "Failed to save bird observation: ${e.message}", Toast.LENGTH_SHORT).show()
+                            print(e.message)
+                        }
                 }
-
-                // Clear all input fields
-                clearFields(etSelectSpecies, etHowMany, etWhen, etNote);
-
-                // Ensure user their entry has been saved
-                val myToast = Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG)
-                myToast.show()
-
-
             }
-
         } catch (ex: Exception) {
             Log.w("log", ex.toString())
             ex.printStackTrace()
@@ -224,12 +224,6 @@ class AddObservation : AppCompatActivity(){
                 etHowMany.error = "Amount is required"
                 valid = false
             }
-
-            //try conver to date, if fails it will be handled in the exception
-            val dateText = etWhen.text.toString()
-            val dateFormat = SimpleDateFormat("dd-MM-yyyy")
-            val utilDate = dateFormat.parse(dateText)
-            val sqlDate = Date(utilDate.time)
 
             return valid
         } catch (ex: Exception) {

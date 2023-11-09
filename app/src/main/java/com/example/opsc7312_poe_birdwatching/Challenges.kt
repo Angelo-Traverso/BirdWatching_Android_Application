@@ -39,8 +39,6 @@ class Challenges : Fragment() {
 
         val tvPoints = view.findViewById<TextView>(R.id.tvPoints)
 
-        var totalPoints = 0;
-
         // Loop through the challenges and dynamically add them to the container
         for ((i, challenge) in challengeList.withIndex()) {
 
@@ -76,8 +74,6 @@ class Challenges : Fragment() {
             progressBar.progress = challenge.progress
 
             if (challenge.progress > challenge.required) {
-                // Challenge completed
-                totalPoints += challenge.pointsToGet
                 tvProgress.text = "${challenge.required}/${challenge.required}"
             } else {
                 tvProgress.text = "${challenge.progress}/${challenge.required}"
@@ -93,10 +89,8 @@ class Challenges : Fragment() {
             linearLayout.addView(challengeItemView) // Add the challenge item to the container
         }
 
-        clearListAtMidnight()
-
         // Setting total points earned
-        tvPoints.text = totalPoints.toString()
+        tvPoints.text = ToolBox.users[0].ChallengePoints.toString()
         return view
     }
 
@@ -104,57 +98,73 @@ class Challenges : Fragment() {
     //create the challenges and check the users progress
     private fun checkProgress(): List<Challenge_Object> {
         val challenges = mutableListOf<Challenge_Object>()
+        var pointsToGet = 0
 
         //spot 3 birds
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val currentDate = Date()
 
         val filteredObservations = ToolBox.usersObservations.filter {
-            it.UserID == ToolBox.userID && sdf.format(it.Date) == sdf.format(currentDate)
+            it.UserID == ToolBox.users[0].UserID && (it.Date) == sdf.format(currentDate)
         }
 
         val uniqueBirdNames = filteredObservations.distinctBy { it.BirdName }
         val uniqueBirdCount = uniqueBirdNames.size
 
-        challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 15))
+        //travel to two hotspots
+        if (!ChallengeModel.userObservationsBool && uniqueBirdCount >= 3) {
+            pointsToGet = 15
+            ChallengeModel.userObservationsBool = true
+        }
+
+        challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 15, pointsToGet))
+        pointsToGet = 0
 
         //travel to two hotspots
-        challenges.add(Challenge_Object("Travel to two hotspots", ToolBox.tripsCompleted, 2, 2))
+        if (!ChallengeModel.tripsCompletedBool && ChallengeModel.tripsCompleted >= 2) {
+            pointsToGet = 20
+            ChallengeModel.tripsCompletedBool = true
+        }
 
-        //duck hunt level
         challenges.add(
             Challenge_Object(
-                "Reach the 7th round in duck hunt", ToolBox.topRoundInDuckHunt, 7, 10
+                "Travel to two hotspots",
+                ChallengeModel.tripsCompleted,
+                2,
+                20,
+                pointsToGet
             )
         )
+        pointsToGet = 0
+
+        //duck hunt level
+        if (!ChallengeModel.topRoundInDuckHuntBool && ChallengeModel.topRoundInDuckHunt >= 7) {
+            pointsToGet = 10
+            ChallengeModel.topRoundInDuckHuntBool = true
+        }
+
+        challenges.add(
+            Challenge_Object(
+                "Reach the 7th round in duck hunt",
+                ChallengeModel.topRoundInDuckHunt,
+                7,
+                10,
+                pointsToGet
+            )
+        )
+
+        var pointsAwarded = ToolBox.users[0].ChallengePoints
+        for (challenge in challenges) {
+            pointsAwarded += challenge.pointsAwarded
+        }
+
+        if (pointsAwarded != ToolBox.users[0].ChallengePoints) {
+            ChallengeModel.updatePoints(pointsAwarded)
+        }
+
+        ToolBox.users[0].ChallengePoints = pointsAwarded
+        ChallengeModel.saveChallenge()
+
         return challenges
-    }
-
-    //==============================================================================================
-    //source: (ChatGPT, n.d.)
-    //method to reset challenges every day at midnight
-    fun clearListAtMidnight() {
-        val timer = Timer()
-        val now = Calendar.getInstance()
-        val midnight = Calendar.getInstance()
-
-        // Set the time to midnight of the next day
-        midnight.time = now.time
-        midnight.add(Calendar.DAY_OF_YEAR, 1)
-        midnight.set(Calendar.HOUR_OF_DAY, 0)
-        midnight.set(Calendar.MINUTE, 0)
-        midnight.set(Calendar.SECOND, 0)
-        midnight.set(Calendar.MILLISECOND, 0)
-
-        timer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                ToolBox.topRoundInDuckHunt = 0
-                ToolBox.tripsCompleted = 0
-                for (challenge in challengeList) {
-                    challenge.progress = 0
-                }
-                println("List cleared at midnight.")
-            }
-        }, midnight.time, 24 * 60 * 60 * 1000) // Run every 24 hours
     }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "844741099939",
+    "project_id": "feather-find-ab019",
+    "storage_bucket": "feather-find-ab019.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844741099939:android:5f6066a145b1b948599a16",
+        "android_client_info": {
+          "package_name": "com.example.opsc7312_poe_birdwatching"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVS9gQ65P9wN6MGuKBfMRq01dp2Xd9zAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

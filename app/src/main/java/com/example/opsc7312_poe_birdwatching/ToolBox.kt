@@ -11,155 +11,93 @@ package com.example.opsc7312_poe_birdwatching
 import android.app.Application
 import android.icu.util.LocaleData
 import android.location.Location
+import android.util.Log
 import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
-import java.sql.Date
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+
+import java.util.Date
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 
 class ToolBox : Application() {
 
     companion object {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-        val testDate = dateFormat.parse("2023-10-19")
-
         var userRegion = ""
-        var userID = -1
-        var users = arrayListOf<UsersModel>(
-            UsersModel(
-                UserID = 0,
-                Name = "Benjamin",
-                Surname = "Franklin",
-                Email = "Benjamin@gmail.com",
-                Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
-            ),
-            UsersModel(
-                UserID = 1,
-                Name = "Renold",
-                Surname = "Jackson",
-                Email = "Renold@gmail.com",
-                Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
-            ),
-            UsersModel(
-                UserID = 2,
-                Name = "Tiril",
-                Surname = "Rampo",
-                Email = "Tiril@gmail.com",
-                Hash = "A109E36947AD56DE1DCA1CC49F0EF8AC9AD9A7B1AA0DF41FB3C4CB73C1FF01EA"
-            )
-        )
-        var usersObservations = arrayListOf<UserObservation>(
-            UserObservation(
-                "0",
-                0,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Red-chested Cuckoo",
-                "2",
-                Location = Location("gps").apply {
-                    latitude = -34.005997
-                    longitude = 18.465918
-                },
-                "",
-                ""
-            ),
-            UserObservation(
-                "1",
-                0,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Quailfinch",
-                "10",
-                Location = Location("gps").apply {
-                    latitude = -34.016235
-                    longitude = 18.457296
-                },
-                "There were many birds all eating fruit",
-                ""
-            ),
-            UserObservation(
-                "2",
-                0,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Blue Petrel",
-                "2",
-                Location = Location("gps").apply {
-                    latitude = -34.030784
-                    longitude = 18.477414
-                },
-                "",
-                ""
-            ),
-            UserObservation(
-                "3",
-                0,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Marsh Owl",
-                "3",
-                Location = Location("gps").apply {
-                    latitude = -34.002017
-                    longitude = 18.452186
-                },
-                "",
-                ""
-            ),
-            UserObservation(
-                "4",
-                1,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Grey Wagtail",
-                "1",
-                Location = Location("gps").apply {
-                    latitude = -34.033745
-                    longitude = 18.458073
-                },
-                "",
-                ""
-            ),
-            UserObservation(
-                "5",
-                1,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Emu",
-                "1",
-                Location = Location("gps").apply {
-                    latitude = -33.813011
-                    longitude = 18.371997
-                },
-                "",
-                ""
-            ),
-            UserObservation(
-                "6",
-                2,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Speckled Pigeon",
-                "2",
-                Location = Location("gps").apply {
-                    latitude = -33.971619
-                    longitude = 18.411377
-                },
-                "",
-                ""
-            ),
-            UserObservation(
-                "7",
-                2,
-                Date(2023 - 1900, 10 - 1, 19),
-                "Rock Pigeon",
-                "2",
-                Location = Location("gps").apply {
-                    latitude = -33.958743
-                    longitude = 18.459167
-                },
-                "",
-                ""
-            )
-        )
-        var hotspotSightings: List<SightingModel> = mutableListOf()
-        var birds: List<BirdModel> = mutableListOf()
-        var topRoundInDuckHunt = 0
-        var tripsCompleted = 0
+
+        //will only store one user at a time
+        var users = arrayListOf<UsersModel>()
+
+        //stores all entries of users observations
+        var usersObservations = arrayListOf<UserObservation>()
+
+        //used to store the sightings for a specific observation, changed for every hotpost pressed
+        var hotspotsSightings: List<SightingModel> = mutableListOf()
+
+        //used to store the birds found in a region, session based
+        var birdsInTheRegion: List<BirdModel> = mutableListOf()
+
+        //var for observers
         var populated = false
+
+        //==============================================================================================
+        //  Function fetches user observations from their profile
+        fun fetchUserObservations() {
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+            if (userId != null) {
+                val db = FirebaseFirestore.getInstance()
+                val userObservationsCollection = db.collection("observations")
+
+                usersObservations.clear()
+
+                userObservationsCollection
+                    .whereEqualTo("userID", userId)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        for (document in querySnapshot) {
+                            val data = document.data
+
+                            val timestamp = data["date"] as? com.google.firebase.Timestamp
+                            val date = timestamp?.toDate()?.time?.let { java.sql.Date(it) } ?: java.sql.Date(
+                                0
+                            )
+
+                            val locationData = data["location"] as? Map<String, Any>
+                            val latitude = locationData?.get("latitude") as? Double ?: 0.0
+                            val longitude = locationData?.get("longitude") as? Double ?: 0.0
+
+                            val location = Location("fused")
+                            location.latitude = latitude
+                            location.longitude = longitude
+
+                            val observation = UserObservation(
+                                ObservationID = data["observationID"] as? String ?: "",
+                                UserID = data["userID"] as? String ?: "",
+                                Date = data["date"] as String ?: "",
+                                BirdName = data["birdName"] as? String ?: "",
+                                Amount = data["amount"] as? String ?: "",
+                                Location = location,
+                                Note = data["note"] as? String ?: "",
+                                PlaceName = data["placeName"] as? String ?: ""
+                            )
+
+                            usersObservations.add(observation)
+                        }
+
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("MyObservations", "Error fetching observations: $exception")
+                    }
+            }
+        }
+
+
     }
+
+
 }

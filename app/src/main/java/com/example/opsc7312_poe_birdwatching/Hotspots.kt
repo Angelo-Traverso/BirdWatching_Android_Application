@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -32,8 +33,10 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.annotations.concurrent.UiThread
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.IOException
 import kotlin.concurrent.thread
@@ -156,7 +159,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     private fun loadMapStyle() {
 
-        if (ToolBox.users[ToolBox.userID].mapStyleIsDark) {
+        if (ToolBox.users[0].mapStyleIsDark) {
             mapStyleChosen = R.raw.dark
         } else {
             mapStyleChosen = R.raw.light
@@ -184,16 +187,22 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
         loadMapStyle()
 
+        lifecycleScope.launch {
+            doWork()
+        }
+
         // Get the users current location
         getCurrentLocation { lat, lon ->
             this.lat = lat
             this.lon = lon
 
-            //get the nearby hotspots
+          /*  //get the nearby hotspots
             getNearByHotspots()
 
+
+
             //add users Obs
-            addUserObs()
+            addUserObs()*/
 
             //move camera
             val userLocation = LatLng(lat, lon)
@@ -212,13 +221,22 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     //---markers
     //region
 
+    // Coroutine scope for getting nearby hotspots and user observations
+    suspend fun doWork() = coroutineScope {
+        launch{
+            getNearByHotspots()
+        }
+        launch{
+            addUserObs()
+        }
+    }
     //==============================================================================================
     // Show any user obs on the map in a different color
     private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
 
             val filteredObservations =
-                ToolBox.usersObservations.filter { it.UserID == ToolBox.userID }
+                ToolBox.usersObservations.filter { it.UserID == ToolBox.users[0].UserID }
 
             for (location in filteredObservations) {
                 mMap.addMarker(
@@ -245,7 +263,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 val hotspots = apiWorker.getHotspots(lat, lon)
                 UpdateMarkers(hotspots)
                 println("getting birds")
-                ToolBox.birds = apiWorker.getBirds()
+                ToolBox.birdsInTheRegion = apiWorker.getBirds()
                 ToolBox.populated = true
                 println("birds saved")
             }
@@ -308,7 +326,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         //using threading to query external resources
         thread {
             scope.launch {
-                ToolBox.hotspotSightings = apiWorker.getHotspotBirdData(lat, lng)
+                ToolBox.hotspotsSightings = apiWorker.getHotspotBirdData(lat, lng)
 
                 destlat = lat
                 destlon = lng

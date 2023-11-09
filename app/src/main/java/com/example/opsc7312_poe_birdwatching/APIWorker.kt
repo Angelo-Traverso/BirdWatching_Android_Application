@@ -30,7 +30,7 @@ class APIWorker {
         var HotspotList: List<HotspotModel> = mutableListOf()
 
         val bird = try {
-            queryGetHotspots(lon, lat, ToolBox.users[ToolBox.userID].MaxDistance)?.readText()
+            queryGetHotspots(lon, lat, ToolBox.users[0].MaxDistance)?.readText()
         } catch (e: Exception) {
             println("========================================== getHotspots " + e.toString())
             return HotspotList

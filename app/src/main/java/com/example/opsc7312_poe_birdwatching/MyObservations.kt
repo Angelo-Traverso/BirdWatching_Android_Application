@@ -8,7 +8,9 @@
 
 package com.example.opsc7312_poe_birdwatching
 
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +19,11 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.sql.Date
 
 class MyObservations : Fragment() {
-
     private lateinit var llObservationContainer: LinearLayout
 
     //==============================================================================================
@@ -30,40 +34,96 @@ class MyObservations : Fragment() {
 
         llObservationContainer = view.findViewById(R.id.myObservationContainer)
 
-        val filteredObservations = ToolBox.usersObservations.filter { it.UserID == ToolBox.userID }
-        // Add a view for every element
-        for (observation in filteredObservations) {
-            addObservationViewToContainer(observation)
-        }
+        // Fetch user observations and populate the list
+        //fetchUserObservations()
+        populateObservationViews()
         return view
     }
 
     //==============================================================================================
-    //  Function Adds new view to container for every userObservation instance
-    private fun addObservationViewToContainer(userObservation: UserObservation) {
-        val inflater = LayoutInflater.from(requireContext())
-        val observationView = inflater.inflate(R.layout.my_observations_display_layout, null)
-        val line = inflater.inflate(R.layout.line, null)
-        val worker = APIWorker()
+    //  Function fetches user observations from their profile
+/*    private fun fetchUserObservations() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-        // Populate the fields with data from UserObservation
-        observationView.findViewById<TextView>(R.id.tvBirdName).text =
-            userObservation.BirdName + " (x${userObservation.Amount})"
+        if (userId != null) {
+            val db = FirebaseFirestore.getInstance()
+            val userObservationsCollection = db.collection("observations")
 
-        // Displaying location - should display location normal name
-        observationView.findViewById<TextView>(R.id.tvLocation).text =
-            userObservation.PlaceName + "\n" + userObservation.Location.longitude.toString() + " " + userObservation.Location.latitude.toString()
-        observationView.findViewById<TextView>(R.id.tvDateSpotted).text =
-            userObservation.Date.toString()
+            ToolBox.usersObservations.clear()
 
-        if (userObservation.Note.isNotEmpty()) {
-            observationView.findViewById<TextView>(R.id.tvViewObsNote).text = userObservation.Note
-        } else {
-            observationView.findViewById<TextView>(R.id.tvViewObsNote).isVisible = false
+            userObservationsCollection
+                .whereEqualTo("userID", userId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+                        val data = document.data
+
+                        val timestamp = data["date"] as? com.google.firebase.Timestamp
+                        val date = timestamp?.toDate()?.time?.let { Date(it) } ?: Date(0)
+
+                        val locationData = data["location"] as? Map<String, Any>
+                        val latitude = locationData?.get("latitude") as? Double ?: 0.0
+                        val longitude = locationData?.get("longitude") as? Double ?: 0.0
+
+                        val location = Location("fused")
+                        location.latitude = latitude
+                        location.longitude = longitude
+
+                        val observation = UserObservation(
+                            ObservationID = data["observationID"] as? String ?: "",
+                            UserID = data["userID"] as? String ?: "",
+                            Date = data["date"] as String ?: "",
+                            BirdName = data["birdName"] as? String ?: "",
+                            Amount = data["amount"] as? String ?: "",
+                            Location = location,
+                            Note = data["note"] as? String ?: "",
+                            PlaceName = data["placeName"] as? String ?: ""
+                        )
+
+                        ToolBox.usersObservations.add(observation)
+                    }
+
+                    populateObservationViews()
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("MyObservations", "Error fetching observations: $exception")
+                }
         }
+    }*/
 
-        // Add the inflated custom view to the linear layout
-        llObservationContainer.addView(observationView)
-        llObservationContainer.addView(line)
+    //==============================================================================================
+    //  Function Populates observation view dynamically
+    private fun populateObservationViews() {
+        llObservationContainer.removeAllViews()
+        val inflater = LayoutInflater.from(requireContext())
+
+        for (userObservation in ToolBox.usersObservations) {
+            val observationView = inflater.inflate(R.layout.my_observations_display_layout, null)
+            val line = inflater.inflate(R.layout.line, null)
+
+            observationView.findViewById<TextView>(R.id.tvBirdName).text =
+                userObservation.BirdName + " (x${userObservation.Amount})"
+
+            val latitude = userObservation.Location.latitude
+            val longitude = userObservation.Location.longitude
+
+            // Displaying location - should display location normal name
+            observationView.findViewById<TextView>(R.id.tvLocation).text =
+                userObservation.PlaceName + "\n" + "Latitude: $latitude, Longitude: $longitude"
+
+            observationView.findViewById<TextView>(R.id.tvDateSpotted).text =
+                userObservation.Date.toString()
+
+            if (userObservation.Note.isNotEmpty()) {
+                observationView.findViewById<TextView>(R.id.tvViewObsNote).text =
+                    userObservation.Note
+            } else {
+                observationView.findViewById<TextView>(R.id.tvViewObsNote).isVisible = false
+            }
+
+            // Other UI population code here
+            llObservationContainer.addView(observationView)
+            llObservationContainer.addView(line)
+        }
     }
 }
