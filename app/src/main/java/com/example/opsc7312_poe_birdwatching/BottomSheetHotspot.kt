@@ -10,6 +10,7 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import kotlin.math.*
 import android.graphics.Color
 import android.graphics.Typeface
 import android.location.Location
@@ -55,10 +56,15 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         const val TAG = "BottomSheetHotspot"
 
         private const val ARG_HEADING_TEXT = "arg_heading_text"
-        fun newInstance(headingText: String): BottomSheetHotspot {
+        private const val ARG_LAT = "arg_lat"
+        private const val ARG_LON = "arg_lon"
+
+        fun newInstance(headingText: String, lat: Double, lon: Double): BottomSheetHotspot {
             val fragment = BottomSheetHotspot()
             val args = Bundle()
             args.putString(ARG_HEADING_TEXT, headingText)
+            args.putDouble(ARG_LAT.toString(), lat)
+            args.putDouble(ARG_LON.toString(), lon)
             fragment.arguments = args
             return fragment
         }
@@ -155,6 +161,26 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         val inflater = LayoutInflater.from(bottomSheetView.context)
         var counter = 0
 
+        val filteredObservations = ToolBox.usersObservations.filter { observation ->
+            !observation.IsAtHotspot && areLocationsWithinDistance(
+                arguments?.getDouble(ARG_LAT)!!,
+                arguments?.getDouble(ARG_LON)!!,
+                observation.Location.latitude,
+                observation.Location.longitude,
+                0.5
+            )
+        }
+
+        val convertedSightings: List<SightingModel> = filteredObservations.map { userObs ->
+            SightingModel(
+                commonName = userObs.BirdName,
+                howMany = userObs.Amount,
+                date = userObs.Date,
+                lat = userObs.Location.latitude,
+                lng = userObs.Location.longitude
+            )
+        }
+
         if (sightings.isEmpty()) {
             totalSpeciesTextView.text = "No Species were found here"
             informationText.isVisible = false
@@ -228,6 +254,36 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
                 bottomSheetView.addView(line)
             }
         }
+    }
+
+    //Source: ChatGPT
+    fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val R = 6371 // Earth radius in kilometers
+
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
+
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return R * c
+    }
+
+    fun areLocationsWithinDistance(
+        lat1: Double, lon1: Double, lat2: Double, lon2: Double,
+        distanceKm: Double
+    ): Boolean {
+        val distance = haversine(
+            lat1,
+            lon1,
+            lat2,
+            lon2
+        )
+
+        return distance <= distanceKm
     }
 
     //==============================================================================================

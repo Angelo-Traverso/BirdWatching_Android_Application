@@ -348,7 +348,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         ToolBox.lng = destlon
 
         // Instance of bottomSheetFragment + setting location name
-        val bottomSheetFragment = BottomSheetHotspot.newInstance(locationName)
+        val bottomSheetFragment = BottomSheetHotspot.newInstance(locationName, destlat, destlon)
         bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
 
         bottomSheetFragment.setButtonClickListener {

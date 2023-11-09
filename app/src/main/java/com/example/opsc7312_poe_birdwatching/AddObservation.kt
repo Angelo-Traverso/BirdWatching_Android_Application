@@ -141,7 +141,7 @@ class AddObservation : AppCompatActivity(){
                 val dateFormat = SimpleDateFormat("dd-MM-yyyy") // Use the correct format
                 val dateInput = etWhen.text.toString().trim()
                 val birdName = etSelectSpecies.text.toString().trim()
-                val howMany = etHowMany.text.toString().trim()
+                val howMany = etHowMany.text.toString().trim().toInt()
                 val note = etNote.text.toString().trim()
 
                 val date = dateFormat.parse(dateInput)

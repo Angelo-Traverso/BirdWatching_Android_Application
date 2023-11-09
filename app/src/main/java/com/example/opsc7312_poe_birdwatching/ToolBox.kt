@@ -85,7 +85,7 @@ class ToolBox : Application() {
                                 UserID = data["userID"] as? String ?: "",
                                 Date = data["date"] as String ?: "",
                                 BirdName = data["birdName"] as? String ?: "",
-                                Amount = data["amount"] as? String ?: "",
+                                Amount = data["amount"] as? Int ?: 0,
                                 Location = location,
                                 Note = data["note"] as? String ?: "",
                                 PlaceName = data["placeName"] as? String ?: "",
