@@ -133,12 +133,14 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
         initializeMap()
     }
+
     // This method is called when getLocationData has completed.
     override fun onLocationDataReceived() {
         // Implement your logic here or leave it empty if not needed
         // For example, you can show a toast or log a message.
         Log.d("Hotpots", "Location data received")
     }
+
     //==============================================================================================
     //check for location perms, if granted get location and move map, if not ask
     private fun initializeMap() {
@@ -232,13 +234,14 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
     // Coroutine scope for getting nearby hotspots and user observations
     suspend fun doWork() = coroutineScope {
-        launch{
+        launch {
             getNearByHotspots()
         }
-        launch{
+        launch {
             addUserObs()
         }
     }
+
     //==============================================================================================
     // Show any user obs on the map in a different color
     private fun addUserObs() {
@@ -337,9 +340,20 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 destlat = lat
                 destlon = lng
 
-                // Now, update the content of the bottom sheet with the received data
+                // Updating the content of the bottom sheet with the received data
                 runOnUiThread {
                     bottomSheet.updateHotspotSightings(ToolBox.hotspotsSightings)
+
+                    // Bottom sheet click listener for naviagtion
+                    bottomSheet.setButtonClickListener {
+                        val intent = Intent(this@Hotpots, Navigation::class.java)
+                        intent.putExtra("LATITUDE", lat)
+                        intent.putExtra("LONGITUDE", lon)
+                        intent.putExtra("DEST_LAT", destlat)
+                        intent.putExtra("DEST_LNG", destlon)
+
+                        startActivity(intent)
+                    }
                 }
             }
         }
