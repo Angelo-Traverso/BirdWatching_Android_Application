@@ -231,15 +231,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
                 isUserObs.visibility = View.VISIBLE
 
                 bottomSheetView.addView(hotspotSightingView)
-
-                val line = View(bottomSheetView.context)
-                line.layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    2
-                )
-                line.alpha = 0.7f
-                line.setBackgroundColor(Color.BLACK)
-                bottomSheetView.addView(line)
             }
 
 
@@ -300,16 +291,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
                 // Add the included layout to the bottom sheet
                 bottomSheetView.addView(hotspotSightingView)
-
-                // Add a line separator between sightings
-                val line = View(bottomSheetView.context)
-                line.layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    2
-                )
-                line.alpha = 0.7f
-                line.setBackgroundColor(Color.BLACK)
-                bottomSheetView.addView(line)
             }
         }
     }

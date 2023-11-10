@@ -1,64 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
-    <LinearLayout
-        android:id="@+id/linearISUserObs"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tvIsUserObs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:text="User Observation"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:textColor="@color/tab_indicator"
+            app:drawableStartCompat="@drawable/baseline_circle_24"
+            app:drawableTint="@color/tab_indicator" />
 
-    <TextView
-        android:id="@+id/tvCommonName"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="Something Bird"
-        android:layout_marginStart="8dp"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/linearISUserObs"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvIsUserObs"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:text="User Observation"
-        android:visibility="gone"
-        android:textColor="@color/tab_indicator"
-        app:drawableStartCompat="@drawable/baseline_circle_24"
-        app:drawableTint="@color/tab_indicator" />
+            <TextView
+                android:id="@+id/tvCommonName"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="Something Bird"
+                android:layout_marginStart="8dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tvHowMany"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="HowMany: 7"
+            android:alpha="0.7"
+            android:layout_below="@+id/linearISUserObs"
+            android:layout_marginStart="13dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tvHowMany"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="HowMany: 7"
-        android:alpha="0.7"
-        android:layout_below="@+id/linearISUserObs"
-        android:layout_marginStart="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvDate"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="temp"
+            android:alpha="0.7"
+            android:layout_marginBottom="16dp"
+            android:layout_below="@+id/tvHowMany"
+            android:layout_marginStart="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="temp"
-        android:alpha="0.7"
-        android:layout_below="@+id/tvHowMany"
-        android:layout_marginStart="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
-</RelativeLayout>
+</androidx.cardview.widget.CardView>
