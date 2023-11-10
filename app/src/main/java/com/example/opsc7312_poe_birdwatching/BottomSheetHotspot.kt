@@ -133,7 +133,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
         // Sets peek height of sheet
-        bottomSheetBehavior.peekHeight = 250
+        bottomSheetBehavior.peekHeight = 400
 
         informationText = view.findViewById(R.id.tvHotspotInformation)
         totalSpeciesTextView = view.findViewById(R.id.tvNumOfSpecies)
@@ -147,7 +147,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         }
 
         // Display the sightings in the bottom sheet
-        displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotsSightings)
+        //displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotsSightings)
     }
     fun updateHotspotSightings(sightings: List<SightingModel>) {
         // Update the content of the bottom sheet with the received hotspot sightings
@@ -165,6 +165,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         Log.d("Display!!!!", "Display called")
         val inflater = LayoutInflater.from(bottomSheetView.context)
         var counter = 0
+        var obsCounter = 0
 
         val filteredObservations = ToolBox.usersObservations.filter { observation ->
             observation.IsAtHotspot && areLocationsWithinDistance(
@@ -186,16 +187,68 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             )
         }
 
-        if (sightings.isEmpty()) {
+        if (sightings.isEmpty() && convertedSightings.isEmpty()) {
             totalSpeciesTextView.text = "No Species were found here"
             informationText.isVisible = false
         } else {
+
+            Log.d("LoopDebug", "Converted Sightings Size: ${convertedSightings.size}")
+
+            for (userObs in convertedSightings) {
+                val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+
+                layoutParams.setMargins(0, 16, 0, 0)
+                hotspotSightingView.layoutParams = layoutParams
+
+                val commonNameTextView =
+                    hotspotSightingView.findViewById<TextView>(R.id.tvCommonName)
+                val howManyTextView = hotspotSightingView.findViewById<TextView>(R.id.tvHowMany)
+                val dateTextView = hotspotSightingView.findViewById<TextView>(R.id.tvDate)
+                val isUserObs = hotspotSightingView.findViewById<TextView>(R.id.tvIsUserObs)
+
+                val commonNameText = "Common Name: "
+                val italicCommonName = SpannableString(userObs.commonName)
+                italicCommonName.setSpan(
+                    StyleSpan(Typeface.ITALIC),
+                    0,
+                    italicCommonName.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                // Combine "Common Name: " and italicized common name
+                val spannableCombined =
+                    SpannableStringBuilder().append(commonNameText).append(italicCommonName)
+
+                // Set the sighting information in the included layout
+                commonNameTextView.text = spannableCombined
+                howManyTextView.text = "How Many: ${userObs.howMany}"
+                dateTextView.text = "Date: ${userObs.date}"
+
+                isUserObs.visibility = View.VISIBLE
+
+                bottomSheetView.addView(hotspotSightingView)
+
+                val line = View(bottomSheetView.context)
+                line.layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    2
+                )
+                line.alpha = 0.7f
+                line.setBackgroundColor(Color.BLACK)
+                bottomSheetView.addView(line)
+            }
+
+
             // Set number of species text
             totalSpeciesTextView.text = "${sightings.count()} species"
 
             //for every sighting
             for (sighting in sightings) {
-                counter++
+               // counter++
                 val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
 
                 // Inflate the hotspot_sighting layout

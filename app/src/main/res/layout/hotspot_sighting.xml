@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
+    <LinearLayout
+        android:id="@+id/linearISUserObs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
     <TextView
         android:id="@+id/tvCommonName"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:text="Something Bird"
@@ -15,11 +24,27 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/tvIsUserObs"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="User Observation"
+        android:visibility="gone"
+        android:textColor="@color/tab_indicator"
+        app:drawableStartCompat="@drawable/baseline_circle_24"
+        app:drawableTint="@color/tab_indicator" />
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/tvHowMany"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:text="HowMany: 7"
         android:alpha="0.7"
+        android:layout_below="@+id/linearISUserObs"
         android:layout_marginStart="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -30,9 +55,10 @@
         android:textSize="16sp"
         android:text="temp"
         android:alpha="0.7"
+        android:layout_below="@+id/tvHowMany"
         android:layout_marginStart="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 
-</LinearLayout>
+</RelativeLayout>
