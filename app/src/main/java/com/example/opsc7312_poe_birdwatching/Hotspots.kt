@@ -133,7 +133,12 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
         initializeMap()
     }
-
+    // This method is called when getLocationData has completed.
+    override fun onLocationDataReceived() {
+        // Implement your logic here or leave it empty if not needed
+        // For example, you can show a toast or log a message.
+        Log.d("Hotpots", "Location data received")
+    }
     //==============================================================================================
     //check for location perms, if granted get location and move map, if not ask
     private fun initializeMap() {
@@ -209,6 +214,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         mMap.setOnMarkerClickListener { marker ->
             // Setting location name
             locationName = marker.title.toString()
+
             // Getting location data to load in bottom sheet
             getLocationData(marker.position.latitude, marker.position.longitude, marker)
             true
@@ -310,37 +316,66 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
-    //method to query eBird and get data for a hotspot
     private fun getLocationData(lat: Double, lng: Double, marker: Marker) {
-
         val apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
-        val bottomSheet = BottomSheetHotspot()
-        bottomSheet.setBottomSheetHeadingText(marker.title.toString())
+        val bottomSheet = BottomSheetHotspot.newInstance(marker.title.toString(), lat, lng)
+        bottomSheet.show(supportFragmentManager, BottomSheetHotspot.TAG)
 
-        //using threading to query external resources
+        // Using threading to query external resources in the background
         thread {
             scope.launch {
                 ToolBox.hotspotsSightings = apiWorker.getHotspotBirdData(lat, lng)
 
                 destlat = lat
                 destlon = lng
-                // Call the callback to show the bottom sheet and start the intent
+
+                // Now, update the content of the bottom sheet with the received data
                 runOnUiThread {
-                    onLocationDataReceived()
+                    bottomSheet.updateHotspotSightings(ToolBox.hotspotsSightings)
                 }
             }
         }
     }
 
+/*    // Add a method to update the content of the bottom sheet
+    private fun updateBottomSheetContent(bottomSheet: BottomSheetHotspot) {
+        // Check if the data retrieval is complete
+        if (isDataReceived) {
+            // Update the content of the bottom sheet with the hotspot sightings
+            bottomSheet.
+
+            // Enable user interaction with the bottom sheet
+            bottomSheet.setButtonClickListener {
+                val intent = Intent(this, Navigation::class.java)
+                intent.putExtra("LATITUDE", lat)
+                intent.putExtra("LONGITUDE", lon)
+                intent.putExtra("DEST_LAT", destlat)
+                intent.putExtra("DEST_LNG", destlon)
+
+                ToolBox.lat = destlat
+                ToolBox.lng = destlon
+
+                val where = (Location(LocationManager.GPS_PROVIDER).apply {
+                    latitude = destlat
+                    longitude = destlon
+                })
+                startActivity(intent)
+            }
+        } else {
+            // Data retrieval is not complete, you may show a loading indicator or handle accordingly
+        }
+    }*/
     //==============================================================================================
     // This method is called when getLocationData has completed.
-    //when the data has been saved then load the bottom fragment
-    override fun onLocationDataReceived() {
+//...
+
+    // This method is called when getLocationData has completed.
+    private fun onLocationDataReceived(lat: Double, lon: Double) {
         // This method is called when getLocationData has completed.
         val intent = Intent(this, Navigation::class.java)
-        intent.putExtra("LATITUDE", this.lat)
-        intent.putExtra("LONGITUDE", this.lon)
+        intent.putExtra("LATITUDE", lat)
+        intent.putExtra("LONGITUDE", lon)
         intent.putExtra("DEST_LAT", destlat)
         intent.putExtra("DEST_LNG", destlon)
 

@@ -30,6 +30,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -148,7 +149,11 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         // Display the sightings in the bottom sheet
         displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotsSightings)
     }
-
+    fun updateHotspotSightings(sightings: List<SightingModel>) {
+        // Update the content of the bottom sheet with the received hotspot sightings
+        val bottomSheetLayout = view?.findViewById<LinearLayout>(R.id.linearViewHotspotInformation)
+        bottomSheetLayout?.let { displaySightingsInBottomSheet(it, sightings) }
+    }
     //==============================================================================================
     // Dynamically displays hotspot data
     @SuppressLint("InflateParams")
