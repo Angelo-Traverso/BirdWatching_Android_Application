@@ -167,12 +167,12 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         var counter = 0
 
         val filteredObservations = ToolBox.usersObservations.filter { observation ->
-            !observation.IsAtHotspot && areLocationsWithinDistance(
+            observation.IsAtHotspot && areLocationsWithinDistance(
                 arguments?.getDouble(ARG_LAT)!!,
                 arguments?.getDouble(ARG_LON)!!,
                 observation.Location.latitude,
                 observation.Location.longitude,
-                0.5
+                0.1
             )
         }
 
@@ -235,10 +235,10 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
                 hotspotSightingView.setOnClickListener() {
                     val intent = Intent(requireContext(), Navigation::class.java)
-                    intent.putExtra("LATITUDE", ToolBox.lat)
-                    intent.putExtra("LONGITUDE", ToolBox.lng)
-                    intent.putExtra("DEST_LAT", sighting.lat)
-                    intent.putExtra("DEST_LNG", sighting.lng)
+                    intent.putExtra("LATITUDE", ToolBox.currentLat)
+                    intent.putExtra("LONGITUDE", ToolBox.currentLng)
+                    intent.putExtra("DEST_LAT", ToolBox.destlat)
+                    intent.putExtra("DEST_LNG", ToolBox.destlng)
 
                     startActivity(intent)
 

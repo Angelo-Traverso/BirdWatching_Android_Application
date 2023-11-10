@@ -146,14 +146,12 @@ class AddObservation : AppCompatActivity(){
 
                 val date = dateFormat.parse(dateInput)
 
-                var a = ToolBox.lat
-
                 var location = userLocation
                 if (ToolBox.newObsOnHotspot)
                 {
                     location = (Location(LocationManager.GPS_PROVIDER).apply {
-                        latitude = ToolBox.lat
-                        longitude = ToolBox.lng
+                        latitude = ToolBox.newObslat
+                        longitude = ToolBox.newObslng
                     })
                 }
 

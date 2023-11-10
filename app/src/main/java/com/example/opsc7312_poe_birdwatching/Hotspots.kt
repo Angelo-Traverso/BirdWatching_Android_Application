@@ -161,9 +161,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         }
-
-        ToolBox.lat = this.lat
-        ToolBox.lng = this.lon
     }
 
     private fun loadMapStyle() {
@@ -205,6 +202,9 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             this.lat = lat
             this.lon = lon
 
+            ToolBox.currentLat = lat
+            ToolBox.currentLng = lon
+
             //move camera
             val userLocation = LatLng(lat, lon)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
@@ -215,11 +215,18 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             // Setting location name
             locationName = marker.title.toString()
 
+            ToolBox.destlat = marker.position.latitude
+            ToolBox.destlng = marker.position.longitude
+
+            ToolBox.newObslat = marker.position.latitude
+            ToolBox.newObslng = marker.position.longitude
+
             // Getting location data to load in bottom sheet
             getLocationData(marker.position.latitude, marker.position.longitude, marker)
             true
         }
     }
+
     //---markers
     //region
 
@@ -365,35 +372,37 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         } else {
             // Data retrieval is not complete, you may show a loading indicator or handle accordingly
         }
-    }*/
+
     //==============================================================================================
     // This method is called when getLocationData has completed.
 //...
 
-    // This method is called when getLocationData has completed.
-    private fun onLocationDataReceived(lat: Double, lon: Double) {
-        // This method is called when getLocationData has completed.
-        val intent = Intent(this, Navigation::class.java)
-        intent.putExtra("LATITUDE", lat)
-        intent.putExtra("LONGITUDE", lon)
-        intent.putExtra("DEST_LAT", destlat)
-        intent.putExtra("DEST_LNG", destlon)
+//    // This method is called when getLocationData has completed.
+//    private fun onLocationDataReceived(lat: Double, lon: Double) {
+//        // This method is called when getLocationData has completed.
+//        val intent = Intent(this, Navigation::class.java)
+//        intent.putExtra("LATITUDE", lat)
+//        intent.putExtra("LONGITUDE", lon)
+//        intent.putExtra("DEST_LAT", destlat)
+//        intent.putExtra("DEST_LNG", destlon)
+//
+//        ToolBox.lat = destlat
+//        ToolBox.lng = destlon
+//
+//        // Instance of bottomSheetFragment + setting location name
+//        val bottomSheetFragment = BottomSheetHotspot.newInstance(locationName, destlat, destlon)
+//        bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
+//
+//        bottomSheetFragment.setButtonClickListener {
+//            val where = (Location(LocationManager.GPS_PROVIDER).apply {
+//                latitude = destlat
+//                longitude = destlon
+//            })
+//            startActivity(intent)
+//        }
+//    }
 
-        ToolBox.lat = destlat
-        ToolBox.lng = destlon
-
-        // Instance of bottomSheetFragment + setting location name
-        val bottomSheetFragment = BottomSheetHotspot.newInstance(locationName, destlat, destlon)
-        bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
-
-        bottomSheetFragment.setButtonClickListener {
-            val where = (Location(LocationManager.GPS_PROVIDER).apply {
-                latitude = destlat
-                longitude = destlon
-            })
-            startActivity(intent)
-        }
-    }
+ */
 
     //==============================================================================================
     // Requests location permission

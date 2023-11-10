@@ -45,9 +45,18 @@ class ToolBox : Application() {
         var populated = false
 
         //var for hotpsot location when adding new obs to it
-        var lat = 0.0
-        var lng = 0.0
+
         var newObsOnHotspot = false;
+
+        var newObslat = 0.0
+        var newObslng = 0.0
+        var destlat = 0.0
+        var destlng = 0.0
+        var currentLat = 0.0
+        var currentLng = 0.0
+
+//        var lat = 0.0
+//        var lng = 0.0
 
         //==============================================================================================
         //  Function fetches all user observations
@@ -74,7 +83,7 @@ class ToolBox : Application() {
                         UserID = data["userID"] as? String ?: "",
                         Date = data["date"] as String ?: "",
                         BirdName = data["birdName"] as? String ?: "",
-                        Amount = data["amount"] as? Int ?: 0,
+                        Amount = (data["amount"] as? Number ?: 0).toInt(),
                         Location = location,
                         Note = data["note"] as? String ?: "",
                         PlaceName = data["placeName"] as? String ?: "",

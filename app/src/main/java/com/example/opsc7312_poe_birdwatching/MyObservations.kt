@@ -39,8 +39,8 @@ class MyObservations : Fragment() {
 
         llObservationContainer = view.findViewById(R.id.myObservationContainer)
 
-        this.lat = ToolBox.lat
-        this.lng = ToolBox.lng
+//        this.lat = ToolBox.destlat
+//        this.lng = ToolBox.destlng
 
         // Fetch user observations and populate the list
         //fetchUserObservations()
@@ -80,8 +80,8 @@ class MyObservations : Fragment() {
 
             observationView.setOnClickListener(){
                 val intent = Intent(requireContext(), Navigation::class.java)
-                intent.putExtra("LATITUDE", this.lat)
-                intent.putExtra("LONGITUDE", this.lng)
+                intent.putExtra("LATITUDE", ToolBox.currentLat)
+                intent.putExtra("LONGITUDE", ToolBox.currentLng)
                 intent.putExtra("DEST_LAT", userObservation.Location.latitude)
                 intent.putExtra("DEST_LNG", userObservation.Location.longitude)
 
