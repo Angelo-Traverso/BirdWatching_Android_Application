@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.slider.RangeSlider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -42,6 +43,8 @@ class UserSettings : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_user_settings, container, false)
 
+        val mAuth = FirebaseAuth.getInstance()
+        val currentUser = mAuth.currentUser
 
         // TextViews
         tvUserName = view.findViewById(R.id.tvUserName)
@@ -50,7 +53,7 @@ class UserSettings : Fragment() {
        tvUserName.text =
           "${ToolBox.users[0].Name} ${ToolBox.users[0].Surname}"
 
-        //tvUserEmail.text = "${ToolBox.users[ToolBox.userID].Email}"
+        tvUserEmail.text = "${currentUser?.email}"
 
         //----SLIDER----
         sliderDistance = view.findViewById(R.id.sliderDistance)

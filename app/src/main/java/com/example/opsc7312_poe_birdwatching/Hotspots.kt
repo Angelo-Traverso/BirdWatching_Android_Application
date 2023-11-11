@@ -344,7 +344,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 runOnUiThread {
                     bottomSheet.updateHotspotSightings(ToolBox.hotspotsSightings)
 
-                    // Bottom sheet click listener for naviagtion
+                    // Bottom sheet click listener for navigation
                     bottomSheet.setButtonClickListener {
                         val intent = Intent(this@Hotpots, Navigation::class.java)
                         intent.putExtra("LATITUDE", lat)

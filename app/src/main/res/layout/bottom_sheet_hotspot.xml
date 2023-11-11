@@ -64,37 +64,33 @@
         android:id="@+id/linNavigateAddButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
         android:weightSum="2"
         >
 
-    <Button
+    <android.widget.Button
         android:id="@+id/btnStartNavigation"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/tab_indicator"
-        android:drawableEnd="@drawable/navigate_24px"
-        android:drawableTint="@color/white"
+
+
         android:text="Navigate"
         android:textColor="@color/white"
-        style="?android:attr/buttonBarButtonStyle" />
+        android:background="@drawable/navigate_button_background"
+        />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/btnAddObs"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/tab_indicator"
-        android:drawableEnd="@drawable/baseline_add_24"
-        android:drawableTint="@color/white"
+
+        android:background="@drawable/add_sighting_button_background"
+
         android:text="Add Sighting"
         android:textColor="@color/white"
-        style="?android:attr/buttonBarButtonStyle" />
+        />
 
     </LinearLayout>
 
