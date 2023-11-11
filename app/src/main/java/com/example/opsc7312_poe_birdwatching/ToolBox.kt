@@ -55,9 +55,6 @@ class ToolBox : Application() {
         var currentLat = 0.0
         var currentLng = 0.0
 
-//        var lat = 0.0
-//        var lng = 0.0
-
         //==============================================================================================
         //  Function fetches all user observations
         fun fetchUserObservations() {

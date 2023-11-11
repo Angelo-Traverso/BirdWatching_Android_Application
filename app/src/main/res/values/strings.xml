@@ -62,5 +62,6 @@
     <string name="SelectSpecies">Select a species</string>
     <string name="SaveObservation">Save Observation</string>
     <string name="title_activity_navigation">Navigation</string>
+    <string name="daily_challenges">Daily Challenges</string>
 
 </resources>
