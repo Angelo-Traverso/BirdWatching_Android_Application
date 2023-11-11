@@ -11,4 +11,12 @@
         <!-- Customize box background color -->
         <item name="boxBackgroundColor">@color/white</item>
     </style>
+
+    <style name="bottomSheetButtons" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@color/tab_indicator</item>
+    </style>
+
+    <style name="bottomSheetAddSighting" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:backgroundTint">@color/gray</item>
+    </style>
 </resources>

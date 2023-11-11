@@ -29,6 +29,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
@@ -93,7 +94,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         }
 
         //add signing button
-        val addSightingButton = view.findViewById<MaterialButton>(R.id.btnAddObs)
+        val addSightingButton = view.findViewById<Button>(R.id.btnAddObs)
         addSightingButton.setOnClickListener {
             ToolBox.newObsOnHotspot = true;
             val intent = Intent(requireContext(), AddObservation::class.java)
@@ -106,6 +107,9 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     //==============================================================================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//
+//        val addButton = view.findViewById<Button>(R.id.btnAddObs)
+//        addButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray))
 
         // Testing execution order for view created vs displaySightingsInBottomSheet
         Log.d("View!!!!", "View Created")
@@ -133,7 +137,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
         // Sets peek height of sheet
-        bottomSheetBehavior.peekHeight = 400
+        bottomSheetBehavior.peekHeight = 370
 
         informationText = view.findViewById(R.id.tvHotspotInformation)
         totalSpeciesTextView = view.findViewById(R.id.tvNumOfSpecies)
