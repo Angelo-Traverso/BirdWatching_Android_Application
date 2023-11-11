@@ -27,9 +27,6 @@ import java.sql.Date
 
 class MyObservations : Fragment() {
     private lateinit var llObservationContainer: LinearLayout
-    var lat = 0.0
-    var lng = 0.0
-
 
     //==============================================================================================
     override fun onCreateView(
@@ -54,7 +51,10 @@ class MyObservations : Fragment() {
         llObservationContainer.removeAllViews()
         val inflater = LayoutInflater.from(requireContext())
 
-        for (userObservation in ToolBox.usersObservations) {
+        val filteredObservations =
+            ToolBox.usersObservations.filter { it.UserID == ToolBox.users[0].UserID}
+
+        for (userObservation in filteredObservations) {
             val observationView = inflater.inflate(R.layout.my_observations_display_layout, null)
             val line = inflater.inflate(R.layout.line, null)
 

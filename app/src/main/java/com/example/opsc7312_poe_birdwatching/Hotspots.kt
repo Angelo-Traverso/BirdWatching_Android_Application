@@ -150,6 +150,10 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             getCurrentLocation { lat, lon ->
                 this.lat = lat
                 this.lon = lon
+
+                ToolBox.currentLat = lat
+                ToolBox.currentLng = lon
+
                 getNearByHotspots()
                 addUserObs()
                 val userLocation = LatLng(lat, lon)
@@ -347,8 +351,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                     // Bottom sheet click listener for navigation
                     bottomSheet.setButtonClickListener {
                         val intent = Intent(this@Hotpots, Navigation::class.java)
-                        intent.putExtra("LATITUDE", lat)
-                        intent.putExtra("LONGITUDE", lon)
+                        intent.putExtra("LATITUDE", ToolBox.currentLat)
+                        intent.putExtra("LONGITUDE", ToolBox.currentLng)
                         intent.putExtra("DEST_LAT", destlat)
                         intent.putExtra("DEST_LNG", destlon)
 
@@ -358,65 +362,6 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
             }
         }
     }
-
-/*    // Add a method to update the content of the bottom sheet
-    private fun updateBottomSheetContent(bottomSheet: BottomSheetHotspot) {
-        // Check if the data retrieval is complete
-        if (isDataReceived) {
-            // Update the content of the bottom sheet with the hotspot sightings
-            bottomSheet.
-
-            // Enable user interaction with the bottom sheet
-            bottomSheet.setButtonClickListener {
-                val intent = Intent(this, Navigation::class.java)
-                intent.putExtra("LATITUDE", lat)
-                intent.putExtra("LONGITUDE", lon)
-                intent.putExtra("DEST_LAT", destlat)
-                intent.putExtra("DEST_LNG", destlon)
-
-                ToolBox.lat = destlat
-                ToolBox.lng = destlon
-
-                val where = (Location(LocationManager.GPS_PROVIDER).apply {
-                    latitude = destlat
-                    longitude = destlon
-                })
-                startActivity(intent)
-            }
-        } else {
-            // Data retrieval is not complete, you may show a loading indicator or handle accordingly
-        }
-
-    //==============================================================================================
-    // This method is called when getLocationData has completed.
-//...
-
-//    // This method is called when getLocationData has completed.
-//    private fun onLocationDataReceived(lat: Double, lon: Double) {
-//        // This method is called when getLocationData has completed.
-//        val intent = Intent(this, Navigation::class.java)
-//        intent.putExtra("LATITUDE", lat)
-//        intent.putExtra("LONGITUDE", lon)
-//        intent.putExtra("DEST_LAT", destlat)
-//        intent.putExtra("DEST_LNG", destlon)
-//
-//        ToolBox.lat = destlat
-//        ToolBox.lng = destlon
-//
-//        // Instance of bottomSheetFragment + setting location name
-//        val bottomSheetFragment = BottomSheetHotspot.newInstance(locationName, destlat, destlon)
-//        bottomSheetFragment.show(supportFragmentManager, BottomSheetHotspot.TAG)
-//
-//        bottomSheetFragment.setButtonClickListener {
-//            val where = (Location(LocationManager.GPS_PROVIDER).apply {
-//                latitude = destlat
-//                longitude = destlon
-//            })
-//            startActivity(intent)
-//        }
-//    }
-
- */
 
     //==============================================================================================
     // Requests location permission
