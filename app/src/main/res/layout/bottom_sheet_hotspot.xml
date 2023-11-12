@@ -28,9 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginStart="8dp"
-            android:textSize="16sp"
             android:text="Monte Vista - Plattekloof Glen"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <View
             android:layout_width="0dp"
@@ -65,32 +65,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:weightSum="2"
-        >
+        android:weightSum="2">
 
-    <android.widget.Button
-        android:id="@+id/btnStartNavigation"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
+        <android.widget.Button
+            android:id="@+id/btnStartNavigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
 
 
-        android:text="Navigate"
-        android:textColor="@color/white"
-        android:background="@drawable/navigate_button_background"
-        />
+            android:background="@drawable/navigate_button_background"
+            android:text="Navigate"
+            android:textColor="@color/white" />
 
-    <android.widget.Button
-        android:id="@+id/btnAddObs"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
+        <android.widget.Button
+            android:id="@+id/btnAddObs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
 
-        android:background="@drawable/add_sighting_button_background"
+            android:background="@drawable/add_sighting_button_background"
 
-        android:text="Add Sighting"
-        android:textColor="@color/white"
-        />
+            android:text="Add Sighting"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
@@ -105,16 +102,19 @@
         android:textColor="@color/black"
         android:textSize="18sp" />
 
-    <ScrollView
-        android:id="@+id/scrollInformation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/linearViewHotspotInformation"
+        <ScrollView
+            android:id="@+id/scrollInformation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:fillViewport="true"
+            android:nestedScrollingEnabled="true">
+
+            <LinearLayout
+                android:id="@+id/linearViewHotspotInformation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
 
 </LinearLayout>
