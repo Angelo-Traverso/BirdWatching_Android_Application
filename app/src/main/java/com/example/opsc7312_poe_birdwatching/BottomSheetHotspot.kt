@@ -65,35 +65,35 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             val fragment = BottomSheetHotspot()
             val args = Bundle()
             args.putString(ARG_HEADING_TEXT, headingText)
-            args.putDouble(ARG_LAT.toString(), lat)
-            args.putDouble(ARG_LON.toString(), lon)
+            args.putDouble(ARG_LAT, lat)
+            args.putDouble(ARG_LON, lon)
             fragment.arguments = args
             return fragment
         }
     }
 
     //==============================================================================================
-    //view created
+    // View created
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_hotspot, container, false)
 
-        // start navigation small button
+        // Start navigation small button
         val startNavigationSmallButton = view.findViewById<ImageButton>(R.id.btnNavigationSmall)
         startNavigationSmallButton.setOnClickListener {
             // Notify the listener when the button is clicked
             buttonClickListener?.invoke()
         }
 
-        // start navigation button
+        // Start navigation button
         val startNavigationButton = view.findViewById<Button>(R.id.btnStartNavigation)
         startNavigationButton.setOnClickListener {
             // Notify the listener when the button is clicked
             buttonClickListener?.invoke()
         }
 
-        //add signing button
+        // Add signing button
         val addSightingButton = view.findViewById<Button>(R.id.btnAddObs)
         addSightingButton.setOnClickListener {
             ToolBox.newObsOnHotspot = true;
@@ -107,9 +107,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     //==============================================================================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//
-//        val addButton = view.findViewById<Button>(R.id.btnAddObs)
-//        addButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray))
 
         // Testing execution order for view created vs displaySightingsInBottomSheet
         Log.d("View!!!!", "View Created")
@@ -151,7 +148,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         }
 
         // Display the sightings in the bottom sheet
-        //displaySightingsInBottomSheet(bottomSheetLayout, ToolBox.hotspotsSightings)
     }
     fun updateHotspotSightings(sightings: List<SightingModel>) {
         // Update the content of the bottom sheet with the received hotspot sightings
@@ -165,11 +161,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         bottomSheetView: LinearLayout,
         sightings: List<SightingModel>
     ) {
-        // Testing execution order for view created vs displaySightingsInBottomSheet
-        Log.d("Display!!!!", "Display called")
         val inflater = LayoutInflater.from(bottomSheetView.context)
-        var counter = 0
-        var obsCounter = 0
 
         val filteredObservations = ToolBox.usersObservations.filter { observation ->
             observation.IsAtHotspot && areLocationsWithinDistance(
@@ -195,8 +187,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             totalSpeciesTextView.text = "No Species were found here"
             informationText.isVisible = false
         } else {
-
-            Log.d("LoopDebug", "Converted Sightings Size: ${convertedSightings.size}")
 
             for (userObs in convertedSightings) {
                 val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
@@ -241,14 +231,12 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             // Set number of species text
             totalSpeciesTextView.text = "${sightings.count()} species"
 
-            //for every sighting
+            // For every sighting
             for (sighting in sightings) {
-               // counter++
+
                 val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
 
-                // Inflate the hotspot_sighting layout
-                //val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
-                // Set margins
+                // Set margins for layout
                 val layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -274,7 +262,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
                 // Combine "Common Name: " and italicized common name
                 val spannableCombined =
                     SpannableStringBuilder().append(commonNameText).append(italicCommonName)
-                val spanString = SpannableString(sighting.commonName)
 
                 // Set the sighting information in the included layout
                 commonNameTextView.text = spannableCombined
@@ -336,7 +323,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     }
 
     //==============================================================================================
-    //Button click listener for button on sheet
+    // Button click listener for button on sheet
     fun setButtonClickListener(listener: () -> Unit) {
         this.buttonClickListener = listener
     }

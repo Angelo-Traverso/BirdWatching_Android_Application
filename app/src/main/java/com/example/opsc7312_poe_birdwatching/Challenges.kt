@@ -16,13 +16,12 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.example.opsc7312_poe_birdwatching.Models.Challenge_Object
-import java.time.LocalDate
+import com.example.opsc7312_poe_birdwatching.Models.ChallengeObject
 import java.util.*
 import java.text.SimpleDateFormat
 
 class Challenges : Fragment() {
-    private var challengeList: List<Challenge_Object> = mutableListOf()
+    private var challengeList: List<ChallengeObject> = mutableListOf()
 
     //==============================================================================================
     override fun onCreateView(
@@ -35,7 +34,7 @@ class Challenges : Fragment() {
         challengeList = checkProgress()
 
         val linearLayout =
-            view.findViewById<LinearLayout>(R.id.fragment_container) // Change to the correct ID
+            view.findViewById<LinearLayout>(R.id.fragment_container)
 
         val tvPoints = view.findViewById<TextView>(R.id.tvPoints)
 
@@ -65,12 +64,10 @@ class Challenges : Fragment() {
                 activity?.onBackPressed()
             }
 
+            // Setting values
             pointSToGet.text = "+${challenge.pointsToGet} points"
-
             tvChallengeDescription.text = challenge.description
-
             progressBar.max = challenge.required
-
             progressBar.progress = challenge.progress
 
             if (challenge.progress > challenge.required) {
@@ -86,7 +83,8 @@ class Challenges : Fragment() {
             params.topMargin = 64
             challengeItemView.layoutParams = params
 
-            linearLayout.addView(challengeItemView) // Add the challenge item to the container
+            // Adding the challenge item to the container
+            linearLayout.addView(challengeItemView)
         }
 
         // Setting total points earned
@@ -95,12 +93,12 @@ class Challenges : Fragment() {
     }
 
     //==============================================================================================
-    //create the challenges and check the users progress
-    private fun checkProgress(): List<Challenge_Object> {
-        val challenges = mutableListOf<Challenge_Object>()
+    // Create the challenges and check the users progress
+    private fun checkProgress(): List<ChallengeObject> {
+        val challenges = mutableListOf<ChallengeObject>()
         var pointsToGet = 0
 
-        //spot 3 birds
+        // Spot 3 birds
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val currentDate = Date()
 
@@ -111,23 +109,23 @@ class Challenges : Fragment() {
         val uniqueBirdNames = filteredObservations.distinctBy { it.BirdName }
         val uniqueBirdCount = uniqueBirdNames.size
 
-        //travel to two hotspots
+        // Travel to two hotspots
         if (!ChallengeModel.userObservationsBool && uniqueBirdCount >= 3) {
             pointsToGet = 15
             ChallengeModel.userObservationsBool = true
         }
 
-        challenges.add(Challenge_Object("Spot three bird species", uniqueBirdCount, 3, 15, pointsToGet))
+        challenges.add(ChallengeObject("Spot three bird species", uniqueBirdCount, 3, 15, pointsToGet))
         pointsToGet = 0
 
-        //travel to two hotspots
+        // Travel to two hotspots
         if (!ChallengeModel.tripsCompletedBool && ChallengeModel.tripsCompleted >= 2) {
             pointsToGet = 20
             ChallengeModel.tripsCompletedBool = true
         }
 
         challenges.add(
-            Challenge_Object(
+            ChallengeObject(
                 "Travel to two hotspots",
                 ChallengeModel.tripsCompleted,
                 2,
@@ -137,14 +135,14 @@ class Challenges : Fragment() {
         )
         pointsToGet = 0
 
-        //duck hunt level
+        // Duck hunt level
         if (!ChallengeModel.topRoundInDuckHuntBool && ChallengeModel.topRoundInDuckHunt >= 7) {
             pointsToGet = 10
             ChallengeModel.topRoundInDuckHuntBool = true
         }
 
         challenges.add(
-            Challenge_Object(
+            ChallengeObject(
                 "Reach the 7th round in duck hunt",
                 ChallengeModel.topRoundInDuckHunt,
                 7,

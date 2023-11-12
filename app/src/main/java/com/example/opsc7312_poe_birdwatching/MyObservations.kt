@@ -9,10 +9,7 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.content.Intent
-import android.content.Intent.getIntent
-import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +17,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.example.opsc7312_poe_birdwatching.Models.UserObservation
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import java.sql.Date
 
 class MyObservations : Fragment() {
     private lateinit var llObservationContainer: LinearLayout
@@ -36,11 +29,7 @@ class MyObservations : Fragment() {
 
         llObservationContainer = view.findViewById(R.id.myObservationContainer)
 
-//        this.lat = ToolBox.destlat
-//        this.lng = ToolBox.destlng
-
         // Fetch user observations and populate the list
-        //fetchUserObservations()
         populateObservationViews()
         return view
     }

@@ -16,36 +16,29 @@ import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-
-import java.util.Date
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 
 class ToolBox : Application() {
 
     companion object {
         var userRegion = ""
 
-        //will only store one user at a time
+        // Will only store one user at a time
         var users = arrayListOf<UsersModel>()
 
-        //stores all entries of users observations
+        // Stores all entries of users observations
         var usersObservations = arrayListOf<UserObservation>()
 
-        //used to store the sightings for a specific observation, changed for every hotpost pressed
+        // Used to store the sightings for a specific observation, changed for every hotpost pressed
         var hotspotsSightings: List<SightingModel> = mutableListOf()
 
-        //used to store the birds found in a region, session based
+        // Used to store the birds found in a region, session based
         var birdsInTheRegion: List<BirdModel> = mutableListOf()
 
-        //var for observers
+        // Var for observers
         var populated = false
 
-        //var for hotpsot location when adding new obs to it
-
+        // Var for hotspot location when adding new obs to it
         var newObsOnHotspot = false;
 
         var newObslat = 0.0
@@ -96,6 +89,4 @@ class ToolBox : Application() {
             }
         }
     }
-
-
 }

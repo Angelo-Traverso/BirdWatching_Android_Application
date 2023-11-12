@@ -9,9 +9,7 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.content.Intent
-import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -20,13 +18,10 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.sql.Date
 
 class SignIn : Fragment() {
 
@@ -56,8 +51,8 @@ class SignIn : Fragment() {
         // Set an OnClickListener to the button
         btnSignIn.setOnClickListener {
 
-            var email = emailInput.text.toString().trim()
-            var pword = passwordInput.text.toString().trim()
+            val email = emailInput.text.toString().trim()
+            val pword = passwordInput.text.toString().trim()
 
             // Setting progress bar to visible when user attempts to sign in
             pbWaitToSignIn.visibility = View.VISIBLE
@@ -67,7 +62,7 @@ class SignIn : Fragment() {
     }
 
     //==============================================================================================
-    //attempt to find user in list, if found check the password is correct
+    // Attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
         val auth = FirebaseAuth.getInstance()
         val db = FirebaseFirestore.getInstance()
@@ -86,7 +81,7 @@ class SignIn : Fragment() {
                     errToast.show()
 
                     if (uid != null) {
-                        // Retrieve user data from Firestore
+                        // Retrieve user data from FireStore
                         val usersCollection = db.collection("users")
 
                         usersCollection.document(uid)
@@ -117,7 +112,7 @@ class SignIn : Fragment() {
                                 }
                             }
                             .addOnFailureListener { e ->
-                                // Handle the error if retrieving data from Firestore fails
+                                // Handle the error if retrieving data from FireStore fails
                                 Toast.makeText(
                                     requireContext(),
                                     "Failed to retrieve user data from Firestore: ${e.message}",
@@ -137,7 +132,4 @@ class SignIn : Fragment() {
                 }
             }
     }
-
-
-
 }

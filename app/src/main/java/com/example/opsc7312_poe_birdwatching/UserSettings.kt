@@ -153,7 +153,7 @@ class UserSettings : Fragment() {
     }
 
     //==============================================================================================
-    //changes which button is highlighted, which text is on the slider, and the var in the user class
+    // Changes which button is highlighted, which text is on the slider, and the var in the user class
     private fun ToImperial() {
         val newSelectColor = ContextCompat.getColor(requireContext(), R.color.clickedMetric)
         val selectedColorStateList = ColorStateList.valueOf(newSelectColor)
@@ -225,12 +225,10 @@ class UserSettings : Fragment() {
                         "maxDistance", user.MaxDistance
                     )
                     .addOnSuccessListener {
-                        // We can show successful messages here if we want to
-                        // It executes after successfully updating data in firestore
+
                     }
                     .addOnFailureListener { e ->
-                        // We can show failure messages here if we want to
-                        // It executes after failing to update settings in firestore
+
                     }
             }
         } catch (ex: Exception) {

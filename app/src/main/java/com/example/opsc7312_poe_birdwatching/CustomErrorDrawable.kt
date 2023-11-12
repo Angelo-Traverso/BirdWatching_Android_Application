@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.content.Context
@@ -28,18 +36,22 @@ class CustomErrorDrawable(context: Context) : Drawable() {
         drawable.setBounds(-130, -50, -130 + scaledWidth, scaledHeight - 50)
     }
 
+    //==============================================================================================
     override fun draw(canvas: Canvas) {
         drawable.draw(canvas)
     }
 
+    //==============================================================================================
     override fun setAlpha(alpha: Int) {
         drawable.alpha = alpha
     }
 
+    //==============================================================================================
     override fun setColorFilter(colorFilter: ColorFilter?) {
         drawable.colorFilter = colorFilter
     }
 
+    //==============================================================================================
     override fun getOpacity(): Int {
         return PixelFormat.TRANSLUCENT
     }

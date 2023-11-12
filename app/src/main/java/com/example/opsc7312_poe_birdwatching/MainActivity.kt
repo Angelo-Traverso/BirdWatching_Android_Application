@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initializing the FireBase application
         FirebaseApp.initializeApp(this)
 
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)

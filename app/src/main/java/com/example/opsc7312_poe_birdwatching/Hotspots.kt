@@ -12,17 +12,13 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.opsc7312_poe_birdwatching.Game.GameActivity
 import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
@@ -34,7 +30,6 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.annotations.concurrent.UiThread
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -45,7 +40,7 @@ import kotlin.concurrent.thread
 
 class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
 
-    //map and location
+    // Map and location
     private lateinit var locationName: String
     private var isPermissionGranted = false
     private lateinit var mMap: GoogleMap
@@ -57,7 +52,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private var destlat = 0.0
     private var destlon = 0.0
 
-    //nav buttons
+    // Nav buttons
     private lateinit var fabMenu: FloatingActionButton
     private lateinit var menuGame: FloatingActionButton
     private lateinit var menuSettings: FloatingActionButton
@@ -66,7 +61,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private lateinit var menuChallenges: FloatingActionButton
     private var mapStyleChosen = 0
 
-    //menu movement
+    // Menu movement
     private lateinit var fabClose: Animation
     private lateinit var fabOpen: Animation
     private lateinit var fabClock: Animation
@@ -78,14 +73,13 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotpots)
 
-        //MAP code
+        // MAP code
         mapView = findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //NAV menu popup code
-        //region
+        // NAV menu popup code
         fabClose = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fabClock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
@@ -129,20 +123,18 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
                 open()
             }
         }
-        //endregion
 
         initializeMap()
     }
 
+    //==============================================================================================
     // This method is called when getLocationData has completed.
     override fun onLocationDataReceived() {
-        // Implement your logic here or leave it empty if not needed
-        // For example, you can show a toast or log a message.
         Log.d("Hotpots", "Location data received")
     }
 
     //==============================================================================================
-    //check for location perms, if granted get location and move map, if not ask
+    // Check for location perms, if granted get location and move map, if not ask
     private fun initializeMap() {
         // Initialize the map if permission has been granted
         if (isPermissionGranted) {
@@ -169,12 +161,14 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
+    //==============================================================================================
+    // Loading user map style
     private fun loadMapStyle() {
 
-        if (ToolBox.users[0].mapStyleIsDark) {
-            mapStyleChosen = R.raw.dark
+        mapStyleChosen = if (ToolBox.users[0].mapStyleIsDark) {
+            R.raw.dark
         } else {
-            mapStyleChosen = R.raw.light
+            R.raw.light
         }
 
         try {
@@ -233,10 +227,9 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
-    //---markers
-    //region
-
+    //==============================================================================================
     // Coroutine scope for getting nearby hotspots and user observations
+    // Method to retrieve data while bottom sheet is active, so that there is no delay
     suspend fun doWork() = coroutineScope {
         launch {
             getNearByHotspots()
@@ -251,7 +244,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     private fun addUserObs() {
         if (ToolBox.usersObservations.isNotEmpty()) {
             val filteredObservations =
-                ToolBox.usersObservations.filter { it.IsAtHotspot == false }
+                ToolBox.usersObservations.filter { !it.IsAtHotspot }
 
             for (location in filteredObservations) {
                 mMap.addMarker(
@@ -267,10 +260,9 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
-    //get all nearby hotspot to the user, based on their chosen distance
+    // Get all nearby hotspot to the user, based on their chosen distance
     private fun getNearByHotspots() {
-        //query eBird and get the nearby hotspots and the birds in the region
-        var apiWorker = APIWorker()
+        val apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
 
         thread {
@@ -286,7 +278,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
-    //puts markers on map
+    // Puts markers on map
     private fun UpdateMarkers(locations: List<HotspotModel>) {
         try {
             runOnUiThread {
@@ -302,22 +294,17 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
-    //endregion
-
     //==============================================================================================
-    //---location
-    //region
-
-    //==============================================================================================
-    //method to handel the fusedLocationClient logic and if no location is found use a hard coded location
-    //this is a callback as it needs to finish what it is working on before the rest of the map logic can continue
+    // Method to handel the fusedLocationClient logic and if no location is found use a hard coded location
+    // This is a callback as it needs to finish what it is working on before the rest of the map logic can continue
     private fun getCurrentLocation(callback: (Double, Double) -> Unit) {
         // Check for location permission
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            isPermissionGranted = true // Permission is granted
+            // Permission is granted
+            isPermissionGranted = true
             mMap.isMyLocationEnabled = true
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
@@ -330,6 +317,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
+    // Gets location data to be displayed in bottom sheet
     private fun getLocationData(lat: Double, lng: Double, marker: Marker) {
         val apiWorker = APIWorker()
         val scope = CoroutineScope(Dispatchers.Default)
@@ -379,13 +367,8 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         }
     }
 
-    //endregion
-
     //==============================================================================================
-    //---nav popup
-    //region
-
-    //==============================================================================================
+    // Open animation for the menu
     private fun open() {
         fabMenu.startAnimation(fabClock)
         fabMenu.isEnabled = true
@@ -410,6 +393,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
+    // Checks to see if user has open the menu
     private fun isOpen(): Boolean {
         if (isOpen) {
             menuGame.startAnimation(fabClose)
@@ -432,6 +416,7 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
+    // Close animations for menu
     private fun close() {
         menuGame.startAnimation(fabClose)
         menuGame.isEnabled = false
@@ -453,20 +438,15 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
     }
 
     //==============================================================================================
+    // Showing/loading challenges fragment
     private fun loadChallengesFragment() {
         val challengesFragment = Challenges()
-
-
         fabMenu.isEnabled = false
-        // Replace the fragment
         supportFragmentManager.beginTransaction().replace(android.R.id.content, challengesFragment)
             .addToBackStack(null).commit()
     }
-    //endregion
 
     //==============================================================================================
-    //---on...
-    //region
     override fun onResume() {
         super.onResume()
         mapView.onResume()
@@ -487,17 +467,19 @@ class Hotpots : AppCompatActivity(), OnMapReadyCallback, LocationDataCallback {
         mapView.onLowMemory()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         fabMenu.isEnabled = true
     }
-    //endregion
 }
 
-
-//interface to handel callbacks to allow the popup for markers to wait for the correct data to be loaded
-//this is needed as without the callback the fragment will be loaded before the data has been saved, resulting in an empty fragment appearing
-//now it only appears once the data has been loaded
+//==============================================================================================
+/*
+    Interface to handel callbacks to allow the popup for markers to wait for the correct data to be loaded.
+    This is needed as without the callback the fragment will be loaded before the data has been saved, resulting in an empty fragment appearing
+    now it only appears once the data has been loaded
+ */
 interface LocationDataCallback {
     fun onLocationDataReceived()
 }

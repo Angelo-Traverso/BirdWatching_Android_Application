@@ -18,8 +18,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 class Settings : AppCompatActivity() {
 
-    private lateinit var Logout: TextView
-    private lateinit var Back: TextView
+    private lateinit var logout: TextView
+    private lateinit var back: TextView
 
     //==============================================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,18 +28,20 @@ class Settings : AppCompatActivity() {
 
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
         val viewPager: ViewPager = findViewById(R.id.viewPager)
-        Logout = findViewById(R.id.tvLogout)
-        Back = findViewById(R.id.tvBackSettings)
+        logout = findViewById(R.id.tvLogout)
+        back = findViewById(R.id.tvBackSettings)
 
         val pagerAdapter = PagerAdapterSettings(supportFragmentManager)
         viewPager.adapter = pagerAdapter
         tabLayout.setupWithViewPager(viewPager)
 
-        Logout.setOnClickListener() {
+        // Logging user out
+        logout.setOnClickListener() {
             logout()
         }
 
-        Back.setOnClickListener() {
+        // Sending user back to hotspots
+        back.setOnClickListener() {
             val intent = Intent(this, Hotpots::class.java)
             startActivity(intent)
         }
@@ -49,16 +51,18 @@ class Settings : AppCompatActivity() {
     }
 
     //==============================================================================================
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val intent = Intent(this, Hotpots::class.java)
         startActivity(intent)
     }
 
     //==============================================================================================
-    // Signs user out of their account using firebase authentication
+    // Signing user out of their account using firebase authentication
     private fun logout()
     {
         ToolBox.users.clear()
+
         // Signing user out of firebase using FireBaseAuth
         FirebaseAuth.getInstance().signOut();
         val intent = Intent(this, MainActivity::class.java)
