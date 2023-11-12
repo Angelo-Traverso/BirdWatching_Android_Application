@@ -10,12 +10,7 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import kotlin.math.*
-import android.graphics.Color
 import android.graphics.Typeface
-import android.location.Location
-import android.location.LocationManager
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -29,19 +24,18 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.example.opsc7312_poe_birdwatching.Models.HotspotModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
-import com.mapbox.bindgen.None
+import kotlin.math.*
 
 class BottomSheetHotspot : BottomSheetDialogFragment() {
 
     private lateinit var totalSpeciesTextView: TextView
     private lateinit var informationText: TextView
+
+    private var userSighting: Boolean = false
 
     /*
     * Button click listener for sheet button
@@ -145,15 +139,21 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         // Update heading text
         arguments?.getString(ARG_HEADING_TEXT)?.let {
             setBottomSheetHeadingText(it)
+
+            if ((it.contains("User Sighting"))) {
+                userSighting = true
+            }
         }
 
         // Display the sightings in the bottom sheet
     }
+
     fun updateHotspotSightings(sightings: List<SightingModel>) {
         // Update the content of the bottom sheet with the received hotspot sightings
         val bottomSheetLayout = view?.findViewById<LinearLayout>(R.id.linearViewHotspotInformation)
         bottomSheetLayout?.let { displaySightingsInBottomSheet(it, sightings) }
     }
+
     //==============================================================================================
     // Dynamically displays hotspot data
     @SuppressLint("InflateParams")
@@ -162,6 +162,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
         sightings: List<SightingModel>
     ) {
         val inflater = LayoutInflater.from(bottomSheetView.context)
+        var totalSpecies = 0
 
         val filteredObservations = ToolBox.usersObservations.filter { observation ->
             observation.IsAtHotspot && areLocationsWithinDistance(
@@ -188,6 +189,7 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
             informationText.isVisible = false
         } else {
 
+            totalSpecies += convertedSightings.count()
             for (userObs in convertedSightings) {
                 val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
                 val layoutParams = LinearLayout.LayoutParams(
@@ -224,50 +226,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
 
                 isUserObs.visibility = View.VISIBLE
 
-                bottomSheetView.addView(hotspotSightingView)
-            }
-
-
-            // Set number of species text
-            totalSpeciesTextView.text = "${sightings.count()} species"
-
-            // For every sighting
-            for (sighting in sightings) {
-
-                val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
-
-                // Set margins for layout
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                layoutParams.setMargins(0, 16, 0, 0)
-                hotspotSightingView.layoutParams = layoutParams
-
-                // TextViews
-                val commonNameTextView =
-                    hotspotSightingView.findViewById<TextView>(R.id.tvCommonName)
-                val howManyTextView = hotspotSightingView.findViewById<TextView>(R.id.tvHowMany)
-                val dateTextView = hotspotSightingView.findViewById<TextView>(R.id.tvDate)
-
-                val commonNameText = "Common Name: "
-                val italicCommonName = SpannableString(sighting.commonName)
-                italicCommonName.setSpan(
-                    StyleSpan(Typeface.ITALIC),
-                    0,
-                    italicCommonName.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-
-                // Combine "Common Name: " and italicized common name
-                val spannableCombined =
-                    SpannableStringBuilder().append(commonNameText).append(italicCommonName)
-
-                // Set the sighting information in the included layout
-                commonNameTextView.text = spannableCombined
-                howManyTextView.text = "How Many: ${sighting.howMany}"
-                dateTextView.text = "Date: ${sighting.date}"
-
                 hotspotSightingView.setOnClickListener() {
                     val intent = Intent(requireContext(), Navigation::class.java)
                     intent.putExtra("LATITUDE", ToolBox.currentLat)
@@ -280,9 +238,70 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
                     buttonClickListener?.invoke()
                 }
 
-                // Add the included layout to the bottom sheet
                 bottomSheetView.addView(hotspotSightingView)
             }
+
+            // Set number of species text
+
+
+            if (!userSighting) {
+
+                totalSpecies += sightings.count()
+                // For every sighting
+                for (sighting in sightings) {
+
+                    val hotspotSightingView = inflater.inflate(R.layout.hotspot_sighting, null)
+
+                    // Set margins for layout
+                    val layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    layoutParams.setMargins(0, 16, 0, 0)
+                    hotspotSightingView.layoutParams = layoutParams
+
+                    // TextViews
+                    val commonNameTextView =
+                        hotspotSightingView.findViewById<TextView>(R.id.tvCommonName)
+                    val howManyTextView = hotspotSightingView.findViewById<TextView>(R.id.tvHowMany)
+                    val dateTextView = hotspotSightingView.findViewById<TextView>(R.id.tvDate)
+
+                    val commonNameText = "Common Name: "
+                    val italicCommonName = SpannableString(sighting.commonName)
+                    italicCommonName.setSpan(
+                        StyleSpan(Typeface.ITALIC),
+                        0,
+                        italicCommonName.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    // Combine "Common Name: " and italicized common name
+                    val spannableCombined =
+                        SpannableStringBuilder().append(commonNameText).append(italicCommonName)
+
+                    // Set the sighting information in the included layout
+                    commonNameTextView.text = spannableCombined
+                    howManyTextView.text = "How Many: ${sighting.howMany}"
+                    dateTextView.text = "Date: ${sighting.date}"
+
+                    hotspotSightingView.setOnClickListener() {
+                        val intent = Intent(requireContext(), Navigation::class.java)
+                        intent.putExtra("LATITUDE", ToolBox.currentLat)
+                        intent.putExtra("LONGITUDE", ToolBox.currentLng)
+                        intent.putExtra("DEST_LAT", ToolBox.destlat)
+                        intent.putExtra("DEST_LNG", ToolBox.destlng)
+
+                        startActivity(intent)
+
+                        buttonClickListener?.invoke()
+                    }
+
+                    // Add the included layout to the bottom sheet
+                    bottomSheetView.addView(hotspotSightingView)
+                }
+            }
+
+            totalSpeciesTextView.text = "${totalSpecies} sightings"
         }
     }
 
