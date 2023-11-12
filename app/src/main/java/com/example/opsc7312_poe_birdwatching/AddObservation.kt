@@ -14,6 +14,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -31,9 +32,6 @@ import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -85,7 +83,7 @@ class AddObservation : AppCompatActivity(){
         etNote = findViewById(R.id.etNote)
         pbWaitToSignIn = findViewById(R.id.pbWaitForData)
 
-        //start the handler
+        // Start the handler
         if(ToolBox.populated)
         {
             btnSave.isEnabled = true
@@ -103,13 +101,13 @@ class AddObservation : AppCompatActivity(){
             etWhen.isEnabled = false
             etSelectSpecies.isEnabled = false
             handler.post(checkPopulatedRunnable)
-            println("handeler started")
+            println("Handler started")
         }
 
     }
 
     //==============================================================================================
-    //Source: (ChatGPT, n.d.)
+    // Source: (ChatGPT, n.d.)
     // Check for the populated value when the activity is created.
     private val checkPopulatedRunnable = object : Runnable {
         override fun run() {
@@ -133,47 +131,62 @@ class AddObservation : AppCompatActivity(){
     }
 
     //==============================================================================================
-    //save the new obs to the list
+    // Save the new obs to the list
     private fun addNewObs() {
         try {
             if (validateForm()) {
-                val dateFormat = SimpleDateFormat("dd-MM-yyyy") // Use the correct format
+                // Setting correct format for the date
+                val dateFormat = SimpleDateFormat("dd-MM-yyyy")
                 val dateInput = etWhen.text.toString().trim()
                 val birdName = etSelectSpecies.text.toString().trim()
-                val howMany = etHowMany.text.toString().trim()
+                val howMany = etHowMany.text.toString().trim().toInt()
                 val note = etNote.text.toString().trim()
+                var location = userLocation
 
+                // Setting date
                 val date = dateFormat.parse(dateInput)
+
+
+                if (ToolBox.newObsOnHotspot)
+                {
+                    location = (Location(LocationManager.GPS_PROVIDER).apply {
+                        latitude = ToolBox.newObslat
+                        longitude = ToolBox.newObslng
+                    })
+                }
 
                 if (date != null) {
                     val formattedDate = SimpleDateFormat("yyyy-MM-dd").format(date)
                     val observation = UserObservation(
                         "",
                         ToolBox.users[0].UserID,
-                        formattedDate, // Use the formatted date
+                        formattedDate,
                         birdName,
                         howMany,
-                        userLocation,
+                        location,
                         note,
-                        ""
+                        "",
+                        ToolBox.newObsOnHotspot
                     )
 
+                    // Defaulting to false
+                    ToolBox.newObsOnHotspot = false
                     val db = FirebaseFirestore.getInstance()
                     val observationsCollection = db.collection("observations")
 
                     observationsCollection
                         .add(observation)
-                        .addOnSuccessListener { documentReference ->
-                            // Observation added to Firestore successfully
+                        .addOnSuccessListener { _ ->
+                            // Observation added to FireStore successfully
                             Toast.makeText(this, "Bird observation saved!", Toast.LENGTH_LONG).show()
 
                             ToolBox.usersObservations.add(observation)
 
-                            // Clear all input fields
-                            clearFields(etSelectSpecies, etHowMany, etWhen, etNote)
+                            val intent = Intent(this, Hotpots::class.java)
+                            startActivity(intent)
                         }
                         .addOnFailureListener { e ->
-                            // Handle the error if adding the observation to Firestore fails
+                            // Handling the error if adding the observation to FireStore fails
                             Toast.makeText(this, "Failed to save bird observation: ${e.message}", Toast.LENGTH_SHORT).show()
                             print(e.message)
                         }
@@ -186,29 +199,13 @@ class AddObservation : AppCompatActivity(){
     }
 
     //==============================================================================================
-    // Method to clear all input fields
-    private fun clearFields(species:EditText, howMany: EditText, date: EditText, note: EditText)
-    {
-        species.text.clear()
-        howMany.text.clear()
-        date.text.clear()
-        note.text.clear()
-
-    }
-    //==============================================================================================
-    //validate the form
+    // Validate the form inputs
     private fun validateForm(): Boolean {
         try {
             var valid = true
             val birdName: String = etSelectSpecies.text.toString().trim()
             val date: String = etWhen.text.toString().trim()
             val amount: String = etHowMany.text.toString().trim()
-
-            if (userLocation == null) {
-                val toast = Toast.makeText(this, "Location required", Toast.LENGTH_LONG)
-                toast.show()
-                valid = false
-            }
 
             if (TextUtils.isEmpty(birdName)) {
                 etSelectSpecies.error = "Name is required"
@@ -256,7 +253,7 @@ class AddObservation : AppCompatActivity(){
     }
 
     //==============================================================================================
-    //Shows searchable list of all regional bird species
+    // Shows searchable list of all regional bird species
     private fun showSpeciesDialog(speciesList: List<BirdModel>) {
         val dialogView = layoutInflater.inflate(R.layout.species_dialog, null)
         val etSearch = dialogView.findViewById<EditText>(R.id.etSearch)

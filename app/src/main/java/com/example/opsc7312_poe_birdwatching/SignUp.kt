@@ -8,10 +8,8 @@
 
 package com.example.opsc7312_poe_birdwatching
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,11 +22,9 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class SignUp : Fragment() {
@@ -83,6 +79,7 @@ class SignUp : Fragment() {
     }
 
     //==============================================================================================
+    // Storing new user data in database
     private fun storeUserDataInFireStore() {
         // Check if the user is authenticated
         val currentUser = Firebase.auth.currentUser
@@ -108,7 +105,7 @@ class SignUp : Fragment() {
                         // User data added to Firestore successfully
                         Toast.makeText(
                             requireContext(),
-                            "User data stored in Firestore",
+                            "Successfully signed up",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -134,60 +131,6 @@ class SignUp : Fragment() {
         }
     }
 
-
-    //==============================================================================================
-    // Take user inputs and create new user instance
-//    private fun RegisterUser() {
-//        try {
-//
-//            val newUser = UsersModel(
-//                Name = nameInput.text.toString().trim(),
-//                Surname = surnameInput.text.toString().trim(),
-//                Email = emailInput.text.toString().trim(),
-//                Hash = passwordInput.text.toString().trim()
-//            )
-//
-//            println(newUser.Hash)
-//
-//            // Add user to database
-//            ToolBox.users.add(newUser)
-//
-//            val toast = Toast.makeText(requireContext(), "Account created", Toast.LENGTH_SHORT)
-//            toast.show()
-//        } catch (ex: java.lang.Exception) {
-//            Log.w("log", ex.toString())
-//            ex.printStackTrace()
-//        }
-//
-////        val db = Firebase.firestore
-////        try {
-////
-////            // Hash map to store user data
-////            val user = hashMapOf(
-////                "name" to nameInput.text.toString().trim(),
-////                "surname" to surnameInput.text.toString().trim(),
-////                "username" to usernameInput.text.toString().trim(),
-////                "password" to PasswordHandler.hashPassword(passwordInput.text.toString().trim())
-////            )
-////
-////            // Add user to database
-////            db.collection("users")
-////                .add(user)
-////                .addOnSuccessListener { documentReference ->
-////                    Log.d(ContentValues.TAG, "Entry added with ID: ${documentReference.id}")
-////                }
-////                .addOnFailureListener { e ->
-////                    Log.w(ContentValues.TAG, "Error adding document", e)
-////                }
-////
-////            val toast = Toast.makeText(this, "Account created", Toast.LENGTH_SHORT)
-////            toast.show()
-////        } catch (ex: java.lang.Exception) {
-////            Log.w("log", ex.toString())
-////            ex.printStackTrace()
-////        }
-//    }
-
     //==============================================================================================
     // Method to start intent activity to sign in
     private fun intentToSignIn() {
@@ -207,7 +150,7 @@ class SignUp : Fragment() {
         var valid = true
         try {
 
-            // a custom error message to prevent it from overlapping with the view password eye icon
+            // A custom error message to prevent it from overlapping with the view password eye icon
             val customError = CustomErrorDrawable(requireContext())
 
             val name: String = nameInput.text.toString().trim()

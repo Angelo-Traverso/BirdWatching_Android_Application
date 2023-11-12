@@ -9,9 +9,8 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.content.Intent
-import android.location.Location
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -20,13 +19,10 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.sql.Date
 
 class SignIn : Fragment() {
 
@@ -56,18 +52,20 @@ class SignIn : Fragment() {
         // Set an OnClickListener to the button
         btnSignIn.setOnClickListener {
 
-            var email = emailInput.text.toString().trim()
-            var pword = passwordInput.text.toString().trim()
+            if (validateForm()) {
+                val email = emailInput.text.toString().trim()
+                val pword = passwordInput.text.toString().trim()
 
-            // Setting progress bar to visible when user attempts to sign in
-            pbWaitToSignIn.visibility = View.VISIBLE
+                // Setting progress bar to visible when the user attempts to sign in
+                pbWaitToSignIn.visibility = View.VISIBLE
 
-            authenticateUser(email, pword)
+                authenticateUser(email, pword)
+            }
         }
     }
 
     //==============================================================================================
-    //attempt to find user in list, if found check the password is correct
+    // Attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
         val auth = FirebaseAuth.getInstance()
         val db = FirebaseFirestore.getInstance()
@@ -79,14 +77,14 @@ class SignIn : Fragment() {
                     val uid = user?.uid
 
                     val errToast = Toast.makeText(
-                        requireContext(), "Signed In! UID: $uid", Toast.LENGTH_LONG
+                        requireContext(), "Signed In!", Toast.LENGTH_LONG
                     )
 
                     errToast.setGravity(Gravity.BOTTOM, 0, 25)
                     errToast.show()
 
                     if (uid != null) {
-                        // Retrieve user data from Firestore
+                        // Retrieve user data from FireStore
                         val usersCollection = db.collection("users")
 
                         usersCollection.document(uid)
@@ -117,7 +115,7 @@ class SignIn : Fragment() {
                                 }
                             }
                             .addOnFailureListener { e ->
-                                // Handle the error if retrieving data from Firestore fails
+                                // Handle the error if retrieving data from FireStore fails
                                 Toast.makeText(
                                     requireContext(),
                                     "Failed to retrieve user data from Firestore: ${e.message}",
@@ -136,8 +134,31 @@ class SignIn : Fragment() {
                     errToast.show()
                 }
             }
+
     }
+    private fun validateForm(): Boolean {
+        var valid = true
+        try {
+            // A custom error message to prevent it from overlapping with the view password eye icon
+            val customError = CustomErrorDrawable(requireContext())
 
+            val email: String = emailInput.text.toString().trim()
+            val password: String = passwordInput.text.toString().trim()
 
+            if (TextUtils.isEmpty(email)) {
+                emailInput.setError("Email is required", customError)
+                valid = false
+            }
+            if (TextUtils.isEmpty(password)) {
+                passwordInput.setError("Password is required", customError)
+                valid = false
+            }
 
+            return valid
+        } catch (ex: Exception) {
+            println(ex.toString())
+            ex.printStackTrace()
+            return false
+        }
+    }
 }

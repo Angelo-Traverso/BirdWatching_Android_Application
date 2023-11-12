@@ -16,88 +16,77 @@ import com.example.opsc7312_poe_birdwatching.Models.BirdModel
 import com.example.opsc7312_poe_birdwatching.Models.SightingModel
 import com.example.opsc7312_poe_birdwatching.Models.UserObservation
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-
-import java.util.Date
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 
 class ToolBox : Application() {
 
     companion object {
         var userRegion = ""
 
-        //will only store one user at a time
+        // Will only store one user at a time
         var users = arrayListOf<UsersModel>()
 
-        //stores all entries of users observations
+        // Stores all entries of users observations
         var usersObservations = arrayListOf<UserObservation>()
 
-        //used to store the sightings for a specific observation, changed for every hotpost pressed
+        // Used to store the sightings for a specific observation, changed for every hotpost pressed
         var hotspotsSightings: List<SightingModel> = mutableListOf()
 
-        //used to store the birds found in a region, session based
+        // Used to store the birds found in a region, session based
         var birdsInTheRegion: List<BirdModel> = mutableListOf()
 
-        //var for observers
+        // Var for observers
         var populated = false
 
+        // Var for hotspot location when adding new obs to it
+        var newObsOnHotspot = false;
+
+        var newObslat = 0.0
+        var newObslng = 0.0
+        var destlat = 0.0
+        var destlng = 0.0
+        var currentLat = 0.0
+        var currentLng = 0.0
+
         //==============================================================================================
-        //  Function fetches user observations from their profile
+        //  Function fetches all user observations
         fun fetchUserObservations() {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            val db = FirebaseFirestore.getInstance()
+            val userObservationsCollection = db.collection("observations")
 
-            if (userId != null) {
-                val db = FirebaseFirestore.getInstance()
-                val userObservationsCollection = db.collection("observations")
+            usersObservations.clear()
 
-                usersObservations.clear()
+            userObservationsCollection.get().addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val data = document.data
 
-                userObservationsCollection
-                    .whereEqualTo("userID", userId)
-                    .get()
-                    .addOnSuccessListener { querySnapshot ->
-                        for (document in querySnapshot) {
-                            val data = document.data
+                    val locationData = data["location"] as? Map<String, Any>
+                    val latitude = locationData?.get("latitude") as? Double ?: 0.0
+                    val longitude = locationData?.get("longitude") as? Double ?: 0.0
 
-                            val timestamp = data["date"] as? com.google.firebase.Timestamp
-                            val date = timestamp?.toDate()?.time?.let { java.sql.Date(it) } ?: java.sql.Date(
-                                0
-                            )
+                    val location = Location("fused")
+                    location.latitude = latitude
+                    location.longitude = longitude
 
-                            val locationData = data["location"] as? Map<String, Any>
-                            val latitude = locationData?.get("latitude") as? Double ?: 0.0
-                            val longitude = locationData?.get("longitude") as? Double ?: 0.0
+                    val observation = UserObservation(
+                        ObservationID = data["observationID"] as? String ?: "",
+                        UserID = data["userID"] as? String ?: "",
+                        Date = data["date"] as String ?: "",
+                        BirdName = data["birdName"] as? String ?: "",
+                        Amount = (data["amount"] as? Number ?: 0).toInt(),
+                        Location = location,
+                        Note = data["note"] as? String ?: "",
+                        PlaceName = data["placeName"] as? String ?: "",
+                        IsAtHotspot = data["isAtHotspot"] as? Boolean ?: false,
+                    )
 
-                            val location = Location("fused")
-                            location.latitude = latitude
-                            location.longitude = longitude
+                    usersObservations.add(observation)
+                }
 
-                            val observation = UserObservation(
-                                ObservationID = data["observationID"] as? String ?: "",
-                                UserID = data["userID"] as? String ?: "",
-                                Date = data["date"] as String ?: "",
-                                BirdName = data["birdName"] as? String ?: "",
-                                Amount = data["amount"] as? String ?: "",
-                                Location = location,
-                                Note = data["note"] as? String ?: "",
-                                PlaceName = data["placeName"] as? String ?: ""
-                            )
-
-                            usersObservations.add(observation)
-                        }
-
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e("MyObservations", "Error fetching observations: $exception")
-                    }
+                // Notify your UI or perform any other actions after fetching all observations
+            }.addOnFailureListener { exception ->
+                Log.e("AllObservations", "Error fetching all observations: $exception")
             }
         }
-
-
     }
-
-
 }

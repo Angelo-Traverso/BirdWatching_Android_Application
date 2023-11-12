@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.mapbox.maps:android:10.16.1'
     implementation "com.mapbox.navigation:android:2.10.1"
     implementation "com.mapbox.navigation:ui-dropin:2.15.3"
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:6.10.0'
 
     implementation 'com.google.code.gson:gson:2.8.8'
 

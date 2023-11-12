@@ -1,3 +1,11 @@
+//Project:
+//Open Source Coding (Intermediate)
+//Portfolio of evidence
+//Task 2
+//Authors:
+//Jonathan Polakow, ST10081881
+//Angelo Traverso, ST10081927
+
 package com.example.opsc7312_poe_birdwatching
 
 import android.util.Log
@@ -9,7 +17,6 @@ import java.util.*
 
 class ChallengeModel {
     companion object {
-        //challenges vars
         var newTopRoundInDuckHunt = 0
         var newTripsCompleted = 0
 
@@ -20,6 +27,8 @@ class ChallengeModel {
         var topRoundInDuckHuntBool = false
         var userObservationsBool = false
 
+        //==============================================================================================
+        // Gets all user challenges and their progress
         fun getChallenges() {
             try {
                 val db = FirebaseFirestore.getInstance()
@@ -55,13 +64,15 @@ class ChallengeModel {
                         }
                     }
                     .addOnFailureListener { e ->
-                        var a = e.message
+                        println("$e")
                     }
             } catch (e: java.lang.Exception) {
-                var a = 0
+                println("$e")
             }
         }
 
+        //==============================================================================================
+        // Saves challenges and updates user progress
         fun saveChallenge() {
             if (newTripsCompleted > tripsCompleted) {
                 tripsCompleted = newTripsCompleted
@@ -108,6 +119,8 @@ class ChallengeModel {
                 }
         }
 
+        //==============================================================================================
+        // Updates users' points based on their challenges
         fun updatePoints(points: Int) {
             try {
                 val db = FirebaseFirestore.getInstance()

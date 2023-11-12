@@ -16,8 +16,8 @@ class PagerAdapterSettings(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAV
     }
 
     //==============================================================================================
-    // Number of tabs
     override fun getCount(): Int {
+        // Number of tabs
         return 2
     }
 
