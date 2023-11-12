@@ -105,7 +105,7 @@ class SignUp : Fragment() {
                         // User data added to Firestore successfully
                         Toast.makeText(
                             requireContext(),
-                            "User data stored in Firestore",
+                            "Successfully signed up",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

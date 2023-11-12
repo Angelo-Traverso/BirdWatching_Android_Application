@@ -10,6 +10,7 @@ package com.example.opsc7312_poe_birdwatching
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -51,13 +52,15 @@ class SignIn : Fragment() {
         // Set an OnClickListener to the button
         btnSignIn.setOnClickListener {
 
-            val email = emailInput.text.toString().trim()
-            val pword = passwordInput.text.toString().trim()
+            if (validateForm()) {
+                val email = emailInput.text.toString().trim()
+                val pword = passwordInput.text.toString().trim()
 
-            // Setting progress bar to visible when user attempts to sign in
-            pbWaitToSignIn.visibility = View.VISIBLE
+                // Setting progress bar to visible when the user attempts to sign in
+                pbWaitToSignIn.visibility = View.VISIBLE
 
-            authenticateUser(email, pword)
+                authenticateUser(email, pword)
+            }
         }
     }
 
@@ -131,5 +134,31 @@ class SignIn : Fragment() {
                     errToast.show()
                 }
             }
+
+    }
+    private fun validateForm(): Boolean {
+        var valid = true
+        try {
+            // A custom error message to prevent it from overlapping with the view password eye icon
+            val customError = CustomErrorDrawable(requireContext())
+
+            val email: String = emailInput.text.toString().trim()
+            val password: String = passwordInput.text.toString().trim()
+
+            if (TextUtils.isEmpty(email)) {
+                emailInput.setError("Email is required", customError)
+                valid = false
+            }
+            if (TextUtils.isEmpty(password)) {
+                passwordInput.setError("Password is required", customError)
+                valid = false
+            }
+
+            return valid
+        } catch (ex: Exception) {
+            println(ex.toString())
+            ex.printStackTrace()
+            return false
+        }
     }
 }
