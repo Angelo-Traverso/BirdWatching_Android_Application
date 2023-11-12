@@ -79,13 +79,6 @@ class BottomSheetHotspot : BottomSheetDialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_hotspot, container, false)
 
-        // Start navigation small button
-        val startNavigationSmallButton = view.findViewById<ImageButton>(R.id.btnNavigationSmall)
-        startNavigationSmallButton.setOnClickListener {
-            // Notify the listener when the button is clicked
-            buttonClickListener?.invoke()
-        }
-
         // Start navigation button
         val startNavigationButton = view.findViewById<Button>(R.id.btnStartNavigation)
         startNavigationButton.setOnClickListener {
