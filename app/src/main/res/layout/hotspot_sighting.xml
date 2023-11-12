@@ -22,7 +22,7 @@
             android:layout_marginTop="8dp"
             android:text="User Observation"
             android:textSize="12sp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:textColor="@color/tab_indicator"
             app:drawableStartCompat="@drawable/baseline_circle_24"
             android:layout_below="@+id/linearISUserObs"
