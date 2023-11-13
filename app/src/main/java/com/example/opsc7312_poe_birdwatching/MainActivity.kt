@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         // Initializing the FireBase application
         FirebaseApp.initializeApp(this)
-        FirebaseApp.clearInstancesForTest()
-        FirebaseApp.initializeApp(this)
         FirebaseApp.getInstance()
 
 
