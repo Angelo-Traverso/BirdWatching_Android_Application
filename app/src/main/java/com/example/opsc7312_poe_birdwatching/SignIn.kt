@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -67,6 +68,8 @@ class SignIn : Fragment() {
     //==============================================================================================
     // Attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
+        FirebaseApp.initializeApp(requireContext())
+
         val auth = FirebaseAuth.getInstance()
         val db = FirebaseFirestore.getInstance()
 
