@@ -9,20 +9,16 @@
 package com.example.opsc7312_poe_birdwatching
 
 import android.net.Uri
-import android.util.Log
 import com.example.opsc7312_poe_birdwatching.Models.*
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import org.json.JSONArray
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
 class APIWorker {
 
+    private val apiKey = BuildConfig.API_KEY
     //==============================================================================================
     // Get nearby hotspots
     fun getHotspots(lat: Double, lon: Double): List<HotspotModel> {
@@ -48,10 +44,9 @@ class APIWorker {
     private fun queryGetHotspots(lng: Double, lat: Double, dist: Double): URL? {
         val EBIRD_URL =
             "https://api.ebird.org/v2/ref/hotspot/geo?lat=${lat}&lng=${lng}&dist=${dist}"
-        val API_KEY = "ijiunrr4nqen"
 
         val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
-            "key", API_KEY
+            "key", apiKey
         ).build()
         var url: URL? = null
         try {
@@ -153,10 +148,9 @@ class APIWorker {
     // Gets a json of all birds in a sub region (eg. ZA-WC)
     private fun queryGetRegionalSciName(region: String): URL? {
         val EBIRD_URL = "https://api.ebird.org/v2/product/spplist/${region}"
-        val API_KEY = "ijiunrr4nqen"
 
         val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
-            "key", API_KEY
+            "key", apiKey
         ).build()
         var url: URL? = null
         try {
@@ -224,10 +218,9 @@ class APIWorker {
     // Gets the full information of all the birds in the region
     private fun queryGetFullBirdData(names: String): URL? {
         val EBIRD_URL = "https://api.ebird.org/v2/ref/taxonomy/ebird?species=${names}"
-        val API_KEY = "ijiunrr4nqen"
 
         val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
-            "key", API_KEY
+            "key", apiKey
         ).build()
         var url: URL? = null
         try {
@@ -242,7 +235,7 @@ class APIWorker {
 
     //==============================================================================================
     // Used to get the data for all sightings near the chosen hotspot
-    public  fun getHotspotBirdData(lat: Double, lon: Double): List<SightingModel>
+    fun getHotspotBirdData(lat: Double, lon: Double): List<SightingModel>
     {
         var sightingsList: List<SightingModel> = mutableListOf()
 
@@ -266,10 +259,9 @@ class APIWorker {
     private fun queryGetHotspotBirdData(lng: Double, lat: Double): URL?
     {
         val EBIRD_URL = "https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${lng}&sort=species&back=30&dist=1"
-        val API_KEY = "ijiunrr4nqen"
 
         val buildUri: Uri = Uri.parse(EBIRD_URL).buildUpon().appendQueryParameter(
-            "key", API_KEY
+            "key", apiKey
         ).build()
         var url: URL? = null
         try {

@@ -17,6 +17,8 @@ android {
         versionName "POE Final"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "API_KEY", "\"${project.findProperty("API_KEY")}\""
     }
 
     buildFeatures {
