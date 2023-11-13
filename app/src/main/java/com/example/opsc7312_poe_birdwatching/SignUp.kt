@@ -22,6 +22,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,6 +47,8 @@ class SignUp : Fragment() {
     //==============================================================================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        FirebaseApp.initializeApp(requireContext())
 
         nameInput = view.findViewById(R.id.txtUserName)
         surnameInput = view.findViewById(R.id.tvSurname)

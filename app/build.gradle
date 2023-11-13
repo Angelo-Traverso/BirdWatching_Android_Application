@@ -44,11 +44,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.9.1'
     implementation 'com.google.firebase:firebase-auth:22.2.0'
     implementation 'com.google.firebase:firebase-appcheck:17.1.1'
-
+    implementation 'com.google.gms:google-services:4.4.0'
 
     implementation "com.google.android.gms:play-services-location:21.0.1"
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
-
 
     // Mapbox
     implementation 'com.mapbox.maps:android:10.16.1'
