@@ -630,8 +630,8 @@ class Navigation : AppCompatActivity() {
             NavigationOptions.Builder(this)
                 .accessToken(getString(R.string.mapbox_access_token))
 
-                    // ------------------------ UNCOMMENT LINE BELOW TO DISABLE SIMULATION ------------------------ //
-                .locationEngine(replayLocationEngine)
+                    // ------------------------ COMMENT LINE BELOW TO DISABLE SIMULATION ------------------------ //
+                //.locationEngine(replayLocationEngine)
                 .build()
         )
 
