@@ -10,7 +10,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.opsc7312_poe_birdwatching"
+        applicationId "com.featherfind.opsc7312_poe_birdwatching"
         minSdk 24
         targetSdk 34
         versionCode 2
