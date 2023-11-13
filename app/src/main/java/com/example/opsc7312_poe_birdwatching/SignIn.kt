@@ -33,6 +33,13 @@ class SignIn : Fragment() {
     private lateinit var pbWaitToSignIn: ProgressBar
 
     //==============================================================================================
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(requireContext())
+    }
+
+    //==============================================================================================
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -68,7 +75,6 @@ class SignIn : Fragment() {
     //==============================================================================================
     // Attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
-        FirebaseApp.initializeApp(requireContext())
 
         val auth = FirebaseAuth.getInstance()
         val db = FirebaseFirestore.getInstance()
