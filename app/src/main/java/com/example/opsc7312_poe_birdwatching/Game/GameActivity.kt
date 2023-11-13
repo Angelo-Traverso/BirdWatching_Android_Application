@@ -37,6 +37,8 @@ class GameActivity : AppCompatActivity() {
         gameView = binding.gameView
         startGame = binding.startGame
 
+        ChallengeModel.newTopRoundInDuckHunt = 0
+
         view.setOnClickListener(){
             run()
         }

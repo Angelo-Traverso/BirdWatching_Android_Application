@@ -47,7 +47,7 @@
             android:id="@+id/txtUserSignInPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Password123!"
+            android:text=""
             android:textColor="@color/white"
             android:background="@android:color/transparent"
             android:inputType="textPassword" />
