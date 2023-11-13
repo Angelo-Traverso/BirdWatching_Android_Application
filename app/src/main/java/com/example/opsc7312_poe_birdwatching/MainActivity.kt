@@ -23,7 +23,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Initializing the FireBase application
+        //if this is not here there is a fatel crash the very first time th euser runs it after pulling from github
+        //this is the only way we were able to fix it
         FirebaseApp.initializeApp(this)
+        FirebaseApp.getInstance()
+
 
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
         val viewPager: ViewPager = findViewById(R.id.viewPager)

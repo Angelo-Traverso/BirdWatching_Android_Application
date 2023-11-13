@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.opsc7312_poe_birdwatching.Models.UsersModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -30,6 +31,13 @@ class SignIn : Fragment() {
     private lateinit var passwordInput: TextInputEditText
     private lateinit var btnSignIn: Button
     private lateinit var pbWaitToSignIn: ProgressBar
+
+    //==============================================================================================
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(requireContext())
+    }
 
     //==============================================================================================
     override fun onCreateView(
@@ -42,6 +50,7 @@ class SignIn : Fragment() {
     //==============================================================================================
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        FirebaseApp.initializeApp(requireContext())
 
         // Find the button by ID
         pbWaitToSignIn = view.findViewById(R.id.pbWaitToSignIn)
@@ -67,6 +76,7 @@ class SignIn : Fragment() {
     //==============================================================================================
     // Attempt to find user in list, if found check the password is correct
     private fun authenticateUser(email: String, password: String) {
+        FirebaseApp.initializeApp(requireContext())
         val auth = FirebaseAuth.getInstance()
         val db = FirebaseFirestore.getInstance()
 
@@ -130,11 +140,12 @@ class SignIn : Fragment() {
                         requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
                     )
 
+                    pbWaitToSignIn.visibility = View.GONE
                     errToast.setGravity(Gravity.BOTTOM, 0, 25)
                     errToast.show()
                 }
             }
-
+        pbWaitToSignIn.visibility = View.GONE
     }
     private fun validateForm(): Boolean {
         var valid = true
