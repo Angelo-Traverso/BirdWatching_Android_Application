@@ -140,11 +140,12 @@ class SignIn : Fragment() {
                         requireContext(), "Incorrect email or password", Toast.LENGTH_LONG
                     )
 
+                    pbWaitToSignIn.visibility = View.GONE
                     errToast.setGravity(Gravity.BOTTOM, 0, 25)
                     errToast.show()
                 }
             }
-
+        pbWaitToSignIn.visibility = View.GONE
     }
     private fun validateForm(): Boolean {
         var valid = true

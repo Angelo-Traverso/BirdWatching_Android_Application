@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         // Initializing the FireBase application
         FirebaseApp.initializeApp(this)
+        FirebaseApp.clearInstancesForTest()
+        FirebaseApp.initializeApp(this)
+        FirebaseApp.getInstance()
+
 
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
         val viewPager: ViewPager = findViewById(R.id.viewPager)
