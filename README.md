@@ -66,8 +66,57 @@ The device must be able to use Google Play Store services. We recommend the basi
 - If SDK location not found error, copy "local.properties" from another project.
 - Google Maps and MapBox are used for different strengths in the app.
 
-## References
-- Al-Fanatsah, A. M. (2017). [android - i want to change the position of request focus error icon](https://stackoverflow.com/questions/46526260/android-i-want-to-change-the-position-of-request-focus-error-icon-so-that-it-does) - Stack Overflow.
-- [ChatGPT](https://chat.openai.com).
-- Mapbox. (2023). [Add a complete turn-by-turn experience](https://docs.mapbox.com/android/navigation/examples/turn-by-turn-experience/).
-- murli (2012). [how to rotate a bitmap 90 degrees](https://stackoverflow.com/questions/9015372/how-to-rotate-a-bitmap-90-degrees) - Stack Overflow.
+
+## Release Notes
+# Version 1.1.2 (Release - 14 November 2023)
+
+## Summary
+
+After a thorough reassessment of our initial submission, it became apparent that certain key features were lacking, particularly in terms of usability. Following extensive hours dedicated to this latest release, we are pleased to unveil a comprehensively enhanced birdwatching application that reflects our commitment to delivering a more robust and user-friendly experience.
+
+## New Features
+
+### User Observations
+- Users of Feather-Find can now find bird observations made by other users.
+
+### Add Sighting
+- Users now have the ability to click on a nearby hotspot and add a bird sighting for that location. Bird observations made at a nearby hotspot will be added to that hotspot’s sightings.
+
+### My Observation Navigation
+- Users can now click on one of their observations, which will then begin navigation to that bird species.
+
+### Bottom Sheet Bird Navigation
+- Users can now click on a bird in a nearby hotspot, which will begin navigation to that species location.
+
+### Authentication Service
+- Users are now authenticated upon login, and their email and password are being authenticated using Firebase's built-in authentication system.
+
+## Enhancements
+
+### Data Storage
+- Data is now stored in a hosted cloud platform, so all data is persisted and can be accessed at any time, anywhere, as long as users have an internet connection.
+
+### Bottom Sheet
+- Users can now easily see and use both the navigate and add sighting functions in the bottom sheet displayed when a user clicks on a nearby hotspot or user location.
+
+## Bug Fixes
+
+### Scroll View not allowing users to scroll up
+- There was a known issue of users not being able to scroll "up" in the bottom sheet. This has been fixed, and users can now use it as intended without any bugs.
+
+## Changes
+
+### Online Hosted Database
+- Data is no longer being used session-by-session. Data is now rather being stored in an online hosted database - Firebase.
+
+## Known Issue
+
+Once the menu button is clicked in hotspots, users have to click the button again to close it; you are not able to open it and click away from it, it will stay open.
+
+## Security Updates
+
+Users are now authenticated upon login, using Firebase authentication.
+
+## Contributors
+
+Development and Documentation were concurrently completed by both Angelo Traverso (ST10081927) and Jonathan Polakow (ST10081881).
